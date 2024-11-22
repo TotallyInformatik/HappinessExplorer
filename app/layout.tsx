@@ -58,7 +58,7 @@ export default function RootLayout({
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/worldmap" className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink href="/#worldmap" className={navigationMenuTriggerStyle()}>
                       World Map
                     </NavigationMenuLink>
                   </NavigationMenuItem>
@@ -91,7 +91,9 @@ export default function RootLayout({
           </div>
         </header>
         <Separator className="w-screen h-px bg-slate-300"/>
-        {children}
+        <main>
+          {children}
+        </main>
         <footer>
 
         </footer>
