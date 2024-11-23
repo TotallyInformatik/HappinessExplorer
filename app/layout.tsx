@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <header className="w-screen h-auto overflow-x-auto no-scrollbar">
+        <header className="w-screen h-auto overflow-x-auto no-scrollbar sticky top-0 bg-white">
           <div className="flex w-auto items-center h-auto px-5 py-3 justify-between gap-x-10 gap-y-5">
             <section className="flex items-center gap-x-10 gap-y-5">
               <Link href="/" className="flex items-center gap-4 cursor-pointer">
@@ -58,7 +58,7 @@ export default function RootLayout({
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/#worldmap" className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink href="/#world-map" className={navigationMenuTriggerStyle()}>
                       World Map
                     </NavigationMenuLink>
                   </NavigationMenuItem>
@@ -89,8 +89,8 @@ export default function RootLayout({
               </Select>
             </section>
           </div>
+          <Separator className="w-screen h-px bg-slate-300"/>
         </header>
-        <Separator className="w-screen h-px bg-slate-300"/>
         <main>
           {children}
         </main>

@@ -9,6 +9,8 @@
 
 body {
   font-family: "Inter", Arial, Helvetica, sans-serif;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 @layer utilities {
@@ -23,6 +25,10 @@ body {
   .no-scrollbar {
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
+  }
+
+  .contain-paint {
+    contain: paint;
   }
 }
 
