@@ -124,6 +124,8 @@ export default function Page() {
       </div>
     </div>
     <Separator/>
+    <div className="flex flex-row w-full justify-evenly">
+      <div className="w-1/3">
     <CountryDetailedViewContainer 
       country_name='Finland'
       country_flag_emoji="&#127467;&#127470;"
@@ -131,8 +133,24 @@ export default function Page() {
       happinessScore={{year: happinessScore2024Finland.year, score: happinessScore2024Finland.score} as HappinessScore}
       happinessScoreHistory={happinessScoreHistory}
       card_visibility={card_v}
-      // adjust_on_large_device = {true}
+      adjust_on_large_device = {true}
       detailedHappinessScore={happinessScore2024Finland}
     />
+    </div>
+    <Separator orientation="vertical" className="w-64, h-auto"/>
+    <div className="w-1/3">
+    <CountryDetailedViewContainer 
+      country_name='Finland'
+      country_flag_emoji="&#127467;&#127470;"
+      rank={1} 
+      happinessScore={{year: happinessScore2024Finland.year, score: happinessScore2024Finland.score} as HappinessScore}
+      happinessScoreHistory={happinessScoreHistory}
+      card_visibility={card_v}
+      adjust_on_large_device = {true}
+      detailedHappinessScore={happinessScore2024Finland}
+    />
+    </div>
+    </div>
+    <Separator/>
   </>
 }

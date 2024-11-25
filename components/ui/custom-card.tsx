@@ -26,7 +26,7 @@ export type DetailedHappinessScore = {
 
 
 const RankCard = ({rank}: {rank: number | string}): React.ReactNode => {
-  return <Card className={"w-[172px] h-[221px] p-[1rem] flex flex-col gap-3 shrink-0" + (false ? " md:w-full" : '')}>
+  return <Card className={"w-[172px] h-[221px] p-[1rem] flex flex-col gap-3 shrink-0" + (true ? " md:w-full" : '')}>
     <CardHeader className="p-0 grow-0 shrink">
       <CardTitle className="text-base font-normal">Rank (World)</CardTitle>
     </CardHeader>
@@ -41,7 +41,7 @@ const RankCard = ({rank}: {rank: number | string}): React.ReactNode => {
 
 
 const HappinessScoreProgressCard = ({score}: {score: HappinessScore}): React.ReactNode => {
-  return <Card className={"w-[302px] h-[221px] p-[1rem] flex flex-col gap-3 shrink-0" + (false ? " md:w-full" : '')}>
+  return <Card className={"w-[302px] h-[221px] p-[1rem] flex flex-col gap-3 shrink-0" + (true ? " md:w-full" : '')}>
   <CardHeader className="p-0 grow-0 shrink">
     <CardTitle className="text-base font-normal">Happiness Score</CardTitle>
   </CardHeader>
