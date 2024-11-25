@@ -14,10 +14,38 @@ import { Separator } from "@/components/ui/separator"
 import {Chart1} from "@/app/compare/linechart_natural"
 import {Chart2} from "@/app/compare/linechart_linear"
 import React from "react";
+import { card_visibility, CountryDetailedViewContainer } from "@/components/ui/country-detailed-view"
+import { HappinessScore, DetailedHappinessScore } from "@/components/ui/custom-card"
 // import '@/styles/globals.css';
 
+const happinessScoreHistory = [
+  { year: "2019", score: 7.76 } as HappinessScore,
+  { year: "2020", score: 7.8 } as HappinessScore,
+  { year: "2021", score: 7.84 } as HappinessScore,
+  { year: "2022", score: 7.82 } as HappinessScore,
+  { year: "2023", score: 7.8 } as HappinessScore,
+  { year: "2024", score: 7.74 } as HappinessScore,
+]
+
+
+const happinessScore2024Finland = {
+  year: 2024,
+  score: 7.74,
+  logGDPPerCapita: 1.844,
+  socialSupport: 1.572,
+  healthyLifeExpectency: 0.695, 
+  freedomOfLifeChoices: 0.859,
+  generosity: 0.142,
+  perceptionsOfCorruption:0.546, 
+  dystopiaResidual: 2.082
+} as DetailedHappinessScore
 
 export default function Page() {
+
+  const card_v = {
+    show_title: true,
+    show_score_history_card: true,
+  } as card_visibility
   
   // Write code here
   const [year, setYear] = React.useState(2024);
@@ -96,5 +124,15 @@ export default function Page() {
       </div>
     </div>
     <Separator/>
+    <CountryDetailedViewContainer 
+      country_name='Finland'
+      country_flag_emoji="&#127467;&#127470;"
+      rank={1} 
+      happinessScore={{year: happinessScore2024Finland.year, score: happinessScore2024Finland.score} as HappinessScore}
+      happinessScoreHistory={happinessScoreHistory}
+      card_visibility={card_v}
+      // adjust_on_large_device = {true}
+      detailedHappinessScore={happinessScore2024Finland}
+    />
   </>
 }
