@@ -17,25 +17,6 @@ import {
 } from "@/components/ui/chart"
 import { ChartLegend, ChartLegendContent } from "@/components/ui/chart"
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
-const chartConfig = {
-  desktop: {
-    label: "Finland",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Switzerland",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig
-
 type ChildProps= {
   year: number
   country1 : string
@@ -45,12 +26,12 @@ type ChildProps= {
 export function Chart2({year, country1, country2} :ChildProps) {
 
   const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
+    { month: "2019", desktop: 186, mobile: 80 },
+    { month: "2020", desktop: 305, mobile: 200 },
+    { month: "2021", desktop: 237, mobile: 120 },
+    { month: "2022", desktop: 73, mobile: 190 },
+    { month: "2023", desktop: 209, mobile: 130 },
+    { month: "2024", desktop: 214, mobile: 140 },
   ]
   const chartConfig = {
     desktop: {
@@ -62,11 +43,10 @@ export function Chart2({year, country1, country2} :ChildProps) {
       color: "hsl(var(--chart-2))",
     },
   } satisfies ChartConfig
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Score history</CardTitle>
+        <CardTitle>Rank (World) History</CardTitle>
         {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent>
@@ -85,7 +65,7 @@ export function Chart2({year, country1, country2} :ChildProps) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => value.slice(0, 4)}
             />
             <ChartTooltip
               cursor={false}
