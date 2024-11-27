@@ -144,7 +144,7 @@ Croatia
 Norway
 Cyprus
 Poland
-Czech Republic
+Czechia
 Portugal
 Denmark
 Romania
