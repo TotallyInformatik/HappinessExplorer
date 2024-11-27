@@ -17,6 +17,7 @@ export type ContinentGroup = {
 export type Country = {
     countryId: number,
     countryName: string,
+    countryCode: string | null,
 }
 
 export type CountryData = {
@@ -123,7 +124,7 @@ export async function getCountriesByContinent(year: number, locale: string): Pro
                         (c) => c.countryId === country.countryId
                     )?.localizedName || "Unknown Country";
 
-                return { countryId: country.countryId, countryName };
+                return { countryId: country.countryId, countryName, countryCode: country.countryCode };
             })
             .sort((a, b) => a.countryName.localeCompare(b.countryName));
 
@@ -162,4 +163,46 @@ export async function getCountryData(year: number, countryId: number): Promise<C
     catch (error) {
         return undefined;
     }
+}
+
+export async function getTopTenCountries(year: number, locale: string): Promise<Country[]> {
+    const topCountries = await db.query.reports.findMany({
+        where: (table) => eq(table.year, year),
+        orderBy: (table) => asc(table.rank),
+        limit: 10,
+        columns: {
+            countryId: true,
+        },
+    });
+
+    const countryIds = topCountries.map((country) => country.countryId);
+
+    // Step 3: Query translations for the top 10 countries
+    const translations = await db
+        .select({
+            countryId: countries.countryId,
+            countryCode: countries.countryCode,
+            localizedName: countryTranslations.localizedName,
+        })
+        .from(countries)
+        .leftJoin(
+            countryTranslations,
+            and(
+                eq(countryTranslations.countryCode, countries.countryCode),
+                eq(countryTranslations.languageCode, locale)
+            )
+        )
+        .where(inArray(countries.countryId, countryIds));
+
+    // Step 4: Map the translations back to the country IDs
+    const result: Country[] = topCountries.map((id) => {
+        const translation = translations.find((t) => t.countryId === id.countryId);
+        return {
+            countryId: id.countryId,
+            countryName: translation?.localizedName || "Unknown Country",
+            countryCode: translation?.countryCode || null,
+        };
+    });
+
+    return result;
 }

@@ -1,29 +1,13 @@
-"use client";
-
-import { Button } from "@/components/ui/button"
-import { getListOfYears, getCountriesByContinent } from "@/lib/db_interface"
-
-
-async function getYears() {
-  const list = await getListOfYears();
-  console.log(list);
-}
-
-async function getCountries() {
-  const list = await getCountriesByContinent(2021, "de");
-  console.log(list);
-}
+import Leaderboard from "@/components/Leaderboard"
+import { Separator } from "@/components/ui/separator"
 
 export default function Page() {
   return <>
-    <h2>Leaderboard Page</h2>
-    <div className="w-full flex flex-col items-center gap-5 m-5">
-      <Button onClick={() => getYears()}>
-        Get list of years
-      </Button>
-      <Button onClick={() => getCountries()}>
-        Get list of countries by continent
-      </Button>
+    <div className="w-full flex flex-col items-center my-8 gap-4">
+      <h1 className="text-3xl font-extrabold">Leaderboard</h1>
+      <p className="text-sm text-muted-foreground">See the current world champions at a glance</p>
     </div>
+    <Separator/>
+    <Leaderboard />
   </>
 }
