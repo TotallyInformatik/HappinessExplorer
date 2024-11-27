@@ -7,7 +7,7 @@ export default async function Leaderboard() {
     const years = await getListOfYears();
     const currentYear = years[0].year;
 
-    const countries = await getTopTenCountries(currentYear, "ed");
+    const countries = await getTopTenCountries(currentYear, "en");
     console.log(countries);
 
     return <div className="p-6">
