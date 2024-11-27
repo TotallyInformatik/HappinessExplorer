@@ -21,24 +21,25 @@ type ChildProps= {
   year: number
   country1 : string
   country2: string
+  chartData : {year : number, c1 : number, c2 : number}[]
 }
 
-export function Chart1({year, country1, country2} :ChildProps) {
+export function Chart1({year, country1, country2, chartData} :ChildProps) {
 
-  const chartData = [
-    { month: "2019", desktop: 186, mobile: 80 },
-    { month: "2020", desktop: 305, mobile: 200 },
-    { month: "2021", desktop: 237, mobile: 120 },
-    { month: "2022", desktop: 73, mobile: 190 },
-    { month: "2023", desktop: 209, mobile: 130 },
-    { month: "2024", desktop: 214, mobile: 140 },
-  ]
+  // const chartData = [
+  //   { month: "2019", desktop: 186, mobile: 80 },
+  //   { month: "2020", desktop: 305, mobile: 200 },
+  //   { month: "2021", desktop: 237, mobile: 120 },
+  //   { month: "2022", desktop: 73, mobile: 190 },
+  //   { month: "2023", desktop: 209, mobile: 130 },
+  //   { month: "2024", desktop: 214, mobile: 140 },
+  // ]
   const chartConfig = {
-    desktop: {
+    c1: {
       label: country1,
       color: "hsl(var(--chart-1))",
     },
-    mobile: {
+    c2: {
       label: country2,
       color: "hsl(var(--chart-2))",
     },
@@ -50,42 +51,47 @@ export function Chart1({year, country1, country2} :ChildProps) {
         {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-44 w-full">
+        <ChartContainer config={chartConfig} className="h-64 w-full">
           <LineChart
             accessibilityLayer
             data={chartData}
             margin={{
               left: 14,
               right: 14,
+              top: 4,
+              bottom: 2
             }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="year"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 4)}
+              // tickFormatter={(value) => value}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <ChartLegend content={<ChartLegendContent />} />
+            {country1 || country2 ?
+            <ChartLegend content={<ChartLegendContent />} /> : ''}
+            {country1 == "" ? '' :
             <Line
-              dataKey="desktop"
+              dataKey="c1"
               type="natural"
-              stroke="var(--color-desktop)"
+              stroke="orange"
               strokeWidth={2}
               dot={{
-                fill: "var(--color-desktop)",
+                fill: "orange",
               }}
               activeDot={{
                 r: 6,
               }}
-            />
+            />}
+            {country2 == "" ? '' :
             <Line
-              dataKey="mobile"
+              dataKey="c2"
               type="natural"
               stroke="blue"
               strokeWidth={2}
@@ -95,7 +101,7 @@ export function Chart1({year, country1, country2} :ChildProps) {
               activeDot={{
                 r: 6,
               }}
-            />
+            />}
           </LineChart>
         </ChartContainer>
       </CardContent>
