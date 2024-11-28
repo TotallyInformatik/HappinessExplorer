@@ -1,7 +1,7 @@
 "use client";
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectGroup, SelectValue } from "@/components/ui/select";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import {
   Command,
@@ -19,40 +19,38 @@ import {
 import { Button } from '@/components/ui/button';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getCountriesByContinent, getCountryData, Year } from '@/lib/db_interface';
+import { continentTranslations } from '@/lib/database/schema';
+import { setConfig } from 'next/config';
+import GeoCountry from './geo-country';
 
 interface MapPosition {
   coordinates: [number, number],
   zoom: number
 };
 
-interface CountryChangeEvent {
+export interface CountryChangeEvent {
   country: string,
   report: string
 }
 
-interface GlobeExplorerProps { onCountryChange?: (e: CountryChangeEvent) => void }
+interface GlobeExplorerProps { 
+  onCountryChange?: (e: CountryChangeEvent) => void ,
+  years: Year[]
+}
 
-const countries = [
-  {
-    value: "Switzerland",
-    label: "Switzerland",
-  },
-  {
-    value: "Germany",
-    label: "Germany",
-  },
-  {
-    value: "England",
-    label: "England",
-  },
-  {
-    value: "USA",
-    label: "USA",
-  }
-]
+type Countries = {
+  label: string,
+  value: string
+}[]
+
+export type CountryIDs = {
+  [countryName: string]: number
+}
 
 const GlobeExplorer = ({ 
-  onCountryChange 
+  onCountryChange,
+  years
 } : GlobeExplorerProps) => {
   const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
@@ -66,6 +64,8 @@ const GlobeExplorer = ({
   const [position, setPosition] = useState<MapPosition>({ coordinates: [0, 0], zoom: 1.3 });
   const [open, setOpen] = React.useState(false)
   const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [countries, setCountries] = useState<Countries>([]);
+  const [countryIDs, setCountryIDs] = useState<CountryIDs>({});
 
   return <>
     <section id='world-map'>
@@ -73,17 +73,42 @@ const GlobeExplorer = ({
         <h3 className="text-2xl font-normal">Globe Explorer</h3>
         <section className='flex items-center h-full gap-10'>
           <Separator orientation='vertical' className='bg-slate-300 h-10'/>
-          <Select value={report} onValueChange={setReport}>
+          <Select value={report} onValueChange={(value) => {
+            setReport(value);
+            setSelectedCountry("");
+            getCountriesByContinent(parseInt(value), "en").then((result) => {
+              let allCountries: Countries = [];
+              let newCountryData: CountryIDs = {};
+              for (let continents of result) { 
+                continents.countries.forEach((country) => {
+                  allCountries.push({
+                    label: country.countryName,
+                    value: country.countryName
+                  });
+                  newCountryData[country.countryName] = country.countryId;
+                })
+              }
+
+              allCountries.sort((a, b) => {
+                return a.label.localeCompare(b.label);
+              });
+
+              setCountries(allCountries);
+              setCountryIDs(newCountryData);
+              //console.log(newCountryData);
+
+            });
+          }}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select a report"/>
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="2024">2024</SelectItem>
-                <SelectItem value="2023">2023</SelectItem>
-                <SelectItem value="2022">2022</SelectItem>
-                <SelectItem value="2021">2021</SelectItem>
-                <SelectItem value="2020">2020</SelectItem>
+                {
+                  years.map((year) => {
+                    return <SelectItem key={year.year} value={year.year.toString()}>{year.year}</SelectItem>;
+                  })
+                }
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -154,24 +179,15 @@ const GlobeExplorer = ({
                 <ZoomableGroup translateExtent={[[0, 65], [900, 535]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom}>
                   <Geographies geography={geoUrl}>
                     {({ geographies }) =>
-                      geographies.map(geo => (
-                        <Geography 
-                          fill='black'
-                          key={geo.rsmKey} 
-                          geography={geo} 
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setSelectedCountry(geo.properties.name);
-
-                            if (onCountryChange) {
-                              onCountryChange({
-                                country: geo.properties.name,
-                                report: report
-                              });
-                            }
-                          }}
+                      geographies.map((geo) => {
+                        return <GeoCountry 
+                          geo={geo}
+                          countryIDs={countryIDs}
+                          onCountryChange={onCountryChange}
+                          setSelectedCountry={setSelectedCountry}
+                          report={report}
                         />
-                      ))
+                      })
                     }
                   </Geographies> 
                 </ZoomableGroup>

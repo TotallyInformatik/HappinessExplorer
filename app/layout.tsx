@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <header className="w-screen h-auto overflow-x-auto no-scrollbar sticky top-0 bg-white">
+        <header className="w-screen h-auto overflow-x-auto no-scrollbar sticky top-0 bg-white z-50">
           <div className="flex w-auto items-center h-auto px-5 py-3 justify-between gap-x-10 gap-y-5">
             <section className="flex items-center gap-x-10 gap-y-5">
               <Link href="/" className="flex items-center gap-4 cursor-pointer">
