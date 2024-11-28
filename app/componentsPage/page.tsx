@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { CountryDetailedViewContainer, card_visibility } from "@/components/ui/country-detailed-view";
+import { DemographicComposition } from "@/components/ui/custom-bar-chart";
 import { DetailedHappinessScore, HappinessScore } from "@/components/ui/custom-card";
 
 
@@ -27,6 +28,13 @@ const happinessScore2024Finland = {
 } as DetailedHappinessScore
 
 
+const demographicComposition = {
+  happinessScore_young: 5.1,
+  happinessScore_lower_middle: 7.8,
+  happinessScore_upper_middle: 7.9,
+  happinessScore_old: 6.9,
+} as DemographicComposition
+
 
 export default function Page() {
   
@@ -35,7 +43,7 @@ export default function Page() {
     show_score_history_card: true,
   } as card_visibility
 
-  return <>
+  return <div className="overflow-x-scroll">
     <h2>Components Page</h2>
     <Button>Button</Button>
     <hr className="mt-64"/>
@@ -46,8 +54,10 @@ export default function Page() {
       happinessScore={{year: happinessScore2024Finland.year, score: happinessScore2024Finland.score} as HappinessScore}
       happinessScoreHistory={happinessScoreHistory}
       card_visibility={card_v}
+      adjust_on_large_device={false}
       detailedHappinessScore={happinessScore2024Finland}
+      demographicComposition={demographicComposition}
     />
     <hr/>
-  </>
+  </div>
 }
