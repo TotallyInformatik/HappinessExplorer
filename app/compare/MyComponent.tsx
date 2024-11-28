@@ -17,6 +17,7 @@ import React, { ReactNode } from "react";
 import { card_visibility, CountryDetailedViewContainer } from "@/components/ui/country-detailed-view"
 import { HappinessScore, DetailedHappinessScore } from "@/components/ui/custom-card"
 import { ContinentGroup, CountryData, getCountryData, getListOfYears, Year } from "@/lib/db_interface"
+import { DemographicComposition } from "@/components/ui/custom-bar-chart"
 // import '@/styles/globals.css';
 
 const Africa = Array.from(`Algeria
@@ -396,6 +397,13 @@ const happinessScore2024Finland = {
   dystopiaResidual: 2.082
 } as DetailedHappinessScore
 
+const demographicComposition = {
+  happinessScore_young: 5.1,
+  happinessScore_lower_middle: 7.8,
+  happinessScore_upper_middle: 7.9,
+  happinessScore_old: 6.9,
+} as DemographicComposition
+
 // const tmp :Promise<Year[]> = getListOfYears()
 
 // type chartDataType = {year : number, c1 : number, c2 : number}[] | undefined
@@ -574,7 +582,17 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       happinessScoreHistory={history1 ? history1 : [{year:0, score:0}]}
       card_visibility={card_v}
       adjust_on_large_device = {true}
-      detailedHappinessScore={happinessScore2024Finland}
+      demographicComposition={demographicComposition}
+      detailedHappinessScore={{year : year,
+                               score : data1?.ladderScore ? data1.ladderScore : 0,
+                               logGDPPerCapita : data1?.logGdpPerCapita ? data1.logGdpPerCapita : 0,
+                               socialSupport : data1?.socialSupport ? data1.socialSupport : 0,
+                               healthyLifeExpectency : data1?.healthyLifeExpectancy ? data1.healthyLifeExpectancy : 0,
+                               freedomOfLifeChoices : data1?.freedomToMakeLifeChoices ? data1.freedomToMakeLifeChoices : 0,
+                               generosity : data1?.generosity ? data1.generosity : 0,
+                               perceptionsOfCorruption : data1?.perceptionsOfCorruption ? data1.perceptionsOfCorruption : 0,
+                               dystopiaResidual : data1?.dystopiaResidual ? data1.dystopiaResidual : 0   
+      }}
     />
     </div>}
     {country1 && country2 ? 
@@ -588,8 +606,18 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       happinessScore={{year: year, score: data2 ? (data2!.ladderScore ? data2!.ladderScore : 0) :0} as HappinessScore}
       happinessScoreHistory={history2 ? history2 : [{year:0, score:0}]}
       card_visibility={card_v}
+      demographicComposition={demographicComposition}
       adjust_on_large_device = {true}
-      detailedHappinessScore={happinessScore2024Finland}
+      detailedHappinessScore={{year : year,
+        score : data2?.ladderScore ? data2.ladderScore : 0,
+        logGDPPerCapita : data2?.logGdpPerCapita ? data2.logGdpPerCapita : 0,
+        socialSupport : data2?.socialSupport ? data2.socialSupport : 0,
+        healthyLifeExpectency : data2?.healthyLifeExpectancy ? data2.healthyLifeExpectancy : 0,
+        freedomOfLifeChoices : data2?.freedomToMakeLifeChoices ? data2.freedomToMakeLifeChoices : 0,
+        generosity : data2?.generosity ? data2.generosity : 0,
+        perceptionsOfCorruption : data2?.perceptionsOfCorruption ? data2.perceptionsOfCorruption : 0,
+        dystopiaResidual : data2?.dystopiaResidual ? data2.dystopiaResidual : 0   
+}}
     />
     </div>}
       {sameContinent ? (<>
@@ -602,6 +630,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       happinessScoreHistory={happinessScoreHistory}
       card_visibility={card_v}
       adjust_on_large_device = {true}
+      demographicComposition={demographicComposition}
       detailedHappinessScore={happinessScore2024Finland}
     /> 
     </div>

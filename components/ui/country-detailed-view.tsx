@@ -109,4 +109,3 @@ function createCardVisibilityVariables(overrides?: card_visibility): boolean[] {
   ];
 }
 
-

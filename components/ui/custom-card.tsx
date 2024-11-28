@@ -27,8 +27,24 @@ export type DetailedHappinessScore = {
 
 
 
-const RankCard = ({rank}: {rank: number | string}): React.ReactNode => {
-  return <Card className={"w-[172px] h-[221px] p-[1rem] flex flex-col gap-3 shrink-0" + (false ? " md:w-full" : '')}>
+const RankCard = ({
+  rank,
+
+  
+  adjust_on_large_device = true,
+}: {
+  rank: number | string,
+
+
+  adjust_on_large_device?: boolean
+}): React.ReactNode => {
+  return (
+  <Card className={clsx(
+    "w-[172px] h-full p-[1rem] flex flex-col gap-3 shrink-0",
+    {
+      "md:w-full md:h-[221px]": adjust_on_large_device
+    }
+    )}>
     <CardHeader className="p-0 grow-0 shrink">
       <CardTitle className="text-base font-normal">Rank (World)</CardTitle>
     </CardHeader>
@@ -42,24 +58,40 @@ const RankCard = ({rank}: {rank: number | string}): React.ReactNode => {
 
 
 
-const HappinessScoreProgressCard = ({score}: {score: HappinessScore}): React.ReactNode => {
-  return <Card className={"w-[302px] h-[221px] p-[1rem] flex flex-col gap-3 shrink-0" + (false ? " md:w-full" : '')}>
-  <CardHeader className="p-0 grow-0 shrink">
-    <CardTitle className="text-base font-normal">Happiness Score</CardTitle>
-  </CardHeader>
-  <CardContent className="p-0 grow shrink flex items-center justify-center">
-    <div className="w-[100%] max-w-[302px] gap-3 flex flex-col">
-      <div className="flex justify-center items-center gap-3 w-[100%]">
-        <span className="font-semibold text-lg grow-0">0</span>
-        <Progress value={score.score * 10} className="grow"></Progress>
-        <span className="font-semibold text-lg grow-0">10</span>
-      </div>
-      <div className="flex justify-center">
-        <p className="font-semibold text-3xl">{score.score}</p>
-      </div>
-    </div>
-  </CardContent>
-</Card>
+const HappinessScoreProgressCard = ({
+  score,
+
+  
+  adjust_on_large_device = true,
+}: {
+  score: HappinessScore,
+  
+  adjust_on_large_device?: boolean,
+}): React.ReactNode => {
+  return (
+    <Card className={clsx(
+      "w-[302px] h-full p-[1rem] flex flex-col gap-3 shrink-0",
+      {
+        "md:w-full md:h-[221px]": adjust_on_large_device,
+      }
+    )}>
+      <CardHeader className="p-0 grow-0 shrink">
+        <CardTitle className="text-base font-normal">Happiness Score</CardTitle>
+      </CardHeader>
+      <CardContent className="p-0 grow shrink flex items-center justify-center">
+        <div className="w-full max-w-[302px] gap-3 flex flex-col">
+          <div className="flex justify-center items-center gap-3 w-[100%]">
+            <span className="font-semibold text-lg grow-0">0</span>
+            <Progress value={score.score * 10} className="grow [&_div]:bg-chart-1"></Progress>
+            <span className="font-semibold text-lg grow-0">10</span>
+          </div>
+          <div className="flex justify-center">
+            <p className="font-semibold text-3xl">{score.score}</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
 
 
