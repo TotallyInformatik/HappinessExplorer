@@ -1,7 +1,7 @@
 "use client"
 
 
-import { CartesianGrid, Label, LabelList, Line, LineChart, PolarAngleAxis, PolarRadiusAxis, RadialBar, RadialBarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { CartesianGrid, Label, LabelList, Line, LineChart, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import clsx from "clsx"
@@ -11,16 +11,10 @@ import clsx from "clsx"
 export type YearLineChartData = {
   year: number | string,
   value: number,
-  value2?: number,
-  value3?: number,
-  value4?: number,
 }
 
 export type YearLineChartConfig = {
   label: string,
-  label2?: string,
-  label3?: string,
-  label4?: string,
 }
 
 
@@ -30,7 +24,6 @@ export const YearLineChartDots = ({
   chartData,
   chartConfig,
   className,
-  cardHeader,
 
 
   adjust_on_large_device = true,
@@ -40,7 +33,6 @@ export const YearLineChartDots = ({
   chartData: YearLineChartData[],
   chartConfig: YearLineChartConfig,
   className?: string,
-  cardHeader?: React.ReactNode,
 
   
   adjust_on_large_device?: boolean,
@@ -54,7 +46,7 @@ export const YearLineChartDots = ({
 
   const tickCount = 5
   const tickInterval = (upperBound - lowerBound) / tickCount
-  const ticks = Array.from({ length: tickCount },(_, i) => lowerBound + i * tickInterval)
+  const ticks = Array.from({ length: tickCount + 2},(_, i) => lowerBound + i * tickInterval)
 
 
 
@@ -67,26 +59,24 @@ export const YearLineChartDots = ({
 
   return (
     <Card className={clsx(
-      "max-w-[435px] w-full h-full p-3 flex flex-col shrink-0 gap-3",
+      "w-[435px] h-full p-3 flex flex-col shrink-0 gap-3",
       {
-        "md:max-w-full": adjust_on_large_device,
+        "md:w-full md:h-[221px]": adjust_on_large_device,
       }
     )}>
-      {(cardHeader ? cardHeader : (title ? (
-        <CardHeader className="p-0">
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-      ) : null))}
-
+      <CardHeader className="p-0 grow-0 shrink-0">
+        <CardTitle className="text-base font-normal">Score History</CardTitle>
+      </CardHeader>
       <CardContent className={clsx(
-        "p-0 max-w-[435px] h-full",
+        "p-0 w-full grow-0 shrink-0 h-[calc(100%-2.25rem)]",
         {
-          "md:flex md:justify-center md:max-w-full md:w-full": adjust_on_large_device
+          "md:flex md:justify-center md:w-full": adjust_on_large_device
         }
       )}>
-        <div className="max-w-[435px] p-0 h-[calc(100%-2.25rem)]">
+        <div className="max-w-[435px] w-full p-0 h-full">
           <ChartContainer config={config} className="h-full w-full text-black">
             <LineChart
+              accessibilityLayer
               data={chartData}
             >
               <CartesianGrid vertical={false}/>
@@ -146,45 +136,23 @@ export const YearLineChartDots = ({
 
 
 function getSmallestValue(data: YearLineChartData[]): number {
-  let smallest: number | null = null;
+  let smallest: number = 10;
 
   data.forEach((entry) => {
-    // Collect all defined numeric values in the entry
-    const values = [entry.value, entry.value2, entry.value3, entry.value4].filter(
-      (v): v is number => v !== undefined
-    );
-
-    // Find the smallest value in the current entry
-    const minInEntry = Math.min(...values);
-
-    // Update the smallest value found so far
-    if (smallest === null || minInEntry < smallest) {
-      smallest = minInEntry;
-    }
+    smallest = smallest > entry.value ? entry.value : smallest
   });
 
-  return (smallest ? smallest : 0);
+  return (smallest);
 }
 
 function getLargestValue(data: YearLineChartData[]): number {
-  let largest: number | null = null;
+  let largest: number = 0;
 
   data.forEach((entry) => {
-    // Collect all defined numeric values in the entry
-    const values = [entry.value, entry.value2, entry.value3, entry.value4].filter(
-      (v): v is number => v !== undefined
-    );
-
-    // Find the smallest value in the current entry
-    const maxInEntry = Math.max(...values);
-
-    // Update the smallest value found so far
-    if (largest === null || maxInEntry > largest) {
-      largest = maxInEntry;
-    }
+    largest = largest < entry.value ? entry.value : largest
   });
 
-  return (largest ? largest : 10);
+  return (largest);
 }
 
 
