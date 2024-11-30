@@ -2,7 +2,7 @@
 
 import { CountryData, getCountryData } from "@/lib/db_interface";
 import { Geography } from "react-simple-maps";
-import { CountryChangeEvent, CountryIDs } from "./globe-explorer";
+import { GlobeSelection, CountryIDs } from "./globe-explorer";
 import { LegacyRef, RefObject, useRef, useState } from "react";
 
 // compared to the data we have from the website.
@@ -55,7 +55,7 @@ export default function GeoCountry({
   report: string,
   countryIDs: CountryIDs,
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>,
-  onCountryChange?: (e: CountryChangeEvent) => void,
+  onCountryChange?: (e: GlobeSelection) => void,
 }) {
 
   //const ref = useRef<any>();
@@ -83,7 +83,8 @@ export default function GeoCountry({
       if (onCountryChange) {
         onCountryChange({
           country: correctName,
-          report: report
+          report: report,
+          countryId: countryIDs[correctName]
         });
       }
     }}

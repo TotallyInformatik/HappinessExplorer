@@ -14,9 +14,12 @@
 }
 
 body {
-  font-family: "NotoColorEmojiLimited", "Inter", Arial, Helvetica, sans-serif;
+  font-family: "NotoColorEmojiLimited", "Inter", "Apple Color Emoji", Arial, Helvetica, sans-serif;
   width: 100%;
   overflow-x: hidden;
+}
+main {
+  contain: paint; /* todo: remove this if we have any problems  */
 }
 
 @layer utilities {

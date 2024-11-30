@@ -37,9 +37,6 @@ export const CountryDetailedViewContainer = ({
   happinessScoreHistory,
   detailedHappinessScore,
   demographicComposition,
-
-
-
   adjust_on_large_device = true,
   card_visibility,
 }: {

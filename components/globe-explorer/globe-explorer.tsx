@@ -17,25 +17,31 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
-import { Check, ChevronsUpDown, X } from 'lucide-react';
+import { ArrowDown, Check, ChevronsUpDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getCountriesByContinent, getCountryData, Year } from '@/lib/db_interface';
 import { continentTranslations } from '@/lib/database/schema';
 import { setConfig } from 'next/config';
 import GeoCountry from './geo-country';
+import { useRouter } from 'next/navigation';
+import { ChartConfig, ChartContainer } from '../ui/chart';
+import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
+import CountryDetailsShort from './country-details-short';
+import { Card, CardContent } from '../ui/card';
 
 interface MapPosition {
   coordinates: [number, number],
   zoom: number
 };
 
-export interface CountryChangeEvent {
+export interface GlobeSelection {
   country: string,
-  report: string
+  report: string,
+  countryId: number
 }
 
 interface GlobeExplorerProps { 
-  onCountryChange?: (e: CountryChangeEvent) => void ,
+  onCountryChange?: (e: GlobeSelection) => void ,
   years: Year[]
 }
 
@@ -66,13 +72,32 @@ const GlobeExplorer = ({
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [countries, setCountries] = useState<Countries>([]);
   const [countryIDs, setCountryIDs] = useState<CountryIDs>({});
+  const [rank, setRank] = useState<number>(0);
+  const [score, setScore] = useState<number>(0); 
+    
+  useEffect(() => {
+
+    if (selectedCountry && report) {
+      getCountryData(parseInt(report), countryIDs[selectedCountry])
+        .then((result) => {
+          if (result) {
+            setRank(result.rank || 0);
+            setScore(result.ladderScore || 0);
+          }
+        })
+    }
+
+  }, [selectedCountry])
 
   return <>
     <section id='world-map'>
-      <header className="w-screen h-auto overflow-x-auto no-scrollbar flex items-center px-5 py-3 justify-between gap-x-10 gap-y-5">
+      <header className="w-screen h-auto overflow-x-auto no-scrollbar 
+                        flex md:items-center px-5 py-3 justify-between gap-x-10 
+                        gap-y-5 flex-col md:flex-row "
+      >
         <h3 className="text-2xl font-normal">Globe Explorer</h3>
-        <section className='flex items-center h-full gap-10'>
-          <Separator orientation='vertical' className='bg-slate-300 h-10'/>
+        <section className='flex md:items-center flex-col md:flex-row h-full gap-x-10 gap-y-2'>
+          <Separator orientation='vertical' className='bg-slate-300 h-10 hidden md:block'/>
           <Select value={report} onValueChange={(value) => {
             setReport(value);
             setSelectedCountry("");
@@ -112,7 +137,7 @@ const GlobeExplorer = ({
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Separator orientation='vertical' className='bg-slate-300 h-10'/>
+          <Separator orientation='vertical' className='bg-slate-300 h-10 hidden md:block'/>
           <section className='flex items-center gap-2'>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild disabled={report == ""}>
@@ -139,6 +164,13 @@ const GlobeExplorer = ({
                           onSelect={(currentValue) => {
                             setSelectedCountry(currentValue === selectedCountry ? "" : currentValue)
                             setOpen(false)
+                            if (onCountryChange) {
+                              onCountryChange({
+                                country: currentValue,
+                                report: report,
+                                countryId: countryIDs[currentValue]
+                              });
+                            }
                           }}
                         >
                           {country.label}
@@ -155,7 +187,7 @@ const GlobeExplorer = ({
                 </Command>
               </PopoverContent>
             </Popover>
-            <span className='text-[14px] text-muted-foreground'>
+            <span className='text-[14px] text-muted-foreground text-nowrap'>
               or press
             </span>
             <kbd className="pointer-events-none inline-flex h-5 select-none text-[14px] font-medium text-muted-foreground items-center gap-1 rounded bg-muted px-1.5 font-mono opacity-100">
@@ -165,7 +197,7 @@ const GlobeExplorer = ({
         </section>
       </header>
       <Separator className="w-screen h-px bg-slate-300"/>
-      <main className="w-full  aspect-[4/3] overflow-hidden bg-slate-200 relative">
+      <main className="w-full aspect-[4/3] overflow-hidden bg-slate-200 relative">
         {
           report == "" ? 
             <div className='w-full h-full flex items-center justify-center'>
@@ -173,14 +205,16 @@ const GlobeExplorer = ({
             </div>
             : 
             <>
-              <ComposableMap onClick={(event) => {
-                setSelectedCountry("");
-              }}>
-                <ZoomableGroup translateExtent={[[0, 65], [900, 535]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom}>
+              <ComposableMap 
+                onClick={(event) => {
+                  setSelectedCountry("");
+                }}>
+                <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom}>
                   <Geographies geography={geoUrl}>
                     {({ geographies }) =>
                       geographies.map((geo) => {
                         return <GeoCountry 
+                          key={geo.rsmKey}
                           geo={geo}
                           countryIDs={countryIDs}
                           onCountryChange={onCountryChange}
@@ -192,30 +226,33 @@ const GlobeExplorer = ({
                   </Geographies> 
                 </ZoomableGroup>
               </ComposableMap>
-              <div className="absolute top-0">
-                <Popover open={selectedCountry != ""}>
-                  <PopoverTrigger></PopoverTrigger>
-                  <PopoverContent className='mx-5 w-[40vw] max-w-[400px]'>
-                    <header className='flex justify-between items-start'>
-                      <section>
-                        <h2>{selectedCountry}</h2>
-                        <p className='text-sm opacity-50'>in {report}</p>
-                      </section>
-                      {
-                        /*
-                        <button className='bg-transparent p-1'>
-                          <X color='black' size={20}/>
-                        </button>
-                        */
-                      }
-                    </header>
-                  </PopoverContent>
-                </Popover>
+              <div className="absolute top-2 left-2">
+                <Card>
+                  <CardContent className='px-5 w-[30vw] max-w-[400px] z-0 hidden md:block py-5'>
+                    <CountryDetailsShort 
+                      selected={selectedCountry != ""}
+                      score={score}
+                      report={report || ""}
+                      selectedCountry={selectedCountry}
+                      rank={rank}
+                    />
+                  </CardContent>
+                </Card>
               </div>
           </>
         }
       </main>
     </section>
+    <Separator className="w-screen h-px bg-slate-300"/>
+    <div className='p-5 block md:hidden'>
+      <CountryDetailsShort 
+        selected={selectedCountry != ""}
+        score={score}
+        report={report || ""}
+        selectedCountry={selectedCountry}
+        rank={rank}
+      />
+    </div>
   </>
 };
 
