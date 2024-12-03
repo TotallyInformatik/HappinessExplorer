@@ -236,8 +236,20 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
   label
 
 }) => {
-  if (startAngle > 180 || startAngle < 0 || endAngle > 180 || endAngle < 0) {
-    return null
+  if (startAngle > 180) {
+    startAngle = 180
+  }
+
+  if (startAngle < 0) {
+    startAngle = 0
+  }
+
+  if (endAngle > 180) {
+    endAngle = 180
+  }
+
+  if (endAngle < 0) {
+    endAngle = 0
   }
 
   // Convert degrees to radians
