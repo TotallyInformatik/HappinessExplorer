@@ -70,7 +70,7 @@ const HappinessScoreProgressCard = ({
 }): React.ReactNode => {
   return (
     <Card className={clsx(
-      "w-[302px] h-full p-[1rem] flex flex-col gap-3 shrink-0",
+      "w-[302px] h-[200px] p-[1rem] flex flex-col gap-3 shrink-0",
       {
         "md:w-full md:h-[221px]": adjust_on_large_device,
       }

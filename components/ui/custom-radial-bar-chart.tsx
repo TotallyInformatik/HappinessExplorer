@@ -104,7 +104,7 @@ export const FactorsRadialBarChart = ({
 
   return (
     <Card className={clsx(
-      "h-full w-[302px] p-0 shrink-0",
+      "h-[200px] w-[302px] p-0 shrink-0",
       {
         "md:w-full": adjust_on_large_device,
         'relative': openedUsingFocus && !mouseHover,
