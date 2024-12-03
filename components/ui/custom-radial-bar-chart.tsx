@@ -107,7 +107,7 @@ export const FactorsRadialBarChart = ({
 
   return (
     <Card className={clsx(
-      "h-[200px] w-[490px] p-0 shrink-0",
+      "h-full w-[490px] p-0 shrink-0",
       {
         "md:w-full md:h-[221px]": adjust_on_large_device,
       }
@@ -236,8 +236,20 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
   label
 
 }) => {
-  if (startAngle > 180 || startAngle < 0 || endAngle > 180 || endAngle < 0) {
-    return null
+  if (startAngle > 180) {
+    startAngle = 180
+  }
+
+  if (startAngle < 0) {
+    startAngle = 0
+  }
+
+  if (endAngle > 180) {
+    endAngle = 180
+  }
+
+  if (endAngle < 0) {
+    endAngle = 0
   }
 
   // Convert degrees to radians
