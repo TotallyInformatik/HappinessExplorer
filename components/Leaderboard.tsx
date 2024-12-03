@@ -17,6 +17,7 @@ export default async function Leaderboard() {
                     countryName={country.countryName}
                     countryId={country.countryId}
                     countryCode={country.countryCode ?? ""}
+                    flagEmoji={country.flagEmoji ?? ""}
                     year={currentYear}
                 />
                 <Separator className="my-4"/>

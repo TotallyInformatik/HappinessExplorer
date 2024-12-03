@@ -18,6 +18,7 @@ export type Country = {
     countryId: number,
     countryName: string,
     countryCode: string | null,
+    flagEmoji: string | null,
 }
 
 export type CountryData = {
@@ -124,7 +125,7 @@ export async function getCountriesByContinent(year: number, locale: string): Pro
                         (c) => c.countryId === country.countryId
                     )?.localizedName || "Unknown Country";
 
-                return { countryId: country.countryId, countryName, countryCode: country.countryCode };
+                return { countryId: country.countryId, countryName, countryCode: country.countryCode, flagEmoji: null };
             })
             .sort((a, b) => a.countryName.localeCompare(b.countryName));
 
@@ -165,6 +166,42 @@ export async function getCountryData(year: number, countryId: number): Promise<C
     }
 }
 
+export async function getCountry(countryId: number, locale: string): Promise<Country | undefined> {
+    try {
+        const countryDetails = await db.query.countries.findFirst({
+            where: (table) => eq(table.countryId, countryId),
+            columns: {
+                flagEmoji: true,
+                countryCode: true,
+            },
+        });
+
+        if (!countryDetails) {
+            throw new Error(`Country with ID ${countryId} not found.`);
+        }
+
+        const translation = await db.query.countryTranslations.findFirst({
+            where: (table) =>
+                and(
+                    eq(table.countryCode, countryDetails.countryCode),
+                    eq(table.languageCode, locale)
+                ),
+            columns: {
+                localizedName: true,
+            },
+        });
+
+        return {
+            countryId,
+            countryName: translation?.localizedName || "Unknown Country",
+            countryCode: countryDetails.countryCode,
+            flagEmoji: countryDetails.flagEmoji,
+        };
+    } catch (error) {
+        return;
+    }
+}
+
 export async function getTopTenCountries(year: number, locale: string): Promise<Country[]> {
     const topCountries = await db.query.reports.findMany({
         where: (table) => eq(table.year, year),
@@ -182,6 +219,7 @@ export async function getTopTenCountries(year: number, locale: string): Promise<
         .select({
             countryId: countries.countryId,
             countryCode: countries.countryCode,
+            flagEmoji: countries.flagEmoji,
             localizedName: countryTranslations.localizedName,
         })
         .from(countries)
@@ -201,6 +239,7 @@ export async function getTopTenCountries(year: number, locale: string): Promise<
             countryId: id.countryId,
             countryName: translation?.localizedName || "Unknown Country",
             countryCode: translation?.countryCode || null,
+            flagEmoji: translation?.flagEmoji || null,
         };
     });
 
