@@ -15,6 +15,19 @@ const happinessScoreHistory = [
 ]
 
 
+const happinessScore2024BurkinaFaso = {
+  year: 2024,
+  score: 4.548,
+  logGDPPerCapita: 0.756,
+  socialSupport: 0.685,
+  healthyLifeExpectency: 0.274, 
+  freedomOfLifeChoices: 0.483,
+  generosity: 0.173,
+  perceptionsOfCorruption: 0.179, 
+  dystopiaResidual: 1.999
+} as DetailedHappinessScore
+
+
 const happinessScore2024Finland = {
   year: 2024,
   score: 7.74,
@@ -26,6 +39,7 @@ const happinessScore2024Finland = {
   perceptionsOfCorruption:0.546, 
   dystopiaResidual: 2.082
 } as DetailedHappinessScore
+
 
 
 const demographicComposition = {
@@ -43,21 +57,24 @@ export default function Page() {
     show_score_history_card: true,
   } as card_visibility
 
-  return <div className="overflow-x-scroll">
+  return <div className="">
     <h2>Components Page</h2>
     <Button>Button</Button>
     <hr className="mt-64"/>
-    <CountryDetailedViewContainer 
-      country_name='Finland'
-      country_flag_emoji="&#127467;&#127470;"
-      rank={1} 
-      happinessScore={{year: happinessScore2024Finland.year, score: happinessScore2024Finland.score} as HappinessScore}
-      happinessScoreHistory={happinessScoreHistory}
-      card_visibility={card_v}
-      adjust_on_large_device={false}
-      detailedHappinessScore={happinessScore2024Finland}
-      demographicComposition={demographicComposition}
-    />
+    <div className="overflow-auto">
+      <CountryDetailedViewContainer 
+        country_name='Finland'
+        country_flag_emoji="&#127467;&#127470;"
+        rank={1} 
+        happinessScore={happinessScore2024Finland as HappinessScore}
+        happinessScoreHistory={happinessScoreHistory}
+        card_visibility={card_v}
+        adjust_on_large_device={true}
+        detailedHappinessScore={happinessScore2024Finland}
+        demographicComposition={demographicComposition}
+      />
+    </div>
+    
     <hr/>
   </div>
 }
