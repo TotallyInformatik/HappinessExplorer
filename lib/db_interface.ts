@@ -206,3 +206,18 @@ export async function getTopTenCountries(year: number, locale: string): Promise<
 
     return result;
 }
+
+export async function getCountryEmoji(countryId: number): Promise<string | null | undefined> {
+    try {
+        const emoji = await db.query.countries.findFirst({
+            where: (table) => eq(table.countryId, countryId),
+            columns: {
+                flagEmoji: true,
+            }
+        });
+
+        return emoji?.flagEmoji;
+    } catch (error) {
+        return;
+    }
+}
