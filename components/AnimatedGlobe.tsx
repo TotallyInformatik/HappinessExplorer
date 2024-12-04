@@ -2,11 +2,11 @@
 
 import { useRive } from '@rive-app/react-canvas';
 
-type AnimatedLogoProps = {
+type AnimatedGlobeProps = {
     size: number
 }
 
-export default function AnimatedLogo(props: AnimatedLogoProps) {
+export default function AnimatedGlobe(props: AnimatedGlobeProps) {
     const { RiveComponent } = useRive({
         src: "/animations/animation_mainpage.riv",
         stateMachines: "Main",

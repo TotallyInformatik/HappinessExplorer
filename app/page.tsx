@@ -1,17 +1,14 @@
 "use client"
-import dynamic from 'next/dynamic';
+
 import React, { ReactNode, useEffect, useState } from 'react'; // This is the standard import
-import { Button } from "@/components/ui/button"
 import { Separator } from '@/components/ui/separator';
-import { ArrowDown, Router } from 'lucide-react';
 import GlobeExplorer, { GlobeSelection } from '@/components/globe-explorer/globe-explorer';
-import { CountryData, getCountriesByContinent, getCountryData, getCountryEmoji, getListOfYears, Year } from '@/lib/db_interface';
-import { useRouter } from 'next/navigation';
+import { CountryData, getCountryData, getCountryEmoji, getListOfYears, Year } from '@/lib/db_interface';
 import VerySpecialButton from '@/components/globe-explorer/very-special-button';
 import { CountryDetailedViewContainer } from '@/components/ui/country-detailed-view';
-import { YearLineChartDots } from '@/components/ui/custom-line-chart';
 import { HappinessScore } from '@/components/ui/custom-card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import AnimatedGlobe from '@/components/AnimatedGlobe';
 
 export default function Home() {
 
@@ -30,9 +27,10 @@ export default function Home() {
 
 
   return <>
-    <section className="w-screen h-80 flex items-center justify-center">
-      <div className="w-fit h-fit flex flex-col items-center gap-14 p-4">
+    <section className="w-screen flex items-center justify-center">
+      <div className="w-fit h-fit flex flex-col items-center gap-5 p-10">
         <h2 className="text-4xl font-bold  text-center">A lens of joy for the world.</h2>
+        <AnimatedGlobe size={300}/>
         <VerySpecialButton />
       </div>
     </section>

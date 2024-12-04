@@ -166,7 +166,7 @@ const GlobeExplorer = ({
                         <CommandItem
                           key={country.value}
                           value={country.value}
-                          onSelect={(currentValue) => {
+                          onSelect={(currentValue: any) => {
                             setSelectedCountry(currentValue === selectedCountry ? "" : currentValue)
                             setOpen(false)
                             if (onCountryChange) {
