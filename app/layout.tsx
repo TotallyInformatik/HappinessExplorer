@@ -20,12 +20,13 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 
 import Link from "next/link";
+import Head from "next/head";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Smiling Globe",
@@ -39,10 +40,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <body>
-        <header className="w-screen h-auto overflow-x-auto no-scrollbar">
-          <div className="flex w-auto items-center h-auto px-5 py-3 justify-between gap-x-10 gap-y-5">
-            <section className="flex items-center gap-x-10 gap-y-5">
+        <header className="w-[100%] h-auto overflow-x-auto no-scrollbar sticky top-0 bg-white z-50">
+          <div className="flex w-auto items-center h-auto px-5 py-3 justify-between gap-x-10 gap-y-5 flex-wrap">
+            <section className="flex items-center gap-x-10 gap-y-5 flex-wrap">
               <Link href="/" className="flex items-center gap-4 cursor-pointer">
                 <Image
                   src="/icons/logo_onLight.svg"
@@ -63,17 +67,17 @@ export default function RootLayout({
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/#worldmap" className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink href="/#world-map" className={cn(navigationMenuTriggerStyle(), "p-2")}>
                       World Map
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/compare" className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink href="/compare" className={cn(navigationMenuTriggerStyle(), "p-2")}>
                       Compare
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <NavigationMenuLink href="/leaderboard" className={navigationMenuTriggerStyle()}>
+                    <NavigationMenuLink href="/leaderboard" className={cn(navigationMenuTriggerStyle(), "p-2")}>
                       Leaderboard
                     </NavigationMenuLink>
                   </NavigationMenuItem>
@@ -94,8 +98,8 @@ export default function RootLayout({
               </Select>
             </section>
           </div>
+          <Separator className="w-screen h-px bg-slate-300"/>
         </header>
-        <Separator className="w-screen h-px bg-slate-300"/>
         <main>
           {children}
         </main>

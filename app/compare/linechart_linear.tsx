@@ -80,10 +80,10 @@ export function Chart2({year, country1, country2, chartData} :ChildProps) {
             <Line
               dataKey="c1"
               type="linear"
-              stroke="orange"
+              stroke="hsl(var(--chart-1))"
               strokeWidth={2}
               dot={{
-                fill: "orange",
+                fill: "hsl(var(--chart-1))",
               }}
               activeDot={{
                 r: 6,
@@ -93,10 +93,10 @@ export function Chart2({year, country1, country2, chartData} :ChildProps) {
             <Line
               dataKey="c2"
               type="linear"
-              stroke="blue"
+              stroke="hsl(var(--chart-2))"
               strokeWidth={2}
               dot={{
-                fill: "blue",
+                fill: "hsl(var(--chart-2))",
               }}
               activeDot={{
                 r: 6,
