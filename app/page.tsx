@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from '@/components/ui/separator';
 import { ArrowDown, Router } from 'lucide-react';
 import GlobeExplorer, { GlobeSelection } from '@/components/globe-explorer/globe-explorer';
-import { CountryData, getCountriesByContinent, getCountryData, getListOfYears, Year } from '@/lib/db_interface';
+import { CountryData, getCountriesByContinent, getCountryData, getCountryEmoji, getListOfYears, Year } from '@/lib/db_interface';
 import { useRouter } from 'next/navigation';
 import VerySpecialButton from '@/components/globe-explorer/very-special-button';
 import { CountryDetailedViewContainer } from '@/components/ui/country-detailed-view';
@@ -68,13 +68,13 @@ export default function Home() {
           )
           return;
         }
-
+        const emoji = await getCountryEmoji(selection.countryId);
 
         setDetailedContent(
           <ScrollArea className='whitespace-nowrap'>
             <CountryDetailedViewContainer
               country_name={selection.country}
-              country_flag_emoji={"👍"}
+              country_flag_emoji={emoji || ""}
               rank={selectedData.rank!}
               happinessScore={{
                 year: selection.report,

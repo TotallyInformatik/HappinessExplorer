@@ -20,7 +20,6 @@ body {
 }
 main {
   contain: paint; /* todo: remove this if we have any problems  */
-  font-family: "NotoColorEmojiLimited", "Apple Color Emoji", "Inter", Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
