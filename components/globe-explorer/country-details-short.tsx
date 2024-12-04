@@ -28,8 +28,6 @@ export default function CountryDetailsShort({
 
   const router = useRouter();
 
-  console.log(selected);
-
   if (selected) {
     return <>
     <header className='flex justify-between items-start'>

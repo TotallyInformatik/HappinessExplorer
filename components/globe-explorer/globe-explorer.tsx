@@ -65,7 +65,7 @@ const GlobeExplorer = ({
   // select a country has an external event, the same as the country click event.
   // this event also tells which report is currently selected.
   // todo: heatmap
-
+  
   const [report, setReport] = useState("");
   const [position, setPosition] = useState<MapPosition>({ coordinates: [0, 0], zoom: 1.3 });
   const [open, setOpen] = React.useState(false)
@@ -75,7 +75,9 @@ const GlobeExplorer = ({
   const [rank, setRank] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [dataExists, setDataExists] = useState<boolean>(false);
-    
+  
+
+
   useEffect(() => {
 
     if (selectedCountry && report) {

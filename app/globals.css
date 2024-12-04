@@ -18,6 +18,11 @@ body {
   width: 100%;
   overflow-x: hidden;
 }
+
+path {
+  outline: none;
+  cursor: pointer;
+}
 main {
   contain: paint; /* todo: remove this if we have any problems  */
 }
