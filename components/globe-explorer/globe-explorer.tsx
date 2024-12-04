@@ -73,7 +73,8 @@ const GlobeExplorer = ({
   const [countries, setCountries] = useState<Countries>([]);
   const [countryIDs, setCountryIDs] = useState<CountryIDs>({});
   const [rank, setRank] = useState<number>(0);
-  const [score, setScore] = useState<number>(0); 
+  const [score, setScore] = useState<number>(0);
+  const [dataExists, setDataExists] = useState<boolean>(false);
     
   useEffect(() => {
 
@@ -83,6 +84,9 @@ const GlobeExplorer = ({
           if (result) {
             setRank(result.rank || 0);
             setScore(result.ladderScore || 0);
+            setDataExists(true);
+          } else {
+            setDataExists(false);
           }
         })
     }
@@ -120,7 +124,6 @@ const GlobeExplorer = ({
 
               setCountries(allCountries);
               setCountryIDs(newCountryData);
-              //console.log(newCountryData);
 
             });
           }}>
@@ -227,32 +230,45 @@ const GlobeExplorer = ({
                 </ZoomableGroup>
               </ComposableMap>
               <div className="absolute top-2 left-2">
-                <Card>
-                  <CardContent className='px-5 w-[30vw] max-w-[400px] z-0 hidden md:block py-5'>
-                    <CountryDetailsShort 
-                      selected={selectedCountry != ""}
-                      score={score}
-                      report={report || ""}
-                      selectedCountry={selectedCountry}
-                      rank={rank}
-                    />
-                  </CardContent>
+                {
+                  selectedCountry != "" && <Card>
+                      <CardContent className='px-5 w-[30vw] max-w-[400px] z-0 hidden md:block py-5'>
+                        {
+                          dataExists ? 
+                            <CountryDetailsShort 
+                              selected={selectedCountry != ""}
+                              score={score}
+                              report={report || ""}
+                              selectedCountry={selectedCountry}
+                              rank={rank}
+                            /> : <div>
+                              <p>No data available for {selectedCountry}</p>
+                            </div>
+                        }
+                        <Separator className="w-full h-px bg-slate-300 block md:hidden"/>
+                      </CardContent>
                 </Card>
+                }
               </div>
           </>
         }
       </main>
     </section>
-    <Separator className="w-screen h-px bg-slate-300"/>
     <div className='p-5 block md:hidden'>
-      <CountryDetailsShort 
-        selected={selectedCountry != ""}
-        score={score}
-        report={report || ""}
-        selectedCountry={selectedCountry}
-        rank={rank}
-      />
+    {
+      dataExists ? 
+        <CountryDetailsShort 
+          selected={selectedCountry != ""}
+          score={score}
+          report={report || ""}
+          selectedCountry={selectedCountry}
+          rank={rank}
+        /> : <div>
+          <p>No data available for {selectedCountry}</p>
+        </div>
+    }
     </div>
+    <Separator className="w-screen h-px bg-slate-300"/>
   </>
 };
 

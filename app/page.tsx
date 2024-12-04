@@ -116,11 +116,11 @@ export default function Home() {
       }
 
     }}/>
-    <Separator className="w-screen h-px bg-slate-300"/>
     <section>
       <header className="w-screen h-auto overflow-x-auto no-scrollbar flex items-center px-5 py-3 justify-between gap-x-10 gap-y-5">
         <h3 className="text-2xl font-normal">Detail View</h3>
       </header>
+      <Separator className="w-screen h-px bg-slate-300"/>
       <section className="h-fit w-screen" id='details'>
         {detailedContent}
       </section>
