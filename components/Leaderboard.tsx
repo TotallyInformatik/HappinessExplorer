@@ -8,7 +8,7 @@ export default async function Leaderboard() {
     const currentYear = years[0].year;
 
     const countries = await getTopTenCountries(currentYear, "en");
-    console.log(countries);
+    //console.log(countries);
 
     return <div className="p-6">
         {countries.map((country) => (
@@ -17,6 +17,7 @@ export default async function Leaderboard() {
                     countryName={country.countryName}
                     countryId={country.countryId}
                     countryCode={country.countryCode ?? ""}
+                    flagEmoji={country.flagEmoji ?? ""}
                     year={currentYear}
                 />
                 <Separator className="my-4"/>

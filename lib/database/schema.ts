@@ -12,6 +12,7 @@ export const countries = pgTable("countries", {
   countryId: serial("country_id").primaryKey(),
   countryCode: varchar("country_code", { length: 10 }).unique().notNull(),
   continentCode: varchar("continent_code", { length: 10 }).notNull().references(() => continents.continentCode),
+  flagEmoji: varchar("flag_emoji", { length: 20 }),
 });
 
 // Country Translations Table

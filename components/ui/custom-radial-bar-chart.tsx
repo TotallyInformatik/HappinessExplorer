@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { Card, CardContent, CardHeader, CardTitle } from "./card"
 import { DetailedHappinessScore } from "./custom-card";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
 
 
@@ -26,22 +26,13 @@ export const FactorsRadialBarChart = ({
   
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
+  /*
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
   const [openedUsingFocus, setOpenedUsingFocus] = useState<boolean>(false);
   const [mouseHover, setMouseHover] = useState<boolean>(false);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverPosition, setPopoverPosition] = useState<'left' | 'right' | 'middle'>('middle');
-
   
-  const data = [
-    { name: 'Log GDP per capita', value: detailedHappinessScore.logGDPPerCapita, color: '-chart-1' },
-    { name: 'Social support', value: detailedHappinessScore.socialSupport, color: '-chart-2' },
-    { name: 'Healthy life expectency', value: detailedHappinessScore.healthyLifeExpectency, color: '-chart-3' },
-    { name: 'Freedom to make life choices', value: detailedHappinessScore.freedomOfLifeChoices, color: '-chart-4' },
-    { name: 'Generosity', value: detailedHappinessScore.generosity, color: '-chart-5' },
-    { name: 'Perceptions of corruption', value: detailedHappinessScore.perceptionsOfCorruption, color: '-chart-1' },
-    { name: 'Dystopia + residual', value: detailedHappinessScore.dystopiaResidual, color: '-chart-2' },
-  ] as FactorsRadialBarChartData[]
 
 
   useEffect(() => {
@@ -62,6 +53,18 @@ export const FactorsRadialBarChart = ({
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     setMousePosition({ x: event.clientX, y: event.clientY });
   };
+  */
+
+  
+  const data = [
+    { name: 'Log GDP per capita', value: detailedHappinessScore.logGDPPerCapita, color: '-chart-1' },
+    { name: 'Social support', value: detailedHappinessScore.socialSupport, color: '-chart-2' },
+    { name: 'Healthy life expectency', value: detailedHappinessScore.healthyLifeExpectency, color: '-chart-3' },
+    { name: 'Freedom to make life choices', value: detailedHappinessScore.freedomOfLifeChoices, color: '-chart-4' },
+    { name: 'Generosity', value: detailedHappinessScore.generosity, color: '-chart-5' },
+    { name: 'Perceptions of corruption', value: detailedHappinessScore.perceptionsOfCorruption, color: '-chart-6' },
+    { name: 'Dystopia + residual', value: detailedHappinessScore.dystopiaResidual, color: '-chart-7' },
+  ] as FactorsRadialBarChartData[]
 
   const reversed_data = data.slice().reverse();
 
@@ -104,10 +107,9 @@ export const FactorsRadialBarChart = ({
 
   return (
     <Card className={clsx(
-      "h-full w-[302px] p-0 shrink-0",
+      "h-full w-[490px] p-0 shrink-0",
       {
-        "md:w-full": adjust_on_large_device,
-        'relative': openedUsingFocus && !mouseHover,
+        "md:w-full md:h-[221px]": adjust_on_large_device,
       }
     )}
     >
@@ -115,22 +117,16 @@ export const FactorsRadialBarChart = ({
         className={clsx(
           "w-full h-full p-3 overflow-hidden",
         )}
-        tabIndex={0}
-        onMouseEnter={() => {setIsPopoverVisible(true); setMouseHover(true); }}
-        onMouseLeave={() => {setIsPopoverVisible(false); setMouseHover(false); }}
-        onFocus={() => { setIsPopoverVisible(true); setOpenedUsingFocus(true); }}
-        onBlur={() => { setIsPopoverVisible(false); setOpenedUsingFocus(false); }}
-        onMouseMove={handleMouseMove}
       >
         <CardHeader className="p-0 grow-0 shrink">
           <CardTitle className="text-base font-normal">Contributing Factors</CardTitle>
         </CardHeader>
-        <CardContent className="p-0 grow shrink h-full flex justify-center items-center">
+        <CardContent className="p-0 grow shrink h-full flex flex-row justify-center items-center gap-3">
           <div>
             <SVGContainer radius={radius} >
               {reversed_data.map((segment, index) => {
                 const startAngle = cumulativeAngle;
-                const endAngle = startAngle + segment.value * multiplier;
+                const endAngle = Math.round((startAngle + segment.value * multiplier));
                 cumulativeAngle = endAngle;
 
                 return (
@@ -140,12 +136,13 @@ export const FactorsRadialBarChart = ({
                     startAngle={startAngle}
                     endAngle={endAngle}
                     radius={radius}
+                    label={segment.name}
                   />
                 );
               })}
               <text
                 x={"50%"}
-                y={radius - 10}
+                y={radius-10}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 className="text-3xl font-bold cursor-default"
@@ -163,34 +160,20 @@ export const FactorsRadialBarChart = ({
                 Total score
               </text>
             </SVGContainer>
+            {/*<CustomPopover 
+              data={data} 
+              visible={isPopoverVisible}
+              openedUsingFocus={openedUsingFocus}
+              mousePosition={mousePosition}
+            />*/}
           </div>
+          <CustomLegend
+            data={data}
+          />
           
         </CardContent>
       </div>
-      {(isPopoverVisible) && (
-        <div
-          className="absolute p-3 bg-white border rounded-lg shadow-lg w-[256px]"
-          style={{
-            top: mouseHover ? mousePosition.y - 10 : 0,
-            left: mouseHover ? (popoverPosition === 'middle' ? mousePosition.x - 128 : (popoverPosition === "right" ? mousePosition.x + 10 : mousePosition.x - 266)) : 0,
-            transform: `translate(0, -100%)`,
-          }}
-        >
-          <ul className="space-y-1">
-            {data.map((factor, index) => (
-              <li key={index} className="flex justify-between items-center text-xs">
-                <div className="flex items-center">
-                  <div className={`w-[10px] h-[10px] rounded-[2px] inline-block mr-[5px]`} style={{background: `hsl(var(-${factor.color}))`}}/>
-                  {factor.name}
-                </div>
-                <span className="font-semibold">
-                  {factor.value.toFixed(2)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      
     </Card>
   )
 }
@@ -223,7 +206,10 @@ export const SVGContainer: React.FC<SVGContainerProps> = ({
         "",
         className
       )}
+      role="img" aria-label="[title + description]"
     >
+      <title>[Contributing Factors to Happiness Score]</title>
+      <desc>[This is a radial chart, that visually shows the composition of the happiness score of a country]</desc>
       {children}
     </svg>
   );
@@ -238,6 +224,7 @@ type RadialPathProps = {
   endAngle: number; // Ending angle in degrees
   radius: number; // Radius of the arc
   strokeWidth?: number; // Thickness of the arc
+  label: string; // used for aria label
 };
 
 export const HalfRadialPath: React.FC<RadialPathProps> = ({
@@ -246,9 +233,23 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
   endAngle,
   radius,
   strokeWidth = 16,
+  label
+
 }) => {
-  if (startAngle > 180 || startAngle < 0 || endAngle > 180 || endAngle < 0) {
-    return null
+  if (startAngle > 180) {
+    startAngle = 180
+  }
+
+  if (startAngle < 0) {
+    startAngle = 0
+  }
+
+  if (endAngle > 180) {
+    endAngle = 180
+  }
+
+  if (endAngle < 0) {
+    endAngle = 0
   }
 
   // Convert degrees to radians
@@ -280,6 +281,7 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       stroke={`hsl(var(-${color}))`}
+      aria-label={label}
     />
   );
 };
@@ -287,183 +289,82 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
 
 
 
-
-
-
-
-/*
-"use client"
-import { Label, PolarAngleAxis, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { DetailedHappinessScore } from "./custom-card"
-import clsx from "clsx"
-
-
-
-
-
-export const FactorsRadialBarChart = ({
-  detailedHappinessScore,
-
-  
-  adjust_on_large_device = true,
+const CustomLegend = ({
+  data,
 }: {
-  detailedHappinessScore: DetailedHappinessScore;
-
-  
-  adjust_on_large_device?: boolean,
+  data: FactorsRadialBarChartData[],
 }): React.ReactNode => {
-
-  const chartConfig = {
-    logGDPPerCapita: {
-      label: 'Log GDP per capita',
-      color: 'hsl(val(--chart-1))'
-    },
-    socialSupport: {
-      label: 'Social support',
-      color: 'hsl(val(--chart-2))'
-    },
-    healthyLifeExpectency: {
-      label: 'Healthy life expectency',
-      color: 'hsl(val(--chart-3))'
-    },
-    freedomOfLifeChoices: {
-      label: 'Freedom to make life choices',
-      color: 'hsl(val(--chart-4))'
-    },
-    generosity: {
-      label: 'Generosity',
-      color: 'hsl(val(--chart-5))'
-    },
-    perceptionsOfCorruption: {
-      label: 'Perceptions of corruption',
-      color: 'hsl(val(--chart-1))'
-    },
-    dystopiaResidual: {
-      label: 'Dystopia + residual',
-      color: 'hsl(val(--chart-2))'
-    },
-  } satisfies ChartConfig
-
-
-  const chartData = [detailedHappinessScore]
-
-
   return (
-    <Card className={clsx(
-      "max-w-[302px] w-full h-full p-3 flex flex-col shrink-0 gap-3",
-      {
-        "md:max-w-full": adjust_on_large_device,
-      }
-    )}>
-      <CardHeader className="p-0">
-        <CardTitle className="text-base font-normal">Contributing Factors</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-1 items-center pb-0">
-        <div className="max-w-[435px] p-0 h-[calc(100%-2.25rem)]">
-          <ChartContainer
-            config={chartConfig}
-            className="h-full w-full"
-          >
-            <RadialBarChart
-              data={chartData}
-              startAngle={180}
-              endAngle={0}
-              innerRadius={82}
-              outerRadius={97}
-            >
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              
-              <PolarAngleAxis
-                type="number"
-                domain={[0, detailedHappinessScore.score]}
-                angleAxisId={0}
-                tick={false} // Remove tick labels
-              />
-
-              <PolarRadiusAxis 
-                tick={false} 
-                tickLine={false} 
-                axisLine={false}
-              >
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) - 16}
-                            className="fill-foreground text-2xl font-bold"
-                          >
-                            {detailedHappinessScore.score}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 4}
-                            className="fill-muted-foreground"
-                          >
-                            Total Score
-                          </tspan>
-                        </text>
-                      )
-                    }
-                  }}
-                />
-              </PolarRadiusAxis>
-              <RadialBar
-                background // Adds a background to bars
-                dataKey="logGDPPerCapita"
-                stackId="a" // Stack all bars in the same space
-                cornerRadius={10} // Rounded corners
-                fill="hsl(var(--chart-1))"
-              />
-              <RadialBar
-                dataKey="socialSupport"
-                stackId="a" // Stack all bars in the same space
-                cornerRadius={10} // Rounded corners
-                fill="hsl(var(--chart-2))"
-              />
-              <RadialBar
-                dataKey="healthyLifeExpectency"
-                stackId="a" // Stack all bars in the same space
-                cornerRadius={10} // Rounded corners
-                fill="hsl(var(--chart-3))"
-              />
-              <RadialBar
-                dataKey="freedomOfLifeChoices"
-                stackId="a" // Stack all bars in the same space
-                cornerRadius={10} // Rounded corners
-                fill="hsl(var(--chart-4))"
-              />
-              <RadialBar
-                dataKey="generosity"
-                stackId="a" // Stack all bars in the same space
-                cornerRadius={10} // Rounded corners
-                fill="hsl(var(--chart-5))"
-              />
-              <RadialBar
-                dataKey="perceptionsOfCorruption"
-                stackId="a" // Stack all bars in the same space
-                cornerRadius={10} // Rounded corners
-                fill="hsl(var(--chart-1))"
-              />
-              <RadialBar
-                dataKey="dystopiaResidual"
-                stackId="a" // Stack all bars in the same space
-                cornerRadius={10} // Rounded corners
-                fill="hsl(var(--chart-2))"
-              />
-            </RadialBarChart>
-          </ChartContainer>
-        </div>
-      </CardContent>
-    </Card>
+    <div
+      className={clsx(
+        "p-3 w-[256px]",
+      )}
+      style={{
+        top: -20,
+        left: -20,
+      }}
+    >
+      <ul className="space-y-1">
+        {data.map((factor, index) => (
+          <li key={index} className="flex justify-between items-center text-xs">
+            <div className="flex items-center leading-[13px]">
+              <div className={`w-[10px] h-[10px] rounded-[2px] inline-block mr-[5px]`} style={{background: `hsl(var(-${factor.color}))`}}/>
+              {factor.name}
+            </div>
+            <span className="font-semibold leading-[13px]">
+              {factor.value.toFixed(2)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
+
+/*
+const CustomPopover = ({
+  data,
+  visible,
+  openedUsingFocus,
+  mousePosition,
+}: {
+  data: FactorsRadialBarChartData[],
+  visible: boolean,
+  openedUsingFocus: boolean,
+  mousePosition: { x: number, y: number},
+}): React.ReactNode => {
+  return (
+    <div
+      className={clsx(
+        "absolute p-3 bg-white border rounded-lg shadow-lg w-[256px] translate-x-[-100%] transition-transform ease-out duration-500 translate-y-[-20px]",
+        {
+          'opacity-0 ': !visible,
+          'translate-y-[0px]': visible,
+        }
+      )}
+      style={{
+        top: -20,
+        left: -20,
+      }}
+    >
+      <ul className="space-y-1">
+        {data.map((factor, index) => (
+          <li key={index} className="flex justify-between items-center text-xs">
+            <div className="flex items-center">
+              <div className={`w-[10px] h-[10px] rounded-[2px] inline-block mr-[5px]`} style={{background: `hsl(var(-${factor.color}))`}}/>
+              {factor.name}
+            </div>
+            <span className="font-semibold">
+              {factor.value.toFixed(2)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 */
+
+
+

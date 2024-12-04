@@ -54,6 +54,7 @@ export default function Home() {
             });
           }
         }
+        scoreHistory.reverse();
 
         const selectedYear = parseInt(selection.report);
         const selectedData = countryData[selectedYear];
