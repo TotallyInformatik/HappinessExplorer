@@ -8,6 +8,7 @@ import { DemographicComposition } from "./custom-bar-chart";
 
 export type card_visibility = {
   show_title?: boolean,
+  show_year_in_title?: boolean,
   show_delete_button?: boolean,
   show_rank_card?: boolean,
   show_happiness_score_progress_card?: boolean,
@@ -18,6 +19,7 @@ export type card_visibility = {
 
 const defaultCardVisibility: Required<card_visibility> = {
   show_title: true,
+  show_year_in_title: true,
   show_delete_button: true,
   show_rank_card: true,
   show_happiness_score_progress_card: true,
@@ -57,7 +59,7 @@ export const CountryDetailedViewContainer = ({
   adjust_on_large_device?: boolean,
   card_visibility?: card_visibility,
 }): React.ReactNode => {
-  const [show_title, show_rank_card, show_happiness_score_progress_card, show_score_history_card, show_contributing_factors_card, show_demographic_composition_card] = createCardVisibilityVariables(card_visibility)
+  const [show_title, show_year_in_title, show_rank_card, show_happiness_score_progress_card, show_score_history_card, show_contributing_factors_card, show_demographic_composition_card] = createCardVisibilityVariables(card_visibility)
 
 
   return (
@@ -66,7 +68,7 @@ export const CountryDetailedViewContainer = ({
     {
       "md:flex-col md:items-center md:h-auto md:w-full": adjust_on_large_device
     })}>
-      {show_title && <TitleCard country_flag_emoji={country_flag_emoji} country_name={country_name} happinessScore={happinessScore}></TitleCard>}
+      {show_title && <TitleCard country_flag_emoji={country_flag_emoji} country_name={country_name} happinessScore={happinessScore} show_year_in_title={show_year_in_title}></TitleCard>}
       {show_rank_card && <RankCard rank={rank} adjust_on_large_device={adjust_on_large_device}></RankCard>}
       {show_happiness_score_progress_card && <HappinessScoreProgressCard score={happinessScore} adjust_on_large_device={adjust_on_large_device}></HappinessScoreProgressCard>}
       {show_score_history_card && <ScoreHistoryCard label={country_name} scoreHistory={happinessScoreHistory} adjust_on_large_device={adjust_on_large_device}></ScoreHistoryCard>}
@@ -87,6 +89,7 @@ function createCardVisibilityVariables(overrides?: card_visibility): boolean[] {
 
   return [
     merged.show_title,
+    merged.show_year_in_title,
     merged.show_rank_card,
     merged.show_happiness_score_progress_card,
     merged.show_score_history_card,
