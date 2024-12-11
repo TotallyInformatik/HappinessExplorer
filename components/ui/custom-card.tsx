@@ -41,7 +41,7 @@ const TitleCard = ({
   show_year_in_title: boolean,
 }) => {
   return (
-    <div className="w-[158px] h-fit shrink-0">
+    <div className="w-[158px] h-fit min-h-[130px] shrink-0 flex flex-col justify-center">
       <p className="text-5xl">{country_flag_emoji}</p>
       <p className="text-2xl font-semibold">{country_name}</p>
       {show_year_in_title && <p className="text-sm text-slate-500 leading-3">in {happinessScore.year}</p>}
