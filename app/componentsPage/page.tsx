@@ -58,9 +58,6 @@ export default function Page() {
   } as card_visibility
 
   return <div className="">
-    <h2>Components Page</h2>
-    <Button>Button</Button>
-    <hr className="mt-64"/>
     <div className="overflow-auto">
       <CountryDetailedViewContainer 
         country_name='Finland'

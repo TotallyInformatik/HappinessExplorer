@@ -1,4 +1,4 @@
-import { RankCard, HappinessScoreProgressCard, HappinessScore, ScoreHistoryCard, DetailedHappinessScore, ContributingFactorsCard, DemographicCompositionCard } from "./custom-card"
+import { RankCard, HappinessScoreProgressCard, HappinessScore, ScoreHistoryCard, DetailedHappinessScore, ContributingFactorsCard, DemographicCompositionCard, TitleCard } from "./custom-card"
 import { Button } from "@/components/ui/button"
 import clsx from "clsx";
 import { Trash2 } from "lucide-react"
@@ -18,12 +18,12 @@ export type card_visibility = {
 
 const defaultCardVisibility: Required<card_visibility> = {
   show_title: true,
-  show_delete_button: true,
+  show_delete_button: false,
   show_rank_card: true,
   show_happiness_score_progress_card: true,
   show_score_history_card: true,
   show_contributing_factors_card: true,
-  show_demographic_composition_card: true,
+  show_demographic_composition_card: false,
 };
 
 
@@ -57,22 +57,8 @@ export const CountryDetailedViewContainer = ({
   adjust_on_large_device?: boolean,
   card_visibility?: card_visibility,
 }): React.ReactNode => {
-  const [show_title, show_delete_button, show_rank_card, show_happiness_score_progress_card, show_score_history_card, show_contributing_factors_card, show_demographic_composition_card] = createCardVisibilityVariables(card_visibility)
+  const [show_title, show_rank_card, show_happiness_score_progress_card, show_score_history_card, show_contributing_factors_card, show_demographic_composition_card] = createCardVisibilityVariables(card_visibility)
 
-  const navButtonClassName = 'rounded-full h-[2.5rem] w-[2.5rem] px-0 py-0 bg-red-600 text-white hover:bg-red-500 active:bg-red-700'
-
-
-  
-  const title = show_title && (
-    <div className="w-[158px] h-fit shrink-0">
-      <p className="text-5xl">{country_flag_emoji}</p>
-      <p className="text-2xl font-semibold">{country_name}</p>
-      <p className="text-sm text-slate-500 leading-3">in {happinessScore.year}</p>
-      <div className="pt-4 flex gap-2.5">
-        {show_delete_button ? (<Button className={navButtonClassName}><Trash2/></Button>) : ''}
-      </div>
-    </div>
-  )
 
   return (
     <div className={clsx(
@@ -80,7 +66,7 @@ export const CountryDetailedViewContainer = ({
     {
       "md:flex-col md:items-center md:h-auto md:w-full": adjust_on_large_device
     })}>
-      {title}
+      {show_title && <TitleCard country_flag_emoji={country_flag_emoji} country_name={country_name} happinessScore={happinessScore}></TitleCard>}
       {show_rank_card && <RankCard rank={rank} adjust_on_large_device={adjust_on_large_device}></RankCard>}
       {show_happiness_score_progress_card && <HappinessScoreProgressCard score={happinessScore} adjust_on_large_device={adjust_on_large_device}></HappinessScoreProgressCard>}
       {show_score_history_card && <ScoreHistoryCard label={country_name} scoreHistory={happinessScoreHistory} adjust_on_large_device={adjust_on_large_device}></ScoreHistoryCard>}
@@ -101,7 +87,6 @@ function createCardVisibilityVariables(overrides?: card_visibility): boolean[] {
 
   return [
     merged.show_title,
-    merged.show_delete_button,
     merged.show_rank_card,
     merged.show_happiness_score_progress_card,
     merged.show_score_history_card,
