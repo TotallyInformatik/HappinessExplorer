@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { Card, CardContent, CardHeader, CardTitle } from "./card"
 import { DetailedHappinessScore } from "./custom-card";
-// import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 
 
 
@@ -26,35 +26,7 @@ export const FactorsRadialBarChart = ({
   
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
-  /*
-  const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-  const [openedUsingFocus, setOpenedUsingFocus] = useState<boolean>(false);
-  const [mouseHover, setMouseHover] = useState<boolean>(false);
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [popoverPosition, setPopoverPosition] = useState<'left' | 'right' | 'middle'>('middle');
-  
-
-
-  useEffect(() => {
-    const popoverWidth = 256; // Width of the popover
-    const offset = 10; // Offset from the cursor
-    const windowWidth = window.innerWidth;
-
-    if (mousePosition.x - popoverWidth / 2 + offset > 0 && mousePosition.x + popoverWidth / 2 + offset < windowWidth) {
-      setPopoverPosition('middle');
-    } else if (mousePosition.x + popoverWidth + offset > windowWidth) {
-      setPopoverPosition('left');
-    } else {
-      setPopoverPosition('right');
-    }
-  }, [mousePosition]);
-
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    setMousePosition({ x: event.clientX, y: event.clientY });
-  };
-  */
-
+  const [hoverBar, setHoverBar] = useState<string | boolean>(false)
   
   const data = [
     { name: 'Log GDP per capita', value: detailedHappinessScore.logGDPPerCapita, color: '-chart-1' },
@@ -67,37 +39,6 @@ export const FactorsRadialBarChart = ({
   ] as FactorsRadialBarChartData[]
 
   const reversed_data = data.slice().reverse();
-
-  const config = {
-    logGDPPerCapita: {
-      label: 'Log GDP per capita',
-      fill: 'hsl(val(--chart-1))'
-    },
-    socialSupport: {
-      label: 'Social support',
-      color: 'hsl(val(--chart-2))'
-    },
-    healthyLifeExpectency: {
-      label: 'Healthy life expectency',
-      color: 'hsl(val(--chart-3))'
-    },
-    freedomOfLifeChoices: {
-      label: 'Freedom to make life choices',
-      color: 'hsl(val(--chart-4))'
-    },
-    generosity: {
-      label: 'Generosity',
-      color: 'hsl(val(--chart-5))'
-    },
-    perceptionsOfCorruption: {
-      label: 'Perceptions of corruption',
-      color: 'hsl(val(--chart-1))'
-    },
-    dystopiaResidual: {
-      label: 'Dystopia + residual',
-      color: 'hsl(val(--chart-2))'
-    },
-  }
 
   
   const radius = 97
@@ -137,6 +78,8 @@ export const FactorsRadialBarChart = ({
                     endAngle={endAngle}
                     radius={radius}
                     label={segment.name}
+                    currentHover={hoverBar}
+                    setOnHover={setHoverBar}
                   />
                 );
               })}
@@ -160,15 +103,11 @@ export const FactorsRadialBarChart = ({
                 Total score
               </text>
             </SVGContainer>
-            {/*<CustomPopover 
-              data={data} 
-              visible={isPopoverVisible}
-              openedUsingFocus={openedUsingFocus}
-              mousePosition={mousePosition}
-            />*/}
           </div>
           <CustomLegend
             data={data}
+            currentHover={hoverBar}
+            setOnHover={setHoverBar}
           />
           
         </CardContent>
@@ -225,6 +164,8 @@ type RadialPathProps = {
   radius: number; // Radius of the arc
   strokeWidth?: number; // Thickness of the arc
   label: string; // used for aria label
+  currentHover: string | boolean; // use for on hover color changes
+  setOnHover: React.Dispatch<SetStateAction<string | boolean>>; // used for on hover interactions
 };
 
 export const HalfRadialPath: React.FC<RadialPathProps> = ({
@@ -233,24 +174,23 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
   endAngle,
   radius,
   strokeWidth = 16,
-  label
+  label,
+  currentHover,
+  setOnHover,
 
 }) => {
-  if (startAngle > 180) {
-    startAngle = 180
+  let greyscale = 0
+
+  if (currentHover !== false && currentHover !== label) {
+    greyscale = 0.9
+  } else {
+    greyscale = 0
   }
 
-  if (startAngle < 0) {
-    startAngle = 0
-  }
 
-  if (endAngle > 180) {
-    endAngle = 180
-  }
-
-  if (endAngle < 0) {
-    endAngle = 0
-  }
+  // Make sure angles are in allowed range (if not adjust them)
+  startAngle = (startAngle > 180) ? 180 : (startAngle < 0 ? 0 : startAngle) 
+  endAngle = (endAngle > 180) ? 180 : (endAngle < 0 ? 0 : endAngle)
 
   // Convert degrees to radians
   const toRadians = (angle: number) => (angle * Math.PI) / 180;
@@ -281,7 +221,12 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       stroke={`hsl(var(-${color}))`}
+      style={{
+        filter: `saturate(${(currentHover === label || currentHover === false) ? 1 : 0.2}) contrast(${(currentHover === label || currentHover === false) ? 1 : 0.2})`,
+      }}
       aria-label={label}
+      onMouseEnter={() => setOnHover(label)}
+      onMouseLeave={() => setOnHover(false)}
     />
   );
 };
@@ -291,9 +236,16 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
 
 const CustomLegend = ({
   data,
+  currentHover,
+  setOnHover,
 }: {
   data: FactorsRadialBarChartData[],
+  currentHover: string | boolean
+  setOnHover: React.Dispatch<SetStateAction<string | boolean>>
 }): React.ReactNode => {
+
+
+
   return (
     <div
       className={clsx(
@@ -306,12 +258,18 @@ const CustomLegend = ({
     >
       <ul className="space-y-1">
         {data.map((factor, index) => (
-          <li key={index} className="flex justify-between items-center text-xs">
-            <div className="flex items-center leading-[13px]">
-              <div className={`w-[10px] h-[10px] rounded-[2px] inline-block mr-[5px]`} style={{background: `hsl(var(-${factor.color}))`}}/>
+          <li key={index} className="flex justify-between items-center text-xs"
+            onMouseEnter={() => setOnHover(factor.name)}
+            onMouseLeave={() => setOnHover(false)}
+          >
+            <div className="flex items-center leading-[13px] cursor-default">
+              <div className={`w-[10px] h-[10px] rounded-[2px] inline-block mr-[5px]`} style={{
+                background: `hsl(var(-${factor.color}))`,
+                filter: `saturate(${(currentHover === factor.name || currentHover === false) ? 1 : 0.1})`,
+                }}/>
               {factor.name}
             </div>
-            <span className="font-semibold leading-[13px]">
+            <span className="font-semibold leading-[13px] cursor-default">
               {factor.value.toFixed(2)}
             </span>
           </li>
@@ -320,51 +278,6 @@ const CustomLegend = ({
     </div>
   )
 }
-
-
-/*
-const CustomPopover = ({
-  data,
-  visible,
-  openedUsingFocus,
-  mousePosition,
-}: {
-  data: FactorsRadialBarChartData[],
-  visible: boolean,
-  openedUsingFocus: boolean,
-  mousePosition: { x: number, y: number},
-}): React.ReactNode => {
-  return (
-    <div
-      className={clsx(
-        "absolute p-3 bg-white border rounded-lg shadow-lg w-[256px] translate-x-[-100%] transition-transform ease-out duration-500 translate-y-[-20px]",
-        {
-          'opacity-0 ': !visible,
-          'translate-y-[0px]': visible,
-        }
-      )}
-      style={{
-        top: -20,
-        left: -20,
-      }}
-    >
-      <ul className="space-y-1">
-        {data.map((factor, index) => (
-          <li key={index} className="flex justify-between items-center text-xs">
-            <div className="flex items-center">
-              <div className={`w-[10px] h-[10px] rounded-[2px] inline-block mr-[5px]`} style={{background: `hsl(var(-${factor.color}))`}}/>
-              {factor.name}
-            </div>
-            <span className="font-semibold">
-              {factor.value.toFixed(2)}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-*/
 
 
 
