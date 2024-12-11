@@ -18,7 +18,7 @@ export type card_visibility = {
 
 const defaultCardVisibility: Required<card_visibility> = {
   show_title: true,
-  show_delete_button: false,
+  show_delete_button: true,
   show_rank_card: true,
   show_happiness_score_progress_card: true,
   show_score_history_card: true,
