@@ -33,15 +33,22 @@ const TitleCard = ({
   country_flag_emoji,
   country_name,
   happinessScore,
-  show_year_in_title,
+  show_year_in_title = true,
+  adjust_on_large_device = true,
 }: {
   country_flag_emoji: string,
   country_name: string,
   happinessScore: HappinessScore,
-  show_year_in_title: boolean,
+  show_year_in_title?: boolean,
+  adjust_on_large_device?: boolean
 }) => {
   return (
-    <div className="w-[158px] h-fit min-h-[130px] shrink-0 flex flex-col justify-center">
+    <div className={clsx(
+      "w-[158px] h-fit min-h-[7.75rem] shrink-0 flex flex-col justify-center",
+      {
+        "md:block": adjust_on_large_device,
+      }
+    )}>
       <p className="text-5xl">{country_flag_emoji}</p>
       <p className="text-2xl font-semibold">{country_name}</p>
       {show_year_in_title && <p className="text-sm text-slate-500 leading-3">in {happinessScore.year}</p>}

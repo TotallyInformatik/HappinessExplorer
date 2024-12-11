@@ -68,7 +68,7 @@ export const CountryDetailedViewContainer = ({
     {
       "md:flex-col md:items-center md:h-auto md:w-full": adjust_on_large_device
     })}>
-      {show_title && <TitleCard country_flag_emoji={country_flag_emoji} country_name={country_name} happinessScore={happinessScore} show_year_in_title={show_year_in_title}></TitleCard>}
+      {show_title && <TitleCard country_flag_emoji={country_flag_emoji} country_name={country_name} happinessScore={happinessScore} show_year_in_title={show_year_in_title} adjust_on_large_device={adjust_on_large_device}></TitleCard>}
       {show_rank_card && <RankCard rank={rank} adjust_on_large_device={adjust_on_large_device}></RankCard>}
       {show_happiness_score_progress_card && <HappinessScoreProgressCard score={happinessScore} adjust_on_large_device={adjust_on_large_device}></HappinessScoreProgressCard>}
       {show_score_history_card && <ScoreHistoryCard label={country_name} scoreHistory={happinessScoreHistory} adjust_on_large_device={adjust_on_large_device}></ScoreHistoryCard>}
