@@ -119,11 +119,16 @@ const GlobeExplorer = ({
 
   useEffect(() => {
 
-    console.log("adding event listener");
     const inputCountry = (event: KeyboardEvent) => {
 
       if (event.key == "k" && (event.ctrlKey || event.metaKey)) {
         setOpen(true);
+        const element = document.querySelector(".searchBar");
+        const clientRect = element?.getBoundingClientRect();
+        const bodyRect = document.querySelector("body")?.getBoundingClientRect();
+        window.scrollTo({
+          top: (clientRect?.top || 0) - (bodyRect?.top || 0) - 100
+        });
       }
     }
 
@@ -146,7 +151,7 @@ const GlobeExplorer = ({
     <section id='world-map'>
       <header className="w-screen h-auto overflow-x-auto no-scrollbar 
                         flex md:items-center px-5 py-3 justify-between gap-x-10 
-                        gap-y-5 flex-col md:flex-row "
+                        gap-y-5 flex-col md:flex-row searchBar"
       >
         <h3 className="text-2xl font-normal">Globe Explorer</h3>
         <section className='flex md:items-center flex-col md:flex-row h-full gap-x-10 gap-y-2'>
