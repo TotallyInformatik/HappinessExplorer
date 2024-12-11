@@ -76,7 +76,29 @@ const GlobeExplorer = ({
   const [score, setScore] = useState<number>(0);
   const [dataExists, setDataExists] = useState<boolean>(false);
   
+  function fetchCountries(yearValue: string) {
+    getCountriesByContinent(parseInt(yearValue), "en").then((result) => {
+      let allCountries: Countries = [];
+      let newCountryData: CountryIDs = {};
+      for (let continents of result) { 
+        continents.countries.forEach((country) => {
+          allCountries.push({
+            label: country.countryName,
+            value: country.countryName
+          });
+          newCountryData[country.countryName] = country.countryId;
+        })
+      }
 
+      allCountries.sort((a, b) => {
+        return a.label.localeCompare(b.label);
+      });
+
+      setCountries(allCountries);
+      setCountryIDs(newCountryData);
+
+    });
+  }
 
   useEffect(() => {
 
@@ -95,6 +117,31 @@ const GlobeExplorer = ({
 
   }, [selectedCountry])
 
+  useEffect(() => {
+
+    console.log("adding event listener");
+    const inputCountry = (event: KeyboardEvent) => {
+
+      if (event.key == "k" && (event.ctrlKey || event.metaKey)) {
+        setOpen(true);
+      }
+    }
+
+    window.addEventListener("keydown", inputCountry);
+
+    return () => {
+      window.removeEventListener("keydown", inputCountry);
+    }
+  }, [])
+
+  useEffect(() => {
+    if (years[0]) {
+      const yearValue = years[0].year.toString();
+      setReport(yearValue); 
+      fetchCountries(yearValue);
+    }
+  }, [years])
+
   return <>
     <section id='world-map'>
       <header className="w-screen h-auto overflow-x-auto no-scrollbar 
@@ -107,27 +154,7 @@ const GlobeExplorer = ({
           <Select value={report} onValueChange={(value) => {
             setReport(value);
             setSelectedCountry("");
-            getCountriesByContinent(parseInt(value), "en").then((result) => {
-              let allCountries: Countries = [];
-              let newCountryData: CountryIDs = {};
-              for (let continents of result) { 
-                continents.countries.forEach((country) => {
-                  allCountries.push({
-                    label: country.countryName,
-                    value: country.countryName
-                  });
-                  newCountryData[country.countryName] = country.countryId;
-                })
-              }
-
-              allCountries.sort((a, b) => {
-                return a.label.localeCompare(b.label);
-              });
-
-              setCountries(allCountries);
-              setCountryIDs(newCountryData);
-
-            });
+            fetchCountries(value);
           }}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select a report"/>
