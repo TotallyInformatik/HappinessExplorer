@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
 import { ArrowDown, Check, ChevronsUpDown, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { getCountriesByContinent, getCountryData, Year } from '@/lib/db_interface';
+import { cn, getCorrectCountryName } from '@/lib/utils';
+import { getAllCountries, getCountriesByContinent, getCountryData, MapCountries, Year } from '@/lib/db_interface';
 import { continentTranslations } from '@/lib/database/schema';
 import { setConfig } from 'next/config';
 import GeoCountry from './geo-country';
@@ -75,6 +75,7 @@ const GlobeExplorer = ({
   const [rank, setRank] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [dataExists, setDataExists] = useState<boolean>(false);
+  const [heatMapData, setHeatMapData] = useState<MapCountries | undefined>(undefined);
   
   function fetchCountries(yearValue: string) {
     getCountriesByContinent(parseInt(yearValue), "en").then((result) => {
@@ -98,6 +99,10 @@ const GlobeExplorer = ({
       setCountryIDs(newCountryData);
 
     });
+
+    getAllCountries(parseInt(yearValue)).then((result) => {
+      setHeatMapData(result);
+    })
   }
 
   useEffect(() => {
@@ -243,16 +248,25 @@ const GlobeExplorer = ({
             : 
             <>
               <ComposableMap 
-                onClick={(event) => {
+                onClick={() => {
                   setSelectedCountry("");
                 }}>
                 <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom}>
                   <Geographies geography={geoUrl}>
                     {({ geographies }) =>
                       geographies.map((geo) => {
+                        
+                        const correctName = getCorrectCountryName(geo);
+
+                        let countryScore = undefined;
+                        if (heatMapData && heatMapData[correctName] && heatMapData[correctName].ladderScore) {
+                          countryScore = heatMapData[correctName].ladderScore || undefined;
+                        } 
+
                         return <GeoCountry 
                           key={geo.rsmKey}
                           geo={geo}
+                          score={countryScore}
                           countryIDs={countryIDs}
                           onCountryChange={onCountryChange}
                           setSelectedCountry={setSelectedCountry}
