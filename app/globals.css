@@ -14,7 +14,17 @@
 }
 
 body {
-  font-family: "NotoColorEmojiLimited", "Inter", Arial, Helvetica, sans-serif;
+  font-family: "NotoColorEmojiLimited", "Inter", "Apple Color Emoji", Arial, Helvetica, sans-serif;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+path {
+  outline: none;
+  cursor: pointer;
+}
+main {
+  contain: paint; /* todo: remove this if we have any problems  */
 }
 
 @layer utilities {
@@ -29,6 +39,10 @@ body {
   .no-scrollbar {
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
+  }
+
+  .contain-paint {
+    contain: paint;
   }
 }
 
@@ -58,6 +72,8 @@ body {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --chart-6: 221 78% 79%; /* added */
+    --chart-7: 280 72% 81%; /* added */
     --radius: 0.5rem;
   }
   .dark {
@@ -85,6 +101,8 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --chart-6: 50 70% 60%; /* added */
+    --chart-7: 200 65% 55%; /* added */
   }
 }
 

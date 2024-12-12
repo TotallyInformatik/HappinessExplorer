@@ -16,7 +16,7 @@ import {Chart2} from "@/app/compare/linechart_linear"
 import React, { ReactNode } from "react";
 import { card_visibility, CountryDetailedViewContainer } from "@/components/ui/country-detailed-view"
 import { HappinessScore, DetailedHappinessScore } from "@/components/ui/custom-card"
-import { ContinentGroup, CountryData, getCountryData, getListOfYears, Year } from "@/lib/db_interface"
+import { ContinentGroup, CountryData, getCountryData, getCountryEmoji, getListOfYears, Year } from "@/lib/db_interface"
 import { DemographicComposition } from "@/components/ui/custom-bar-chart"
 // import '@/styles/globals.css';
 
@@ -413,6 +413,8 @@ export default function MyComponent({years, countries} :{years : Year[], countri
   const card_v = {
     show_title: true,
     show_score_history_card: true,
+    show_demographic_composition_card: false,
+    show_delete_button: false
   } as card_visibility
   
   // Write code here
@@ -430,6 +432,8 @@ export default function MyComponent({years, countries} :{years : Year[], countri
   const [id2, setId2] = React.useState<number>(0);
   const [chartData, setChartData] = React.useState<{year : number, c1 : number, c2 : number}[]> ()
   const [chartData2, setChartData2] = React.useState<{year : number, c1 : number, c2 : number}[]>()
+  const [emoji1, setemoji1] = React.useState("")
+  const [emoji2, setemoji2] = React.useState("")
 
 
   const checkContinent1 = (value:string) => {
@@ -481,6 +485,9 @@ export default function MyComponent({years, countries} :{years : Year[], countri
     setHistory1(arr)
     setChartData(chartData)
     setChartData2(chartData2)
+    const emoji1 = await getCountryEmoji(Number.parseInt(t[0]));
+    setemoji1(emoji1 || "")
+  // const emoji2 = await getCountryEmoji(id2);
   };
   
   const handleC2 = async (value :string) => {
@@ -506,6 +513,10 @@ export default function MyComponent({years, countries} :{years : Year[], countri
     setHistory2(arr)
     setChartData(chartData)
     setChartData2(chartData2)
+    const emoji2 = await getCountryEmoji(Number.parseInt(t[0]));
+    setemoji2(emoji2 || "")
+    // const emoji1 = await getCountryEmoji(id1);
+  // const emoji2 = await getCountryEmoji(id2);
   };
 
   // async function g(){
@@ -518,15 +529,18 @@ export default function MyComponent({years, countries} :{years : Year[], countri
   //   setAllYears(await getListOfYears())
   // }
 
+  // const emoji1 = await getCountryEmoji(id1);
+  // const emoji2 = await getCountryEmoji(id2);
+
   return <>
     <div className="flex flex-row px-5 py-2 gap-8 items-center">
     <Select onValueChange={(value) => {handleYear(value)}}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a report" />
+      <SelectTrigger className="w-[180px]" defaultChecked>
+        <SelectValue placeholder={years[0].year.toString()} defaultValue={years[0].year.toString()} defaultChecked />
       </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Year</SelectLabel>
+      <SelectContent defaultChecked>
+        <SelectGroup defaultChecked>
+          <SelectLabel defaultChecked>Year</SelectLabel>
           {years.map(e => (<SelectItem value={e.year.toString()}>{e.year}</SelectItem>))}
           {/* <SelectItem value="2024">2024</SelectItem>
           <SelectItem value="2023">2023</SelectItem>
@@ -576,7 +590,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       <div className="w-1/3">
     <CountryDetailedViewContainer 
       country_name={country1}
-      country_flag_emoji="&#127467;&#127470;"
+      country_flag_emoji={emoji1}
       rank={data1 ? (data1!.rank ? data1!.rank : 0) :0} 
       happinessScore={{year: year, score: data1 ? (data1!.ladderScore ? data1!.ladderScore : 0) :0} as HappinessScore}
       happinessScoreHistory={history1 ? history1 : [{year:0, score:0}]}
@@ -601,7 +615,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
     <div className="w-1/3">
     <CountryDetailedViewContainer 
       country_name={country2}
-      country_flag_emoji="&#127467;&#127470;"
+      country_flag_emoji={emoji2}
       rank={data2 ? (data2!.rank ? data2!.rank : 0) :0} 
       happinessScore={{year: year, score: data2 ? (data2!.ladderScore ? data2!.ladderScore : 0) :0} as HappinessScore}
       happinessScoreHistory={history2 ? history2 : [{year:0, score:0}]}

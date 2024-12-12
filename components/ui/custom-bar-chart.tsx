@@ -48,6 +48,10 @@ export const DemographicCompositionBarChart = ({
   } satisfies ChartConfig
 
 
+  const tickCount = 5
+  const tickInterval = 10 / tickCount
+  const ticks = Array.from({ length: tickCount + 2},(_, i) => i * tickInterval)
+
 
 
 
@@ -55,7 +59,7 @@ export const DemographicCompositionBarChart = ({
 
   return (
     <Card className={clsx(
-      "w-[425px] h-full p-[1rem] flex flex-col gap-3 shrink-0",
+      "w-[425px] h-full p-3 flex flex-col gap-3 shrink-0",
       {
         "md:w-full md:h-[221px]": adjust_on_large_device,
       }
@@ -63,11 +67,18 @@ export const DemographicCompositionBarChart = ({
       <CardHeader className="p-0 grow-0 shrink">
         <CardTitle className="text-base font-normal">Demographic Composition</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="max-w-[425px] p-0 h-[calc(100%-2.25rem)]">
-          <ChartContainer config={chartConfig} className="h-full w-full text-black">
+      <CardContent className={clsx(
+        "p-0 w-full grow shrink-0 h-[calc(100%-2.25rem)]",
+        {
+          "md:flex md:justify-center md:w-full": adjust_on_large_device
+        }
+      )}>
+        <div className="max-w-[425px] w-full p-0 shrink-0 grow-0 h-full">
+          <ChartContainer config={chartConfig} className="h-full w-full">
             <BarChart
+              accessibilityLayer
               data={chartData}
+              margin={{ bottom: -8 }}
             >
               <CartesianGrid vertical={false} />
               <XAxis
@@ -75,15 +86,18 @@ export const DemographicCompositionBarChart = ({
                 type="category"
                 tickLine={false}
                 axisLine={false}
+                style={{fill: 'black', fontWeight: '500'}}
               />
               <YAxis
                 hide={true}
                 type="number"
                 domain={[0, 10]}
+                ticks={ticks}
               />
               <ChartTooltip
                 cursor={false}
-                content={<ChartTooltipContent hideLabel />}
+                content={<ChartTooltipContent 
+                  indicator="line"/>}
               />
               <Bar
                 dataKey={"happiness_score"}
@@ -120,7 +134,7 @@ function getSmallestValue(data: DemographicChartDataEntry[]): number {
 }
 
 function getLargestValue(data: DemographicChartDataEntry[]): number {
-  let largest: number = 10;
+  let largest: number = 0;
 
   data.forEach((entry) => {
     largest = largest > entry.happiness_score ? entry.happiness_score : largest

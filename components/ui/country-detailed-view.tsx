@@ -37,9 +37,6 @@ export const CountryDetailedViewContainer = ({
   happinessScoreHistory,
   detailedHappinessScore,
   demographicComposition,
-
-
-
   adjust_on_large_device = true,
   card_visibility,
 }: {
@@ -59,12 +56,6 @@ export const CountryDetailedViewContainer = ({
 }): React.ReactNode => {
   const [show_title, show_delete_button, show_rank_card, show_happiness_score_progress_card, show_score_history_card, show_contributing_factors_card, show_demographic_composition_card] = createCardVisibilityVariables(card_visibility)
 
-
-  const wrapperClassName = clsx(
-    "flex flex-row items-center h-[281px] gap-3 p-[1.875rem]",
-    {
-      "md:flex-col md:items-center md:h-auto": adjust_on_large_device
-    })
   const navButtonClassName = 'rounded-full h-[2.5rem] w-[2.5rem] px-0 py-0 bg-red-600 text-white hover:bg-red-500 active:bg-red-700'
 
 
@@ -80,17 +71,24 @@ export const CountryDetailedViewContainer = ({
     </div>
   )
 
-  return <div className={wrapperClassName}>
-    {title}
-    {show_rank_card && <RankCard rank={rank} adjust_on_large_device={adjust_on_large_device}></RankCard>}
-    {show_happiness_score_progress_card && <HappinessScoreProgressCard score={happinessScore} adjust_on_large_device={adjust_on_large_device}></HappinessScoreProgressCard>}
-    {show_score_history_card && <ScoreHistoryCard label={country_name} scoreHistory={happinessScoreHistory} adjust_on_large_device={adjust_on_large_device}></ScoreHistoryCard>}
-    {show_contributing_factors_card && <ContributingFactorsCard detailedHappinessScore={detailedHappinessScore} adjust_on_large_device={adjust_on_large_device}></ContributingFactorsCard>}
-    {show_demographic_composition_card && <DemographicCompositionCard demographicComposition={demographicComposition} adjust_on_large_device={adjust_on_large_device}></DemographicCompositionCard>}
-  </div>
+  return (
+    <div className={clsx(
+    "flex flex-row items-center h-[281px] gap-3 w-fit justify-end p-[1.875rem]",
+    {
+      "md:flex-col md:items-center md:h-auto md:w-full": adjust_on_large_device
+    })}>
+      {title}
+      {show_rank_card && <RankCard rank={rank} adjust_on_large_device={adjust_on_large_device}></RankCard>}
+      {show_happiness_score_progress_card && <HappinessScoreProgressCard score={happinessScore} adjust_on_large_device={adjust_on_large_device}></HappinessScoreProgressCard>}
+      {show_score_history_card && <ScoreHistoryCard label={country_name} scoreHistory={happinessScoreHistory} adjust_on_large_device={adjust_on_large_device}></ScoreHistoryCard>}
+      {show_contributing_factors_card && <ContributingFactorsCard detailedHappinessScore={detailedHappinessScore} adjust_on_large_device={adjust_on_large_device}></ContributingFactorsCard>}
+      {show_demographic_composition_card && <DemographicCompositionCard demographicComposition={demographicComposition} adjust_on_large_device={adjust_on_large_device}></DemographicCompositionCard>}
+    </div>
+  )
 }
 
-// {show_contributing_factors_card && <ContributingFactoryCard detailedHappinessScore={detailedHappinessScore}></ContributingFactoryCard>}
+
+
 
 function createCardVisibilityVariables(overrides?: card_visibility): boolean[] {
   const merged = {

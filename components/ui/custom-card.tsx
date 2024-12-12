@@ -86,7 +86,7 @@ const HappinessScoreProgressCard = ({
             <span className="font-semibold text-lg grow-0">10</span>
           </div>
           <div className="flex justify-center">
-            <p className="font-semibold text-3xl">{score.score}</p>
+            <p className="font-semibold text-3xl">{score.score.toFixed(2)}</p>
           </div>
         </div>
       </CardContent>
@@ -112,10 +112,6 @@ const ScoreHistoryCard = ({
 
   const chartData: YearLineChartData[] = []
   const chartConfig: YearLineChartConfig = {label: label} as YearLineChartConfig
-  const cardHeader = (
-    <CardHeader className="p-0 grow-0 shrink">
-      <CardTitle className="text-base font-normal">Score History</CardTitle>
-    </CardHeader>)
 
   scoreHistory.forEach((score) => {
     chartData.push({
@@ -124,7 +120,7 @@ const ScoreHistoryCard = ({
     } as YearLineChartData)
   })
 
-  return <YearLineChartDots chartData={chartData} chartConfig={chartConfig} cardHeader={cardHeader} adjust_on_large_device={adjust_on_large_device}/>
+  return <YearLineChartDots chartData={chartData} chartConfig={chartConfig} adjust_on_large_device={adjust_on_large_device}/>
 }
 
 
@@ -142,10 +138,10 @@ const ContributingFactorsCard = ({
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
 
-  // return (<FactorsRadialBarChart detailedHappinessScore={detailedHappinessScore} adjust_on_large_device={adjust_on_large_device}/>)
-
   return (<FactorsRadialBarChart detailedHappinessScore={detailedHappinessScore} adjust_on_large_device={adjust_on_large_device}/>)
 }
+
+
 
 
 const DemographicCompositionCard = ({
