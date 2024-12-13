@@ -118,7 +118,7 @@ const HappinessScoreProgressCard = ({
             <span className="font-semibold text-lg grow-0">10</span>
           </div>
           <div className="flex justify-center">
-            <p className="font-semibold text-3xl">{score.score.toFixed(2)}</p>
+            <p className="font-semibold text-3xl">{score.score.toFixed(3)}</p>
           </div>
         </div>
       </CardContent>

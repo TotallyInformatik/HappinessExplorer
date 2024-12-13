@@ -1,8 +1,7 @@
-import TestCard from "./TestCard"
 import { ScrollArea, ScrollBar } from "./ui/scroll-area"
 import { getCountryData } from "@/lib/db_interface"
 
-import { HappinessScoreProgressCard, ContributingFactorsCard } from "./ui/custom-card"
+import { TitleCard, HappinessScoreProgressCard, ContributingFactorsCard } from "./ui/custom-card"
 
 
 type LeaderboardRowProps = {
@@ -18,13 +17,11 @@ export default async function LeaderboardRow(props: LeaderboardRowProps) {
 
     return <ScrollArea className="whitespace-nowrap p-4">
         <div className="flex w-full space-x-4 h-[221px]">
-            <div className="w-40 flex flex-col items-center justify-center">
+            <div className="w-[158px] h-full min-h-[7.75rem] shrink-0 flex flex-col items-center justify-center">
                 <h1 className="text-4xl font-extrabold my-4">#{countryData?.rank}</h1>
                 <h2 className="text-4xl">{props.flagEmoji}</h2>
                 <h2 className="text-2xl font-medium">{props.countryName}</h2>
-                <p className="text-sm text-muted-foreground">{countryData?.ladderScore} points</p>
             </div>
-
             
             <HappinessScoreProgressCard
                 score={{year: "", score: countryData?.ladderScore ?? 0}}
