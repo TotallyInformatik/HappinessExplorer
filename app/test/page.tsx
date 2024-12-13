@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { getAllCountries } from "@/lib/db_interface";
+import { getAllCountries, getCountryData } from "@/lib/db_interface";
 
 const testDb = async () => {
     const year = 2024;
 
-    const data = await getAllCountries(year);
-
+    //getAllCountries(year);
+    const data = await getCountryData(year, 4);
+    
     console.log(data);
 }
 

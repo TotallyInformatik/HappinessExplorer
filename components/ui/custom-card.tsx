@@ -131,8 +131,6 @@ const HappinessScoreProgressCard = ({
 const ScoreHistoryCard = ({
   scoreHistory, 
   label,
-
-  
   adjust_on_large_device = true,
 }: {
   scoreHistory: HappinessScore[], 
