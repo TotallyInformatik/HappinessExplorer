@@ -70,8 +70,9 @@ export const FactorsRadialBarChart = ({
         </CardHeader>
         <CardContent className={clsx(
           "p-0 grow shrink h-full flex flex-row justify-center items-center gap-3",
-          "md:flex-col",
-          "lg:flex-row"
+          {
+            "md:flex-col lg:flex-row": adjust_on_large_device,
+          }
         )}>
           <div>
             {/* use custom SVGContainer (see below) */}
