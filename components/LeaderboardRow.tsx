@@ -1,8 +1,12 @@
-import TestCard from "./TestCard"
-import { ScrollArea, ScrollBar } from "./ui/scroll-area"
-import { getCountryData } from "@/lib/db_interface"
+"use client";
 
-import { HappinessScoreProgressCard, ContributingFactorsCard } from "./ui/custom-card"
+import { useState, useEffect } from "react";
+
+import { ScrollArea, ScrollBar } from "./ui/scroll-area"
+import { CountryData, getCountryData } from "@/lib/db_interface"
+
+import { HappinessScoreProgressCard, ContributingFactorsCard, ScoreHistoryCard } from "./ui/custom-card"
+import { Skeleton } from "./ui/skeleton";
 
 
 type LeaderboardRowProps = {
@@ -13,37 +17,50 @@ type LeaderboardRowProps = {
     year: number,
 }
 
-export default async function LeaderboardRow(props: LeaderboardRowProps) {
-    const countryData = await getCountryData(props.year, props.countryId);
+export default function LeaderboardRow(props: LeaderboardRowProps) {
+    const [countryData, setCountryData] = useState<CountryData | undefined>(undefined);
+
+    useEffect(() => {
+        async function fetchData() {
+            const data = await getCountryData(props.year, props.countryId);
+            setCountryData(data);
+        }
+
+        fetchData();
+    }, [props.year, props.countryId]);
+
 
     return <ScrollArea className="whitespace-nowrap p-4">
         <div className="flex w-full space-x-4 h-[221px]">
-            <div className="w-40 flex flex-col items-center justify-center">
+            <div className="w-[158px] h-full min-h-[7.75rem] shrink-0 flex flex-col items-center justify-center">
                 <h1 className="text-4xl font-extrabold my-4">#{countryData?.rank}</h1>
                 <h2 className="text-4xl">{props.flagEmoji}</h2>
                 <h2 className="text-2xl font-medium">{props.countryName}</h2>
-                <p className="text-sm text-muted-foreground">{countryData?.ladderScore} points</p>
             </div>
-
             
-            <HappinessScoreProgressCard
-                score={{year: "", score: countryData?.ladderScore ?? 0}}
+            {countryData ? <HappinessScoreProgressCard
+                score={{year: "", score: countryData.ladderScore ?? 0}}
                 adjust_on_large_device={false}
-            />
-            <ContributingFactorsCard
+            /> : <Skeleton className="w-[302px] h-full rounded-xl" />}
+            {countryData ? <ContributingFactorsCard
                 detailedHappinessScore={{
                     year: "",
-                    score: countryData?.ladderScore ?? 0,
-                    logGDPPerCapita: countryData?.logGdpPerCapita ?? 0,
-                    dystopiaResidual: countryData?.dystopiaResidual ?? 0,
-                    freedomOfLifeChoices: countryData?.freedomToMakeLifeChoices ?? 0,
-                    generosity: countryData?.generosity ?? 0,
-                    healthyLifeExpectency: countryData?.healthyLifeExpectancy ?? 0,
-                    perceptionsOfCorruption: countryData?.perceptionsOfCorruption ?? 0,
-                    socialSupport: countryData?.socialSupport ?? 0,
+                    score: countryData.ladderScore ?? 0,
+                    logGDPPerCapita: countryData.logGdpPerCapita ?? 0,
+                    dystopiaResidual: countryData.dystopiaResidual ?? 0,
+                    freedomOfLifeChoices: countryData.freedomToMakeLifeChoices ?? 0,
+                    generosity: countryData.generosity ?? 0,
+                    healthyLifeExpectency: countryData.healthyLifeExpectancy ?? 0,
+                    perceptionsOfCorruption: countryData.perceptionsOfCorruption ?? 0,
+                    socialSupport: countryData.socialSupport ?? 0,
                 }}
                 adjust_on_large_device={false}
-            />
+            /> : <Skeleton className="w-[490px] h-full rounded-xl" />}
+            {countryData ? <ScoreHistoryCard
+                scoreHistory={countryData.scoreHistory}
+                label={props.countryName}
+                adjust_on_large_device={false}
+            /> : <Skeleton className="w-[435px] h-full rounded-xl" />}
         </div>
         <ScrollBar orientation="horizontal"/>
     </ScrollArea>

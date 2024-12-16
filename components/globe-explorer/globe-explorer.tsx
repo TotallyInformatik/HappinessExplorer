@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
 import { ArrowDown, Check, ChevronsUpDown, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { getCountriesByContinent, getCountryData, Year } from '@/lib/db_interface';
+import { cn, getCorrectCountryName } from '@/lib/utils';
+import { getAllCountries, getCountriesByContinent, getCountryData, MapCountries, Year } from '@/lib/db_interface';
 import { continentTranslations } from '@/lib/database/schema';
 import { setConfig } from 'next/config';
 import GeoCountry from './geo-country';
@@ -54,6 +54,11 @@ export type CountryIDs = {
   [countryName: string]: number
 }
 
+/**
+ * @author Rui Zhang
+ * @param 
+ * @returns 
+ */
 const GlobeExplorer = ({ 
   onCountryChange,
   years
@@ -75,8 +80,35 @@ const GlobeExplorer = ({
   const [rank, setRank] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [dataExists, setDataExists] = useState<boolean>(false);
+  const [heatMapData, setHeatMapData] = useState<MapCountries | undefined>(undefined);
   
+  function fetchCountries(yearValue: string) {
+    getCountriesByContinent(parseInt(yearValue), "en").then((result) => {
+      let allCountries: Countries = [];
+      let newCountryData: CountryIDs = {};
+      for (let continents of result) { 
+        continents.countries.forEach((country) => {
+          allCountries.push({
+            label: country.countryName,
+            value: country.countryName
+          });
+          newCountryData[country.countryName] = country.countryId;
+        })
+      }
 
+      allCountries.sort((a, b) => {
+        return a.label.localeCompare(b.label);
+      });
+
+      setCountries(allCountries);
+      setCountryIDs(newCountryData);
+
+    });
+
+    getAllCountries(parseInt(yearValue)).then((result) => {
+      setHeatMapData(result);
+    })
+  }
 
   useEffect(() => {
 
@@ -95,11 +127,41 @@ const GlobeExplorer = ({
 
   }, [selectedCountry])
 
+  useEffect(() => {
+
+    const inputCountry = (event: KeyboardEvent) => {
+
+      if (event.key == "k" && (event.ctrlKey || event.metaKey)) {
+        setOpen(true);
+        const element = document.querySelector(".searchBar");
+        const clientRect = element?.getBoundingClientRect();
+        const bodyRect = document.querySelector("body")?.getBoundingClientRect();
+        window.scrollTo({
+          top: (clientRect?.top || 0) - (bodyRect?.top || 0) - 100
+        });
+      }
+    }
+
+    window.addEventListener("keydown", inputCountry);
+
+    return () => {
+      window.removeEventListener("keydown", inputCountry);
+    }
+  }, [])
+
+  useEffect(() => {
+    if (years[0]) {
+      const yearValue = years[0].year.toString();
+      setReport(yearValue); 
+      fetchCountries(yearValue);
+    }
+  }, [years])
+
   return <>
     <section id='world-map'>
       <header className="w-screen h-auto overflow-x-auto no-scrollbar 
                         flex md:items-center px-5 py-3 justify-between gap-x-10 
-                        gap-y-5 flex-col md:flex-row "
+                        gap-y-5 flex-col md:flex-row searchBar"
       >
         <h3 className="text-2xl font-normal">Globe Explorer</h3>
         <section className='flex md:items-center flex-col md:flex-row h-full gap-x-10 gap-y-2'>
@@ -107,27 +169,7 @@ const GlobeExplorer = ({
           <Select value={report} onValueChange={(value) => {
             setReport(value);
             setSelectedCountry("");
-            getCountriesByContinent(parseInt(value), "en").then((result) => {
-              let allCountries: Countries = [];
-              let newCountryData: CountryIDs = {};
-              for (let continents of result) { 
-                continents.countries.forEach((country) => {
-                  allCountries.push({
-                    label: country.countryName,
-                    value: country.countryName
-                  });
-                  newCountryData[country.countryName] = country.countryId;
-                })
-              }
-
-              allCountries.sort((a, b) => {
-                return a.label.localeCompare(b.label);
-              });
-
-              setCountries(allCountries);
-              setCountryIDs(newCountryData);
-
-            });
+            fetchCountries(value);
           }}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select a report"/>
@@ -211,16 +253,25 @@ const GlobeExplorer = ({
             : 
             <>
               <ComposableMap 
-                onClick={(event) => {
+                onClick={() => {
                   setSelectedCountry("");
                 }}>
                 <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom}>
                   <Geographies geography={geoUrl}>
                     {({ geographies }) =>
                       geographies.map((geo) => {
+                        
+                        const correctName = getCorrectCountryName(geo);
+
+                        let countryScore = undefined;
+                        if (heatMapData && heatMapData[correctName] && heatMapData[correctName].ladderScore) {
+                          countryScore = heatMapData[correctName].ladderScore || undefined;
+                        } 
+
                         return <GeoCountry 
                           key={geo.rsmKey}
                           geo={geo}
+                          score={countryScore}
                           countryIDs={countryIDs}
                           onCountryChange={onCountryChange}
                           setSelectedCountry={setSelectedCountry}

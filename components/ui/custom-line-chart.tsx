@@ -1,67 +1,67 @@
 "use client"
 
 
-import { CartesianGrid, Label, LabelList, Line, LineChart, XAxis, YAxis } from "recharts"
+import { CartesianGrid, LabelList, Line, LineChart, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import clsx from "clsx"
 
 
-
+// custom type for chart data entry
 export type YearLineChartData = {
   year: number | string,
   value: number,
 }
 
+// custom type for required config
 export type YearLineChartConfig = {
   label: string,
 }
 
 
+// YearLineChartDots component
+// provides a line chart with label year on the x axis and dots at the value points
 export const YearLineChartDots = ({
-  title = null,
-  lineCount = 1,
   chartData,
   chartConfig,
-  className,
 
 
   adjust_on_large_device = true,
 }: {
-  title?: string | null,
-  lineCount?: 1 | 2 | 3 | 4,
   chartData: YearLineChartData[],
   chartConfig: YearLineChartConfig,
-  className?: string,
 
   
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
 
-  const padding = 1
-  const maxData = getLargestValue(chartData)
-  const upperBound = maxData + padding
-  const minData = getSmallestValue(chartData)
-  const lowerBound = minData - padding
 
-  const tickCount = 5
-  const tickInterval = (upperBound - lowerBound) / tickCount
-  const ticks = Array.from({ length: tickCount + 2},(_, i) => lowerBound + i * tickInterval)
+  // custom ticks for better visual experience
+  const padding = 1 // padding for chart
+  const maxData = getLargestValue(chartData) // get largest value in chartData
+  const upperBound = maxData + padding // calculate upper bound
+  const minData = getSmallestValue(chartData) // get smallest value in chartData
+  const lowerBound = minData - padding // calculate lower bound
+
+  const tickCount = 5 // 5 horizontal orientation lines
+  const tickInterval = (upperBound - lowerBound) / tickCount // calculate tick (line) intervall
+  const ticks = Array.from({ length: tickCount + 2},(_, i) => lowerBound + i * tickInterval) // create list ticks
 
 
 
   const config = {
     value: {
       label: chartConfig.label,
-      color: "hsl(var(--chart-1))"
+      color: "hsl(var(--chart-1))" // --chart-1 is provided by shadcn/ui
     }
   }
 
+  // using the Card Component of shadcn/ui as well as it's associated Components
   return (
     <Card className={clsx(
       "w-[435px] h-full p-3 flex flex-col shrink-0 gap-3",
       {
-        "md:w-full md:h-[221px]": adjust_on_large_device,
+        "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]": adjust_on_large_device,
       }
     )}>
       <CardHeader className="p-0 grow-0 shrink-0">
@@ -74,35 +74,37 @@ export const YearLineChartDots = ({
         }
       )}>
         <div className="max-w-[435px] w-full p-0 h-full">
+          {/* ChartContainer (required and provided by shadcn/ui) */}
           <ChartContainer config={config} className="h-full w-full text-black">
+            {/* reacharts (library) line chart*/}
             <LineChart
               accessibilityLayer
               data={chartData}
             >
               <CartesianGrid vertical={false}/>
               <XAxis 
-                dataKey="year" 
+                dataKey="year"
                 tickLine={false} 
                 axisLine={false} 
                 type="category" 
                 padding={{left: 12, right: 12}}
-                tickMargin={16} 
-                style={{fill: 'black', fontWeight: '500'}}/>
-                
+                tickMargin={16} // add tick margin on x axis, to make sure the labels can be printed
+                style={{fill: 'black', fontWeight: '500'}} // adjust style
+              />
               <YAxis
                 hide={true}
                 type="number"
                 domain={[lowerBound, upperBound]}
-                ticks={ticks}
+                ticks={ticks} // use calculated ticks array
               />
               <ChartTooltip
                 cursor={false}
                 content={<ChartTooltipContent indicator="line"  />}
               />
-              <Line 
+              <Line // draw line
                 dataKey={'value'}
                 type="natural"
-                stroke="var(--color-value)"
+                stroke="var(--color-value)" // use set color (the one that is set in chartConfig)
                 strokeWidth={2}
                 dot={{
                   fill: "var(--color-value)",
@@ -119,10 +121,8 @@ export const YearLineChartDots = ({
                 /> 
               </Line>
             </LineChart>
-            
           </ChartContainer>
         </div>
-        
       </CardContent>
     </Card>
   )
@@ -134,9 +134,9 @@ export const YearLineChartDots = ({
 
 
 
-
+// simple function to get the smallest score value of a list of YearLineChartData elements
 function getSmallestValue(data: YearLineChartData[]): number {
-  let smallest: number = 10;
+  let smallest: number = 10; // initial value is 10, as the max score is 10
 
   data.forEach((entry) => {
     smallest = smallest > entry.value ? entry.value : smallest
@@ -145,8 +145,10 @@ function getSmallestValue(data: YearLineChartData[]): number {
   return (smallest);
 }
 
+
+// simple function to get the largest score value of a list of YearLineChartData elements
 function getLargestValue(data: YearLineChartData[]): number {
-  let largest: number = 0;
+  let largest: number = 0; // initial value is 0, as the min score is 0
 
   data.forEach((entry) => {
     largest = largest < entry.value ? entry.value : largest

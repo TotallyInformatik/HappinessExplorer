@@ -12,6 +12,11 @@ const chartConfig = {
   }
 } satisfies ChartConfig
 
+/**
+ * @author Rui Zhang
+ * @param 
+ * @returns 
+ */
 export default function CountryDetailsShort({
   selectedCountry,
   report,
@@ -41,10 +46,6 @@ export default function CountryDetailsShort({
       <p className="text-5xl p-0 font-extrabold inline">
         #{rank}
       </p>
-      <p>
-        Happiness Score
-        <span className='text-sm opacity-50 block text-center'>from 0 to 10</span>
-      </p>
       <div className='w-[200px] aspect-square'>
         <ChartContainer
           config={chartConfig}
@@ -56,8 +57,8 @@ export default function CountryDetailsShort({
               // todo: do we need this line? fill: "hsl(var(--chart-1)",
 
             }]}
-            startAngle={0}
-            endAngle={360 * score / 10}
+            startAngle={90}
+            endAngle={450 * score / 10}
             innerRadius={80}
             outerRadius={110}
           >
@@ -82,17 +83,24 @@ export default function CountryDetailsShort({
                       >
                         <tspan
                           x={viewBox.cx}
-                          y={viewBox.cy}
+                          y={(viewBox.cy || 0) - 8}
                           className="fill-foreground text-4xl font-bold"
                         >
                           {score?.toPrecision(3)}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
+                          y={(viewBox.cy || 0) + 16}
                           className="fill-muted-foreground"
                         >
-                          ladderscore
+                          Happiness Score
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 30}
+                          className="fill-muted-foreground"
+                        >
+                          (1 - 10)
                         </tspan>
                       </text>
                     )
