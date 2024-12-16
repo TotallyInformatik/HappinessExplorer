@@ -1,16 +1,16 @@
 "use client"
 
-import React, { ReactNode, useEffect, useState } from 'react'; // This is the standard import
-import { Separator } from '@/components/ui/separator';
+import AnimatedGlobe from '@/components/AnimatedGlobe';
 import GlobeExplorer, { GlobeSelection } from '@/components/globe-explorer/globe-explorer';
-import { CountryData, getCountryData, getCountryEmoji, getListOfYears, Year } from '@/lib/db_interface';
+import { Button } from '@/components/ui/button';
 import { CountryDetailedViewContainer } from '@/components/ui/country-detailed-view';
 import { HappinessScore } from '@/components/ui/custom-card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import AnimatedGlobe from '@/components/AnimatedGlobe';
-import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { CountryData, getCountryData, getCountryEmoji, getListOfYears, Year } from '@/lib/db_interface';
 import { ArrowDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ReactNode, useEffect, useState } from 'react'; // This is the standard import
 
 
 

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-import { Separator } from "./ui/separator";
-import { Year, Country, getTopTenCountries } from "@/lib/db_interface";
+import { Country, getTopTenCountries, Year } from "@/lib/db_interface";
 import LeaderboardRow from "./LeaderboardRow";
+import { Separator } from "./ui/separator";
 import YearSelection from "./YearSelection";
 
 

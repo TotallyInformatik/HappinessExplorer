@@ -10,14 +10,14 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import { Separator } from "@/components/ui/separator"
-import {Chart1} from "@/app/compare/linechart_natural"
-import {Chart2} from "@/app/compare/linechart_linear"
-import React, { ReactNode } from "react";
+import { Chart2 } from "@/app/compare/linechart_linear"
+import { Chart1 } from "@/app/compare/linechart_natural"
 import { card_visibility, CountryDetailedViewContainer } from "@/components/ui/country-detailed-view"
-import { HappinessScore, DetailedHappinessScore } from "@/components/ui/custom-card"
-import { ContinentGroup, CountryData, getCountryData, getCountryEmoji, getListOfYears, Year } from "@/lib/db_interface"
 import { DemographicComposition } from "@/components/ui/custom-bar-chart"
+import { DetailedHappinessScore, HappinessScore } from "@/components/ui/custom-card"
+import { Separator } from "@/components/ui/separator"
+import { ContinentGroup, CountryData, getCountryData, getCountryEmoji, Year } from "@/lib/db_interface"
+import React from "react"
 // import '@/styles/globals.css';
 
 const Africa = Array.from(`Algeria

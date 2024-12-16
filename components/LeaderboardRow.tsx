@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { ScrollArea, ScrollBar } from "./ui/scroll-area"
-import { CountryData, getCountryData } from "@/lib/db_interface"
+import { CountryData, getCountryData } from "@/lib/db_interface";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
-import { HappinessScoreProgressCard, ContributingFactorsCard, ScoreHistoryCard } from "./ui/custom-card"
+import { ContributingFactorsCard, HappinessScoreProgressCard, ScoreHistoryCard } from "./ui/custom-card";
 import { Skeleton } from "./ui/skeleton";
 
 

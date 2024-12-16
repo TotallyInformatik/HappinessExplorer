@@ -1,21 +1,18 @@
 "use client"
-import { TrendingUp } from "lucide-react"
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend, ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { ChartLegend, ChartLegendContent } from "@/components/ui/chart"
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 
 type ChildProps= {
   year: number

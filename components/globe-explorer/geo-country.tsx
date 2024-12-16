@@ -1,10 +1,8 @@
 // some countries have different names in the package 
 
-import { CountryData, getCountryData } from "@/lib/db_interface";
+import { getCorrectCountryName } from "@/lib/utils";
 import { Geography } from "react-simple-maps";
-import { GlobeSelection, CountryIDs } from "./globe-explorer";
-import { LegacyRef, RefObject, useRef, useState } from "react";
-import { COUNTRY_MAPPING, getCorrectCountryName } from "@/lib/utils";
+import { CountryIDs, GlobeSelection } from "./globe-explorer";
 
 /**
  * @author Rui Zhang

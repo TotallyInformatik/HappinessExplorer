@@ -1,8 +1,5 @@
 "use client";
-import { Separator } from '@/components/ui/separator';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectGroup, SelectValue } from "@/components/ui/select";
-import React, { useEffect, useState } from 'react';
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -10,24 +7,22 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Button } from '@/components/ui/button';
-import { ArrowDown, Check, ChevronsUpDown, X } from 'lucide-react';
-import { cn, getCorrectCountryName } from '@/lib/utils';
+} from "@/components/ui/popover";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from '@/components/ui/separator';
 import { getAllCountries, getCountriesByContinent, getCountryData, MapCountries, Year } from '@/lib/db_interface';
-import { continentTranslations } from '@/lib/database/schema';
-import { setConfig } from 'next/config';
-import GeoCountry from './geo-country';
-import { useRouter } from 'next/navigation';
-import { ChartConfig, ChartContainer } from '../ui/chart';
-import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
-import CountryDetailsShort from './country-details-short';
+import { cn, getCorrectCountryName } from '@/lib/utils';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ComposableMap, Geographies, ZoomableGroup } from 'react-simple-maps';
 import { Card, CardContent } from '../ui/card';
+import CountryDetailsShort from './country-details-short';
+import GeoCountry from './geo-country';
 
 interface MapPosition {
   coordinates: [number, number],
@@ -72,7 +67,7 @@ const GlobeExplorer = ({
   // todo: heatmap
   
   const [report, setReport] = useState("");
-  const [position, setPosition] = useState<MapPosition>({ coordinates: [0, 0], zoom: 1.3 });
+  const [position] = useState<MapPosition>({ coordinates: [0, 0], zoom: 1.3 });
   const [open, setOpen] = React.useState(false)
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [countries, setCountries] = useState<Countries>([]);

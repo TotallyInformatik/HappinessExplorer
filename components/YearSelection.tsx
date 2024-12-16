@@ -1,15 +1,15 @@
 "use client";
 
+import { Year } from "@/lib/db_interface";
+import { Label } from "./ui/label";
 import {
     Select,
     SelectContent,
-    SelectItem,
     SelectGroup,
+    SelectItem,
     SelectTrigger,
     SelectValue,
-} from "./ui/select"
-import { Label } from "./ui/label";
-import { Year } from "@/lib/db_interface"
+} from "./ui/select";
 
 
 type YearSelectionProps = {

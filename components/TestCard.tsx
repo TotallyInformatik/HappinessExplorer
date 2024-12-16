@@ -1,4 +1,3 @@
-import { AspectRatio } from "./ui/aspect-ratio";
 import { Card } from "./ui/card";
 
 export default function TestCard() {
