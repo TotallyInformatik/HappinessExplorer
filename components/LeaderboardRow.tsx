@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area"
 import { CountryData, getCountryData } from "@/lib/db_interface"
 
-import { HappinessScoreProgressCard, ContributingFactorsCard } from "./ui/custom-card"
+import { HappinessScoreProgressCard, ContributingFactorsCard, ScoreHistoryCard } from "./ui/custom-card"
+import { Skeleton } from "./ui/skeleton";
 
 
 type LeaderboardRowProps = {
@@ -37,24 +38,29 @@ export default function LeaderboardRow(props: LeaderboardRowProps) {
                 <h2 className="text-2xl font-medium">{props.countryName}</h2>
             </div>
             
-            <HappinessScoreProgressCard
-                score={{year: "", score: countryData?.ladderScore ?? 0}}
+            {countryData ? <HappinessScoreProgressCard
+                score={{year: "", score: countryData.ladderScore ?? 0}}
                 adjust_on_large_device={false}
-            />
-            <ContributingFactorsCard
+            /> : <Skeleton className="w-[302px] h-full rounded-xl" />}
+            {countryData ? <ContributingFactorsCard
                 detailedHappinessScore={{
                     year: "",
-                    score: countryData?.ladderScore ?? 0,
-                    logGDPPerCapita: countryData?.logGdpPerCapita ?? 0,
-                    dystopiaResidual: countryData?.dystopiaResidual ?? 0,
-                    freedomOfLifeChoices: countryData?.freedomToMakeLifeChoices ?? 0,
-                    generosity: countryData?.generosity ?? 0,
-                    healthyLifeExpectency: countryData?.healthyLifeExpectancy ?? 0,
-                    perceptionsOfCorruption: countryData?.perceptionsOfCorruption ?? 0,
-                    socialSupport: countryData?.socialSupport ?? 0,
+                    score: countryData.ladderScore ?? 0,
+                    logGDPPerCapita: countryData.logGdpPerCapita ?? 0,
+                    dystopiaResidual: countryData.dystopiaResidual ?? 0,
+                    freedomOfLifeChoices: countryData.freedomToMakeLifeChoices ?? 0,
+                    generosity: countryData.generosity ?? 0,
+                    healthyLifeExpectency: countryData.healthyLifeExpectancy ?? 0,
+                    perceptionsOfCorruption: countryData.perceptionsOfCorruption ?? 0,
+                    socialSupport: countryData.socialSupport ?? 0,
                 }}
                 adjust_on_large_device={false}
-            />
+            /> : <Skeleton className="w-[490px] h-full rounded-xl" />}
+            {countryData ? <ScoreHistoryCard
+                scoreHistory={countryData.scoreHistory}
+                label={props.countryName}
+                adjust_on_large_device={false}
+            /> : <Skeleton className="w-[435px] h-full rounded-xl" />}
         </div>
         <ScrollBar orientation="horizontal"/>
     </ScrollArea>
