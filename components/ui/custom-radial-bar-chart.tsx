@@ -6,7 +6,7 @@ import { DetailedHappinessScore } from "./custom-card";
 import { SetStateAction, useEffect, useState } from "react";
 
 
-
+// custom type for contributing factors data
 type FactorsRadialBarChartData = {
   name: string,
   value: number,
@@ -15,6 +15,7 @@ type FactorsRadialBarChartData = {
 
 
 
+// FactorsRadialBarchart
 export const FactorsRadialBarChart = ({
   detailedHappinessScore,
 
@@ -26,8 +27,10 @@ export const FactorsRadialBarChart = ({
   
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
+  // which bar part (if any) is hovered?
   const [hoverBar, setHoverBar] = useState<string | boolean>(false)
   
+  // generate chart data in correct format
   const data = [
     { name: 'Log GDP per capita', value: detailedHappinessScore.logGDPPerCapita, color: '-chart-1' },
     { name: 'Social support', value: detailedHappinessScore.socialSupport, color: '-chart-2' },
@@ -38,19 +41,22 @@ export const FactorsRadialBarChart = ({
     { name: 'Dystopia + residual', value: detailedHappinessScore.dystopiaResidual, color: '-chart-7' },
   ] as FactorsRadialBarChartData[]
 
+  // reverse for drawing order
   const reversed_data = data.slice().reverse();
 
   
-  const radius = 97
+  // set necessary variables
+  const radius = 97 // radius of radial bar
   const multiplier = 180 / detailedHappinessScore.score;
   let cumulativeAngle = 0;
 
 
+  // using the Card Component of shadcn/ui as well as it's associated Components
   return (
     <Card className={clsx(
       "h-full w-[490px] p-0 shrink-0",
       {
-        "md:w-full md:h-[221px]": adjust_on_large_device,
+        "lg:min-w-[490px] lg:h-[221px] md:w-full md:min-w-[260px] md:h-[330px] ": adjust_on_large_device,
       }
     )}
     >
@@ -62,14 +68,21 @@ export const FactorsRadialBarChart = ({
         <CardHeader className="p-0 grow-0 shrink">
           <CardTitle className="text-base font-normal">Contributing Factors</CardTitle>
         </CardHeader>
-        <CardContent className="p-0 grow shrink h-full flex flex-row justify-center items-center gap-3">
+        <CardContent className={clsx(
+          "p-0 grow shrink h-full flex flex-row justify-center items-center gap-3",
+          {
+            "md:flex-col lg:flex-row": adjust_on_large_device,
+          }
+        )}>
           <div>
+            {/* use custom SVGContainer (see below) */}
             <SVGContainer radius={radius} >
+              {/* generate the different parts of the radial bar using the custom HalfRadialPath component (see below) */}
               {reversed_data.map((segment, index) => {
                 const startAngle = cumulativeAngle;
                 const endAngle = Math.round((startAngle + segment.value * multiplier));
                 cumulativeAngle = endAngle;
-
+                
                 return (
                   <HalfRadialPath
                     key={index}
@@ -83,6 +96,7 @@ export const FactorsRadialBarChart = ({
                   />
                 );
               })}
+              {/* text in the middle of the half circle */}
               <text
                 x={"50%"}
                 y={radius-10}
@@ -92,7 +106,7 @@ export const FactorsRadialBarChart = ({
               >
                 {detailedHappinessScore.score.toFixed(2)}
               </text>
-              <text
+              <text 
                 x={"50%"}
                 y={radius+10}
                 textAnchor="middle"
@@ -104,6 +118,7 @@ export const FactorsRadialBarChart = ({
               </text>
             </SVGContainer>
           </div>
+          {/* custom legend using the CustomLegend component (see below) */}
           <CustomLegend
             data={data}
             currentHover={hoverBar}
@@ -119,24 +134,24 @@ export const FactorsRadialBarChart = ({
 
 
 
-
-
-type SVGContainerProps = {
-  radius: number,
-  strokeWidth?: number,
-  className?: string,
-  children: React.ReactNode,
-};
-
-export const SVGContainer: React.FC<SVGContainerProps> = ({
+// SVGContainer component
+// custom component for custom radial bar
+export const SVGContainer = ({
   radius,
   strokeWidth = 16,
   className,
   children,
+}: {
+  radius: number,
+  strokeWidth?: number,
+  className?: string,
+  children: React.ReactNode,
 }) => {
+  // calculate size
   const width = radius * 2 + strokeWidth;
   const height = radius + strokeWidth
 
+  // return a svg (container) (including an accessible description)
   return (
     <svg
       width={width}
@@ -156,20 +171,10 @@ export const SVGContainer: React.FC<SVGContainerProps> = ({
 
 
 
-
-type RadialPathProps = {
-  color?: string; // Color of the path
-  startAngle: number; // Starting angle in degrees
-  endAngle: number; // Ending angle in degrees
-  radius: number; // Radius of the arc
-  strokeWidth?: number; // Thickness of the arc
-  label: string; // used for aria label
-  currentHover: string | boolean; // use for on hover color changes
-  setOnHover: React.Dispatch<SetStateAction<string | boolean>>; // used for on hover interactions
-};
-
-export const HalfRadialPath: React.FC<RadialPathProps> = ({
-  color = '#000000',
+// HalfRadialPath component
+// custom component to draw part (or a full) of a half circle
+export const HalfRadialPath = ({
+  color = '#000000', // default is black
   startAngle,
   endAngle,
   radius,
@@ -178,14 +183,16 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
   currentHover,
   setOnHover,
 
+}: {
+  color?: string; // Color of the path
+  startAngle: number; // Starting angle in degrees
+  endAngle: number; // Ending angle in degrees
+  radius: number; // Radius of the arc
+  strokeWidth?: number; // Thickness of the arc
+  label: string; // Used for aria label
+  currentHover: string | boolean; // Use for on hover color changes
+  setOnHover: React.Dispatch<SetStateAction<string | boolean>>; // Used for on hover interactions
 }) => {
-  let greyscale = 0
-
-  if (currentHover !== false && currentHover !== label) {
-    greyscale = 0.9
-  } else {
-    greyscale = 0
-  }
 
 
   // Make sure angles are in allowed range (if not adjust them)
@@ -214,6 +221,7 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
     A ${radius},${radius} 0 ${largeArcFlag} 1 ${x2},${y2}
   `;
 
+  // returns path for an arc that is part of the radial bar
   return (
     <path
       d={pathData}
@@ -222,18 +230,19 @@ export const HalfRadialPath: React.FC<RadialPathProps> = ({
       strokeLinecap="round"
       stroke={`hsl(var(-${color}))`}
       style={{
-        filter: `saturate(${(currentHover === label || currentHover === false) ? 1 : 0.2}) contrast(${(currentHover === label || currentHover === false) ? 1 : 0.2})`,
+        filter: `saturate(${(currentHover === label || currentHover === false) ? 1 : 0.2}) contrast(${(currentHover === label || currentHover === false) ? 1 : 0.2})`, // greyed out if another part is hovered
+        cursor: 'default',
       }}
-      aria-label={label}
-      onMouseEnter={() => setOnHover(label)}
-      onMouseLeave={() => setOnHover(false)}
+      aria-label={label} // accessibility support
+      onMouseEnter={() => setOnHover(label)} // implement the on hover functionality
+      onMouseLeave={() => setOnHover(false)} // implement the on hover functionality
     />
   );
 };
 
 
 
-
+// CustomLegend component
 const CustomLegend = ({
   data,
   currentHover,
@@ -243,8 +252,6 @@ const CustomLegend = ({
   currentHover: string | boolean
   setOnHover: React.Dispatch<SetStateAction<string | boolean>>
 }): React.ReactNode => {
-
-
 
   return (
     <div
@@ -256,21 +263,24 @@ const CustomLegend = ({
         left: -20,
       }}
     >
-      <ul className="space-y-1">
+      <ul>
         {data.map((factor, index) => (
-          <li key={index} className="flex justify-between items-center text-xs"
-            onMouseEnter={() => setOnHover(factor.name)}
-            onMouseLeave={() => setOnHover(false)}
+          <li key={index} className="flex justify-between items-center text-xs pt-1"
+            onMouseEnter={() => setOnHover(factor.name)} // implement the on hover functionality
+            onMouseLeave={() => setOnHover(false)} // implement the on hover functionality
           >
             <div className="flex items-center leading-[13px] cursor-default">
+              {/* colored square in front of label */}
               <div className={`w-[10px] h-[10px] rounded-[2px] inline-block mr-[5px]`} style={{
                 background: `hsl(var(-${factor.color}))`,
-                filter: `saturate(${(currentHover === factor.name || currentHover === false) ? 1 : 0.1})`,
-                }}/>
+                filter: `saturate(${(currentHover === factor.name || currentHover === false) ? 1 : 0.2}) contrast(${(currentHover === factor.name || currentHover === false) ? 1 : 0.2})`, // greyed out if another part is hovered
+              }}/>
+              {/* label */}
               {factor.name}
             </div>
+            {/* score */}
             <span className="font-semibold leading-[13px] cursor-default">
-              {factor.value.toFixed(2)}
+              {factor.value.toFixed(2) /* fixed to two floating pointes */}
             </span>
           </li>
         ))}

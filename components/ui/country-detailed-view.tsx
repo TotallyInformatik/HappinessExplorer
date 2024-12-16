@@ -1,15 +1,24 @@
-import { RankCard, HappinessScoreProgressCard, HappinessScore, ScoreHistoryCard, DetailedHappinessScore, ContributingFactorsCard, DemographicCompositionCard, TitleCard } from "./custom-card"
-import { Button } from "@/components/ui/button"
+import { 
+  RankCard, 
+  HappinessScoreProgressCard, 
+  HappinessScore, 
+  ScoreHistoryCard, 
+  DetailedHappinessScore, 
+  ContributingFactorsCard, 
+  DemographicCompositionCard, 
+  TitleCard 
+} from "./custom-card"
 import clsx from "clsx";
-import { Trash2 } from "lucide-react"
 import { DemographicComposition } from "./custom-bar-chart";
 
 
 
+// custom type for card visibility
+// lets the user of the component decide which cards should be shown
 export type card_visibility = {
   show_title?: boolean,
   show_year_in_title?: boolean,
-  show_delete_button?: boolean,
+  show_delete_button?: boolean, // functionality removed but for backwards compatibility variable still present
   show_rank_card?: boolean,
   show_happiness_score_progress_card?: boolean,
   show_score_history_card?: boolean,
@@ -17,6 +26,7 @@ export type card_visibility = {
   show_demographic_composition_card?: boolean,
 }
 
+// for default values of the cards (later used in createCardVisibilityVariables function)
 const defaultCardVisibility: Required<card_visibility> = {
   show_title: true,
   show_year_in_title: true,
@@ -31,6 +41,7 @@ const defaultCardVisibility: Required<card_visibility> = {
 
 
 
+// CountryDetailedViewContainer Component
 export const CountryDetailedViewContainer = ({
   country_name,
   country_flag_emoji,
@@ -56,21 +67,57 @@ export const CountryDetailedViewContainer = ({
   adjust_on_large_device?: boolean,
   card_visibility?: card_visibility,
 }): React.ReactNode => {
-  const [show_title, show_year_in_title, show_rank_card, show_happiness_score_progress_card, show_score_history_card, show_contributing_factors_card, show_demographic_composition_card] = createCardVisibilityVariables(card_visibility)
+  // get visibility variables (filled up with the default values)
+  const [
+    show_title, 
+    show_year_in_title, 
+    show_rank_card, 
+    show_happiness_score_progress_card, 
+    show_score_history_card, 
+    show_contributing_factors_card, 
+    show_demographic_composition_card ] = createCardVisibilityVariables(card_visibility)
 
 
   return (
     <div className={clsx(
     "flex flex-row items-center h-[281px] gap-3 w-fit justify-end p-[1.875rem]",
     {
-      "md:flex-col md:items-center md:h-auto md:w-full": adjust_on_large_device
+      "md:flex-col md:items-center md:h-auto md:w-full": adjust_on_large_device // used for responsiveness (if requested by user (adjust_on_large_device))
     })}>
-      {show_title && <TitleCard country_flag_emoji={country_flag_emoji} country_name={country_name} happinessScore={happinessScore} show_year_in_title={show_year_in_title} adjust_on_large_device={adjust_on_large_device}></TitleCard>}
-      {show_rank_card && <RankCard rank={rank} adjust_on_large_device={adjust_on_large_device}></RankCard>}
-      {show_happiness_score_progress_card && <HappinessScoreProgressCard score={happinessScore} adjust_on_large_device={adjust_on_large_device}></HappinessScoreProgressCard>}
-      {show_score_history_card && <ScoreHistoryCard label={country_name} scoreHistory={happinessScoreHistory} adjust_on_large_device={adjust_on_large_device}></ScoreHistoryCard>}
-      {show_contributing_factors_card && <ContributingFactorsCard detailedHappinessScore={detailedHappinessScore} adjust_on_large_device={adjust_on_large_device}></ContributingFactorsCard>}
-      {show_demographic_composition_card && <DemographicCompositionCard demographicComposition={demographicComposition} adjust_on_large_device={adjust_on_large_device}></DemographicCompositionCard>}
+      {/* Title Card */}
+      {show_title && <TitleCard 
+        country_flag_emoji={country_flag_emoji} 
+        country_name={country_name} 
+        happinessScore={happinessScore} 
+        show_year_in_title={show_year_in_title} 
+        adjust_on_large_device={adjust_on_large_device}
+      />}
+      {/* Rank Card */}
+      {show_rank_card && <RankCard 
+        rank={rank} 
+        adjust_on_large_device={adjust_on_large_device}
+      />}
+      {/* Happiness Score Progress Card */}
+      {show_happiness_score_progress_card && <HappinessScoreProgressCard 
+        score={happinessScore} 
+        adjust_on_large_device={adjust_on_large_device}
+      />}
+      {/* Score History Card */}
+      {show_score_history_card && <ScoreHistoryCard 
+        label={country_name} 
+        scoreHistory={happinessScoreHistory} 
+        adjust_on_large_device={adjust_on_large_device}
+      />}
+      {/* Contributing Factors Card */}
+      {show_contributing_factors_card && <ContributingFactorsCard 
+        detailedHappinessScore={detailedHappinessScore} 
+        adjust_on_large_device={adjust_on_large_device}
+      />}
+      {/* Demographic Composition Card */}
+      {show_demographic_composition_card && <DemographicCompositionCard 
+        demographicComposition={demographicComposition} 
+        adjust_on_large_device={adjust_on_large_device}
+      />}
     </div>
   )
 }
@@ -78,6 +125,9 @@ export const CountryDetailedViewContainer = ({
 
 
 
+// Function for card visibility
+// Necessary so that not all variables in type card_visibility have to be set
+// Completes overrides to full card_visibility type with defaultCardVisibility values
 function createCardVisibilityVariables(overrides?: card_visibility): boolean[] {
   const merged = {
     ...defaultCardVisibility,
