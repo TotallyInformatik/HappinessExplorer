@@ -20,10 +20,12 @@ export default function LeaderboardRow(props: LeaderboardRowProps) {
     const [countryData, setCountryData] = useState<CountryData | undefined>(undefined);
 
     useEffect(() => {
-        getCountryData(props.year, props.countryId)
-            .then((result) => {
-                setCountryData(result);
-            })
+        async function fetchData() {
+            const data = await getCountryData(props.year, props.countryId);
+            setCountryData(data);
+        }
+
+        fetchData();
     }, [props.year, props.countryId]);
 
 
