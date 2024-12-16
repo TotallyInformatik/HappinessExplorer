@@ -7,6 +7,7 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 
 
+// public custom type for demographic composition data
 export type DemographicComposition = {
   happinessScore_young: number,
   happinessScore_lower_middle: number,
@@ -14,13 +15,14 @@ export type DemographicComposition = {
   happinessScore_old: number,
 }
 
+// private custom type for chart data entry
 type DemographicChartDataEntry = {
   age_group: 'Young' | 'Lower Middle' | 'Upper Middle' | 'Old',
   happiness_score: number,
 }
 
 
-
+// DemographicCompositionBarChart Component
 export const DemographicCompositionBarChart = ({
   demographicComposition,
 
@@ -33,6 +35,7 @@ export const DemographicCompositionBarChart = ({
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
 
+  // create chart data (as list of DemographicChartDataEntry)
   const chartData = [
     {age_group: 'Young', happiness_score: demographicComposition.happinessScore_young},
     {age_group: 'Lower Middle', happiness_score: demographicComposition.happinessScore_lower_middle},
@@ -40,6 +43,8 @@ export const DemographicCompositionBarChart = ({
     {age_group: 'Old', happiness_score: demographicComposition.happinessScore_old},
   ] as DemographicChartDataEntry[]
 
+
+  // create chartConfig (required by shadcn/ui chart implementation)
   const chartConfig = {
     happiness_score: {
       label: "Happiness score",
@@ -48,20 +53,21 @@ export const DemographicCompositionBarChart = ({
   } satisfies ChartConfig
 
 
-  const tickCount = 5
-  const tickInterval = 10 / tickCount
-  const ticks = Array.from({ length: tickCount + 2},(_, i) => i * tickInterval)
+  // custom ticks for horizontal orientation lines in chart
+  const tickCount = 5 // 5 horizontal orientation lines in the chart
+  const tickInterval = 10 / tickCount // calculate tickInterval ( = 2)
+  const ticks = Array.from({ length: tickCount + 2},(_, i) => i * tickInterval) // create ticks array ranging from 0 to 10
 
 
 
 
 
-
+  // using the Card component of shadcn/ui and it's associated components (e.g. CardHeader, CardContent, ...)
   return (
     <Card className={clsx(
       "w-[425px] h-full p-3 flex flex-col gap-3 shrink-0",
       {
-        "md:w-full md:h-[221px]": adjust_on_large_device,
+        "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]": adjust_on_large_device,
       }
     )}>
       <CardHeader className="p-0 grow-0 shrink">
@@ -74,7 +80,9 @@ export const DemographicCompositionBarChart = ({
         }
       )}>
         <div className="max-w-[425px] w-full p-0 shrink-0 grow-0 h-full">
-          <ChartContainer config={chartConfig} className="h-full w-full">
+          {/* ChartContainer (required and provided by shadcn/ui) */}
+          <ChartContainer config={chartConfig} className="h-full w-full"> 
+            {/* reacharts (library) bar chart*/}
             <BarChart
               accessibilityLayer
               data={chartData}
@@ -92,11 +100,12 @@ export const DemographicCompositionBarChart = ({
                 hide={true}
                 type="number"
                 domain={[0, 10]}
-                ticks={ticks}
+                ticks={ticks} // calculated ticks
               />
+              {/* ChartTooltip of shadcn/ui (internally just a RechartsPrimitive.Tooltip element) */}
               <ChartTooltip
                 cursor={false}
-                content={<ChartTooltipContent 
+                content={<ChartTooltipContent // Component provided by shadcn/ui (defines look of the tooltip) 
                   indicator="line"/>}
               />
               <Bar
@@ -118,27 +127,4 @@ export const DemographicCompositionBarChart = ({
       </CardContent>
     </Card>
   )
-}
-
-
-
-
-function getSmallestValue(data: DemographicChartDataEntry[]): number {
-  let smallest: number = 10;
-
-  data.forEach((entry) => {
-    smallest = smallest > entry.happiness_score ? entry.happiness_score : smallest
-  });
-
-  return (smallest);
-}
-
-function getLargestValue(data: DemographicChartDataEntry[]): number {
-  let largest: number = 0;
-
-  data.forEach((entry) => {
-    largest = largest > entry.happiness_score ? entry.happiness_score : largest
-  });
-
-  return (largest);
 }

@@ -4,17 +4,15 @@ import { YearLineChartDots, YearLineChartData, YearLineChartConfig } from "./cus
 import { FactorsRadialBarChart } from "./custom-radial-bar-chart"
 import clsx from "clsx"
 import { DemographicComposition, DemographicCompositionBarChart } from "./custom-bar-chart"
-import { Button } from "./button"
-import { Trash2 } from "lucide-react"
 
 
-
-
+// custom type for simple happiness score data
 export type HappinessScore = {
   year: number | string,
   score: number,
 }
 
+// more detailed happiness score including contributing factors
 export type DetailedHappinessScore = {
   year: number | string,
   score: number,
@@ -27,8 +25,14 @@ export type DetailedHappinessScore = {
   dystopiaResidual: number,
 }
 
+/*
+  Some initial words regarding all the Cards components:
+  As one will see, every card component has the adjust_on_large_device variable
+  This variable does not affect the functionallity of the cards but rather their appearance
+*/
 
-
+// TitleCard Component
+// only '*Card' Component not using the Card Component of shadcn/ui
 const TitleCard = ({
   country_flag_emoji,
   country_name,
@@ -58,23 +62,24 @@ const TitleCard = ({
 
 
 
-
+// RankCard Component
 const RankCard = ({
   rank,
 
   
   adjust_on_large_device = true,
 }: {
-  rank: number | string,
+  rank: number | string, // number and strings accepted for simplicity in usage
 
 
   adjust_on_large_device?: boolean
 }): React.ReactNode => {
+  // using the Card Component of shadcn/ui as well as it's associated Components
   return (
   <Card className={clsx(
     "w-[172px] h-full p-[1rem] flex flex-col gap-3 shrink-0",
     {
-      "md:w-full md:h-[221px]": adjust_on_large_device
+      "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]]": adjust_on_large_device
     }
     )}>
     <CardHeader className="p-0 grow-0 shrink">
@@ -89,7 +94,8 @@ const RankCard = ({
 }
 
 
-
+// HappinessScoreProgressCard Component
+// Provides a Progress-bar view of a Happiness Score. Progress-bar ranges from 0 to 10
 const HappinessScoreProgressCard = ({
   score,
 
@@ -100,11 +106,12 @@ const HappinessScoreProgressCard = ({
   
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
+  // using the Card Component of shadcn/ui as well as it's associated Components
   return (
     <Card className={clsx(
       "w-[302px] h-full p-[1rem] flex flex-col gap-3 shrink-0",
       {
-        "md:w-full md:h-[221px]": adjust_on_large_device,
+        "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]": adjust_on_large_device,
       }
     )}>
       <CardHeader className="p-0 grow-0 shrink">
@@ -114,6 +121,7 @@ const HappinessScoreProgressCard = ({
         <div className="w-full max-w-[302px] gap-3 flex flex-col">
           <div className="flex justify-center items-center gap-3 w-[100%]">
             <span className="font-semibold text-lg grow-0">0</span>
+            {/* Progress-bar component provided by shadcn/ui */}
             <Progress value={score.score * 10} className="grow [&_div]:bg-chart-1"></Progress>
             <span className="font-semibold text-lg grow-0">10</span>
           </div>
@@ -128,6 +136,7 @@ const HappinessScoreProgressCard = ({
 
 
 
+// ScoreHistoryCard component
 const ScoreHistoryCard = ({
   scoreHistory, 
   label,
@@ -142,9 +151,11 @@ const ScoreHistoryCard = ({
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
 
+  // Initialize Data and Config
   const chartData: YearLineChartData[] = []
   const chartConfig: YearLineChartConfig = {label: label} as YearLineChartConfig
 
+  // Format data to required type
   scoreHistory.forEach((score) => {
     chartData.push({
       year: score.year,
@@ -152,12 +163,13 @@ const ScoreHistoryCard = ({
     } as YearLineChartData)
   })
 
+  // Use custom YearLineChartDots component (see custom-line-chart.tsx)
   return <YearLineChartDots chartData={chartData} chartConfig={chartConfig} adjust_on_large_device={adjust_on_large_device}/>
 }
 
 
 
-
+// ContributingFactorsCard component
 const ContributingFactorsCard = ({
   detailedHappinessScore,
 
@@ -169,13 +181,13 @@ const ContributingFactorsCard = ({
   
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
-
+  // Use custom FactorsRadialBarChart component (see custom-radial-bar-chart.tsx)
   return (<FactorsRadialBarChart detailedHappinessScore={detailedHappinessScore} adjust_on_large_device={adjust_on_large_device}/>)
 }
 
 
 
-
+// DemographicCompositionCard component
 const DemographicCompositionCard = ({
   demographicComposition,
 
@@ -187,6 +199,7 @@ const DemographicCompositionCard = ({
   
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
+  // Use custom DemographicCompositionBarChart component (see custom-bar-chart.tsx)
   return (<DemographicCompositionBarChart demographicComposition={demographicComposition} adjust_on_large_device={adjust_on_large_device}/>)
 }
 
@@ -194,7 +207,7 @@ const DemographicCompositionCard = ({
 
 
 
-
+// exported Cards
 export {
   TitleCard,
   RankCard,
