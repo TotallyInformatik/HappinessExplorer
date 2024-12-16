@@ -11,7 +11,6 @@ import { CountryIDs, GlobeSelection } from "./globe-explorer";
  */
 function getColor(score: number | undefined) {
   
-  // todo better color
   if (!score) {
     return "#9E9E9E";
   }
