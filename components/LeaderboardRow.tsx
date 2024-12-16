@@ -1,7 +1,11 @@
-import { ScrollArea, ScrollBar } from "./ui/scroll-area"
-import { getCountryData } from "@/lib/db_interface"
+"use client";
 
-import { TitleCard, HappinessScoreProgressCard, ContributingFactorsCard } from "./ui/custom-card"
+import { useState, useEffect } from "react";
+
+import { ScrollArea, ScrollBar } from "./ui/scroll-area"
+import { CountryData, getCountryData } from "@/lib/db_interface"
+
+import { HappinessScoreProgressCard, ContributingFactorsCard } from "./ui/custom-card"
 
 
 type LeaderboardRowProps = {
@@ -12,8 +16,16 @@ type LeaderboardRowProps = {
     year: number,
 }
 
-export default async function LeaderboardRow(props: LeaderboardRowProps) {
-    const countryData = await getCountryData(props.year, props.countryId);
+export default function LeaderboardRow(props: LeaderboardRowProps) {
+    const [countryData, setCountryData] = useState<CountryData | undefined>(undefined);
+
+    useEffect(() => {
+        getCountryData(props.year, props.countryId)
+            .then((result) => {
+                setCountryData(result);
+            })
+    }, [props.year, props.countryId]);
+
 
     return <ScrollArea className="whitespace-nowrap p-4">
         <div className="flex w-full space-x-4 h-[221px]">

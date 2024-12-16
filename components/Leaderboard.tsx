@@ -15,7 +15,6 @@ type LeaderboardProps = {
 }
 
 export default function Leaderboard(props: LeaderboardProps) {
-    const [topTenCountries, setTopTenCountries] = useState<Country[]>(props.countries);
 
     return <div className="flex flex-col">
         <Separator/>
