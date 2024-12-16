@@ -6,10 +6,16 @@ import { GlobeSelection, CountryIDs } from "./globe-explorer";
 import { LegacyRef, RefObject, useRef, useState } from "react";
 import { COUNTRY_MAPPING, getCorrectCountryName } from "@/lib/utils";
 
+/**
+ * @author Rui Zhang
+ * @param score - the ladder score of some country
+ * @returns color corresponding to the country that should be displayed on the map
+ */
 function getColor(score: number | undefined) {
-
+  
+  // todo better color
   if (!score) {
-    return "#27272a"; // todo better color
+    return "#27272a";
   }
 
   if (score < 1) {
@@ -31,7 +37,17 @@ function getColor(score: number | undefined) {
   }
 } 
 
-
+/**
+ * @author Rui Zhang
+ * @param geo - the geo property passed from react simple maps library
+ * @param report - the year which has been selected in the globe-explorer 
+ * @param countryIDs - a map from country name to its ID for the supabase
+ * @param score - the ladderscore of the country
+ * @param setSelectedCountry - callback passed from globe-explorer which is called
+ * when a country is selected
+ * @param onCountryChange - callback
+ * @returns 
+ */
 export default function GeoCountry({
   geo,
   report,

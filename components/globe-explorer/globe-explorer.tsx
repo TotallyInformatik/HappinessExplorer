@@ -54,6 +54,11 @@ export type CountryIDs = {
   [countryName: string]: number
 }
 
+/**
+ * @author Rui Zhang
+ * @param 
+ * @returns 
+ */
 const GlobeExplorer = ({ 
   onCountryChange,
   years

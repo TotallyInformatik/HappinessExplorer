@@ -12,6 +12,11 @@ const chartConfig = {
   }
 } satisfies ChartConfig
 
+/**
+ * @author Rui Zhang
+ * @param 
+ * @returns 
+ */
 export default function CountryDetailsShort({
   selectedCountry,
   report,

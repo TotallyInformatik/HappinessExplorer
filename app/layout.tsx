@@ -33,6 +33,12 @@ export const metadata: Metadata = {
   description: "See how happy the world is.",
 };
 
+
+/**
+ * @author Rui Zhang
+ * @param children - these are the React Children that will be inserted into the layout 
+ * @returns the layout for the website, which entails a header with the navigation menu
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -92,6 +98,7 @@ export default function RootLayout({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
+                    { /* For now, we only have english as a language option */ }
                     <SelectItem value="en">English</SelectItem>
                   </SelectGroup>
                 </SelectContent>
@@ -101,11 +108,9 @@ export default function RootLayout({
           <Separator className="w-screen h-px bg-slate-300"/>
         </header>
         <main>
+          { /* the page contents will be inserted here. Take for example the contents of app/page.tsx */ }
           {children}
         </main>
-        <footer>
-
-        </footer>
       </body>
     </html>
   );
