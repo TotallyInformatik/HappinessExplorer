@@ -193,7 +193,10 @@ export const HalfRadialPath = ({
   currentHover: string | boolean; // Use for on hover color changes
   setOnHover: React.Dispatch<SetStateAction<string | boolean>>; // Used for on hover interactions
 }) => {
-
+  // Prevent rendering when startAngle or endAngle is not yet calculated
+  if (String(startAngle) === "NaN" || String(endAngle) === "NaN") {
+    return <></>
+  }
 
   // Make sure angles are in allowed range (if not adjust them)
   startAngle = (startAngle > 180) ? 180 : (startAngle < 0 ? 0 : startAngle) 
@@ -211,7 +214,7 @@ export const HalfRadialPath = ({
   const y1 = center_y - radius * Math.sin(toRadians(endAngle)); // SVG Y-axis is flipped
   const x2 = center_x + radius * Math.cos(toRadians(startAngle));
   const y2 = center_y - radius * Math.sin(toRadians(startAngle));
-
+  
   // Large arc flag (1 if the angle > 180°, 0 otherwise)
   const largeArcFlag = startAngle - endAngle > 180 ? 1 : 0;
 
