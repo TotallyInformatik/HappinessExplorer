@@ -541,7 +541,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       <SelectContent defaultChecked>
         <SelectGroup defaultChecked>
           <SelectLabel defaultChecked>Year</SelectLabel>
-          {years.map(e => (<SelectItem value={e.year.toString()}>{e.year}</SelectItem>))}
+          {years.map(e => (<SelectItem value={e.year.toString()} key={e.year.toString()}>{e.year}</SelectItem>))}
           {/* <SelectItem value="2024">2024</SelectItem>
           <SelectItem value="2023">2023</SelectItem>
           <SelectItem value="2022">2022</SelectItem>
@@ -558,7 +558,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Country1</SelectLabel>
-          {countries.map(a => (a.countries.map(e => (<SelectItem value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))))}
+          {countries.map(a => (a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))))}
         </SelectGroup>
       </SelectContent>
     </Select>
@@ -570,7 +570,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Country2</SelectLabel>
-          {countries.map(a => (a.countries.map(e => (<SelectItem value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))))}
+          {countries.map(a => (a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))))}
         </SelectGroup>
       </SelectContent>
     </Select>
