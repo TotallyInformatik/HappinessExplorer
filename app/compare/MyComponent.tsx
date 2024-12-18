@@ -145,7 +145,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
 
   return <>
     <div className="flex flex-wrap md:flex-nowrap md:flex-row px-5 py-2 gap-2 md:gap-8 md:items-center">
-      //selection box year
+      {/* selection box year */}
       <Select onValueChange={(value) => {handleYear(value)}}>
       <SelectTrigger className="w-[180px]" defaultChecked aria-label="Select a report (which year?). Selecting a report might load new data.">
           <SelectValue placeholder={years[0].year.toString()} defaultValue={years[0].year.toString()} defaultChecked />
@@ -158,7 +158,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
         </SelectContent>
       </Select>
       <Separator orientation="vertical" className="hidden md:block w-64, h-16"/>
-      //selection box for first country
+      {/* selection box for first country */}
       <Select onValueChange={handleC1}>
       <SelectTrigger className="w-[250px]" aria-label="Select a first country for the comparison. Selecting a country will load detailed information about said country.">
           <SelectValue placeholder="Add a country" />
@@ -173,7 +173,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
         </SelectContent>
       </Select>
       <Separator orientation="vertical" className="hidden md:block w-64, h-16"/>
-      //selection box for second country
+      {/* selection box for second country */}
       <Select onValueChange={handleC2}>
       <SelectTrigger className="w-[250px]"  aria-label="Select a second country for the comparison. Selecting a country will load detailed information about said country.">
           <SelectValue placeholder="Add another country" />
@@ -191,7 +191,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
     <Separator/>
     <div className="flex flex-col px-5 py-8 gap-4 w-full justify-center md:flex-row">
       <div className="md:w-1/2">
-        //displaying the charts with the data stored in the states
+        {/* displaying the charts with the data stored in the states */}
         <Chart2 year={year} country1={country1} country2={country2} chartData={chartData2 ? chartData2 : []} />
       </div>
       <div className="md:w-1/2">
@@ -199,12 +199,12 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       </div>
     </div>
     <Separator/>
-    //if screen is small, make it horizontal
+    {/* if screen is small, make it horizontal */}
     <div className="flex flex-col w-full justify-evenly md:flex-row">
       {country1 == "" ? '' : 
         <ScrollArea className="whitespace-nowrap p-4 md:p-0 md:m-auto">
           <div className="">
-          //constructing the cards with the data stored in the states
+          {/* constructing the cards with the data stored in the states */}
             <CountryDetailedViewContainer                 
               country_name={country1}                        
               country_flag_emoji={emoji1}
@@ -227,7 +227,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
               }}
             />
           </div>
-          //scrollbar for horizontal direction
+          {/* scrollbar for horizontal direction */}
           <ScrollBar orientation="horizontal" className="md:hidden"/>
         </ScrollArea>
       }
@@ -237,7 +237,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       {country2 == "" ? '' : 
         <ScrollArea className="whitespace-nowrap p-4 md:p-0 md:m-auto">
           <div className="">
-          //constructing the cards with the data stored in the states
+          {/* constructing the cards with the data stored in the states */}
             <CountryDetailedViewContainer
               country_name={country2}
               country_flag_emoji={emoji2}
@@ -259,7 +259,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
               }}
             />
           </div>
-          //scrollbar for horizontal direction
+          {/* scrollbar for horizontal direction */}
           <ScrollBar orientation="horizontal" className="md:hidden"/>
         </ScrollArea>
       }
