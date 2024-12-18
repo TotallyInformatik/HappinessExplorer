@@ -25,16 +25,20 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Technology used
 This project was developed using NextJs, TailwindCSS, Shadcn and a Supabase Database as the backend storing our information.
 
+For access to the supabase database, please contact us.
+
 Concrete versions of packages and frameworks may be found in the `package.json` file.
+
 
 ## Deployment url
 We deployed using Vercel instead of the gitlab cluster. The final deployment can be found under [https://happiness-explorer.vercel.app](https://happiness-explorer.vercel.app)
 
+
 ## Contributions
-Rui Zhang - `./components/globe-explorer/*`, `./app/page.tsx`, `./app/layout.tsx`, Report 
+Rui Zhang - `./components/globe-explorer/*`, `./app/page.tsx`, `./app/layout.tsx`, initial header: `./components/ui/header.tsx`, Report
 
-Tianjian Yi - `./app/compare/*`, Report
+Tianjian Yi - `./app/compare/*`, `./components/ui/custom-line-chart.tsx`, Poster, Report 
 
-Tamàs Nemes - `./lib/*`, `./app/leaderboard/*`, `./components/AnimatedGlobe.tsx`,`./components/Leaderboard.tsx`, `./components/LeaderboardRow.tsx`, `./components/ThemeProvider.tsx`,`./components/ThemeToggle.tsx`, `./components/YearSelection.tsx`, Animated Logo using Rive, Logo design, Figma initial page design, (Report)
+Tamàs Nemes - `./lib/*`, `./app/leaderboard/*`, `./components/AnimatedGlobe.tsx`,`./components/Leaderboard.tsx`, `./components/LeaderboardRow.tsx`, `./components/ThemeProvider.tsx`,`./components/ThemeToggle.tsx`, `./components/YearSelection.tsx`, Supabase backend, Animated Logo using Rive, Logo design, Figma initial page design
 
-Ian Wimmer - `./components/ui/country-detailed-view.tsx`, `./components/ui/custom-bar-chart.tsx`, `./components/ui/custom-card.tsx`, `./components/ui/custom-line-chart.tsx`, `./components/ui/custom-radial-bar-chart.tsx`, `./components/ui/header.tsx`, `./app/layout.tsx`, WCAG 2.1 AA evaluation, Poster, (Report)
+Ian Wimmer - `./components/ui/country-detailed-view.tsx`, `./components/ui/custom-bar-chart.tsx`, `./components/ui/custom-card.tsx`, `./components/ui/custom-line-chart.tsx`, `./components/ui/custom-radial-bar-chart.tsx`, `./components/ui/header.tsx`, `./app/layout.tsx`, (Supabase backend), WCAG 2.1 AA evaluation, Poster
