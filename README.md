@@ -23,6 +23,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Technology used
 This project was developed using NextJs, TailwindCSS, ShadCn and a Supabase Database as the backend storing our information.
 
-
-## Contribution Statement
-Rui Zhang - app/page.tsx, app/layout.tsx, components/globe-explorer/*
+## Deployment url
+We deployed using Vercel instead of the gitlab cluster. The final deployment can be found under [https://happiness-explorer.vercel.app](https://happiness-explorer.vercel.app)
