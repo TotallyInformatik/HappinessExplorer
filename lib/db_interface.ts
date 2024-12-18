@@ -3,6 +3,7 @@
 import { and, eq, inArray, desc, asc } from "drizzle-orm";
 import { db } from "@/lib/database/db";
 import { countries, continentTranslations, countryTranslations, reports } from "@/lib/database/schema";
+import { HappinessScore } from "@/components/ui/custom-card";
 
 
 export type Year = {
@@ -21,6 +22,12 @@ export type Country = {
     flagEmoji: string | null,
 }
 
+export type Score = {
+    ladderScore: number | null;
+}
+
+export type MapCountries = Record<string, Score>;
+
 export type CountryData = {
     ladderScore: number | null,
     upperWhisker: number | null,
@@ -33,6 +40,7 @@ export type CountryData = {
     perceptionsOfCorruption: number | null,
     dystopiaResidual: number | null,
     rank: number | null,
+    scoreHistory: HappinessScore[],
 }
 
 export async function getListOfYears(): Promise<Year[]> {
@@ -158,8 +166,25 @@ export async function getCountryData(year: number, countryId: number): Promise<C
             },
         });
 
-        if (data) return data;
-        else return undefined;
+        if (!data) return undefined;
+
+        // Query all ladder scores for all available years for the given country
+        const allScores = await db.select({
+            year: reports.year,
+            score: reports.ladderScore
+        })
+        .from(reports)
+        .where(eq(reports.countryId, countryId))
+        .orderBy(asc(reports.year));
+
+        // Construct the CountryData object with an additional scores property
+        return {
+            ...data,
+            scoreHistory: allScores.map(entry => ({
+                year: entry.year,
+                score: entry.score ?? 0 // In case ladderScore is nullable, provide a default value
+            }))
+        };
     }
     catch (error) {
         return undefined;
@@ -256,6 +281,36 @@ export async function getCountryEmoji(countryId: number): Promise<string | null 
         });
 
         return emoji?.flagEmoji;
+    } catch (error) {
+        return;
+    }
+}
+
+export async function getAllCountries(year: number): Promise<MapCountries | undefined> {
+    try {
+        const allCountries = await db.select({
+            country_name: countryTranslations.localizedName,
+            score: reports.ladderScore
+        }).from(reports)
+        .leftJoin(countries, eq(reports.countryId, countries.countryId))
+        .leftJoin(
+            countryTranslations,
+            and(
+                eq(countryTranslations.countryCode, countries.countryCode),
+                eq(countryTranslations.languageCode, "en")
+            )
+        )
+        .where(eq(reports.year, year));
+
+        const formattedResult: MapCountries = {};
+
+        for (const row of allCountries) {
+            if (row.country_name) { 
+                formattedResult[row.country_name] = { ladderScore: row.score ?? -1 };
+            }
+        }
+
+        return formattedResult;
     } catch (error) {
         return;
     }

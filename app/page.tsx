@@ -1,22 +1,34 @@
 "use client"
 
-import React, { ReactNode, useEffect, useState } from 'react'; // This is the standard import
-import { Separator } from '@/components/ui/separator';
+import AnimatedGlobe from '@/components/AnimatedGlobe';
 import GlobeExplorer, { GlobeSelection } from '@/components/globe-explorer/globe-explorer';
-import { CountryData, getCountryData, getCountryEmoji, getListOfYears, Year } from '@/lib/db_interface';
-import VerySpecialButton from '@/components/globe-explorer/very-special-button';
+import { Button } from '@/components/ui/button';
 import { CountryDetailedViewContainer } from '@/components/ui/country-detailed-view';
 import { HappinessScore } from '@/components/ui/custom-card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import AnimatedGlobe from '@/components/AnimatedGlobe';
+import { Separator } from '@/components/ui/separator';
+import { CountryData, getCountryData, getCountryEmoji, getListOfYears, Year } from '@/lib/db_interface';
+import { ArrowDown } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ReactNode, useEffect, useState } from 'react'; // This is the standard import
 
+
+
+
+/**
+ * @author Rui Zhang
+ * @returns the index page of the website.
+ */
 export default function Home() {
 
+  // loading in the years from the backend
+  const [years, setYears] = useState<Year[]>([]);
   useEffect(() => {
     getListOfYears().then(setYears);
   }, [])
 
-  const [years, setYears] = useState<Year[]>([]);
+  // this state is for the detailed content showed when we select a country
+  // initially, it is just a disclaimer to select a year and a country
   const [detailedContent, setDetailedContent] = useState<ReactNode>(
     <div className='w-screen h-40 flex items-center justify-center'>
       <p className=''>
@@ -25,36 +37,64 @@ export default function Home() {
     </div>
   );
 
+  const router = useRouter();
 
   return <>
+    
+    { /* landing section */ }
     <section className="w-screen flex items-center justify-center">
       <div className="w-fit h-fit flex flex-col items-center gap-5 p-10">
         <h2 className="text-4xl font-bold  text-center">A lens of joy for the world.</h2>
         <AnimatedGlobe size={300}/>
-        <VerySpecialButton />
+        <Button onClick={() => {
+          // clicking this button will jump you to the world map
+          router.push("#world-map");
+        }}><ArrowDown />Discover</Button>
       </div>
     </section>
+
+    
     <Separator className="w-screen h-px bg-slate-300"/>
+
+
+    { 
+    /**
+     * Globe Explorer Component, see components/globe-explorer/globe-explorer.tsx
+     * 
+     * The main part of this code consists of the "onCountryChange" function
+     * which is called by GlobeExplorer whenever we select a country.
+     * 
+     */ 
+    }
     <GlobeExplorer years={years} onCountryChange={async (selection: GlobeSelection) => {
 
       if (selection.country) {
+
         const countryData: {
           [year: number]: CountryData
         } = {}
+
         const scoreHistory: HappinessScore[] = [];
+        
+        // for each year / report we have, we will fetch the data for the country we have 
+        // selected, under "selection.countryId"
+        // thereby constructing the scoreHistory
         for (let year of years) {
           const result = await getCountryData(year.year, selection.countryId);
           if (result) {
             countryData[year.year] = result;
+
             scoreHistory.push({
               year: year.year,
               score: result.ladderScore!,
             });
           }
         }
+        // reversing it so that the UI shows the scoreHistory from left to right
         scoreHistory.reverse();
 
         const selectedYear = parseInt(selection.report);
+
         const selectedData = countryData[selectedYear];
         if (!selectedData) {
           setDetailedContent(
@@ -66,8 +106,10 @@ export default function Home() {
           )
           return;
         }
-        const emoji = await getCountryEmoji(selection.countryId);
 
+
+        // setting the contents of the detailed view. See components/ui/country-detailed-view.tsx
+        const emoji = await getCountryEmoji(selection.countryId);
         setDetailedContent(
           <ScrollArea className='whitespace-nowrap'>
             <CountryDetailedViewContainer
@@ -114,6 +156,10 @@ export default function Home() {
       }
 
     }}/>
+
+
+
+    { /* Detailed View Section. */ }
     <section>
       <header className="w-screen h-auto overflow-x-auto no-scrollbar flex items-center px-5 py-3 justify-between gap-x-10 gap-y-5">
         <h3 className="text-2xl font-normal">Detail View</h3>

@@ -1,27 +1,51 @@
-import { Separator } from "./ui/separator";
-import { getListOfYears, getTopTenCountries } from "@/lib/db_interface";
+"use client";
+
+import { useState } from "react";
+
+import { Country, getTopTenCountries, Year } from "@/lib/db_interface";
 import LeaderboardRow from "./LeaderboardRow";
+import { Separator } from "./ui/separator";
+import YearSelection from "./YearSelection";
 
 
-export default async function Leaderboard() {
-    const years = await getListOfYears();
-    const currentYear = years[0].year;
+type LeaderboardProps = {
+    years: Year[],
+    defaultYear: Year,
+    countries: Country[],
+}
 
-    const countries = await getTopTenCountries(currentYear, "en");
-    //console.log(countries);
+export default function Leaderboard(props: LeaderboardProps) {
+    const [topTenCountries, setTopTenCountries] = useState<Country[]>(props.countries);
+    const [selectedYear, setSelectedYear] = useState<number>(props.defaultYear.year);
 
-    return <div className="p-6">
-        {countries.map((country) => (
-            <div key={country.countryId}>
-                <LeaderboardRow
-                    countryName={country.countryName}
-                    countryId={country.countryId}
-                    countryCode={country.countryCode ?? ""}
-                    flagEmoji={country.flagEmoji ?? ""}
-                    year={currentYear}
-                />
-                <Separator className="my-4"/>
-            </div>
-        ))}
+    const queryNewTopTen = async (year: number) => {
+        const newCountries = await getTopTenCountries(year, "en");
+        console.log(newCountries);
+        setTopTenCountries(newCountries);
+    }
+
+    return <div className="flex flex-col">
+        <Separator/>
+        <YearSelection
+            years={props.years}
+            value={selectedYear}
+            setValue={setSelectedYear}
+            onChange={queryNewTopTen}
+        />
+        <Separator />
+        <div className="p-6">
+            {topTenCountries.map((country) => (
+                <div key={country.countryId}>
+                    <LeaderboardRow
+                        countryName={country.countryName}
+                        countryId={country.countryId}
+                        countryCode={country.countryCode ?? ""}
+                        flagEmoji={country.flagEmoji ?? ""}
+                        year={selectedYear}
+                    />
+                    <Separator className="my-4" />
+                </div>
+            ))}
+        </div>
     </div>
 }

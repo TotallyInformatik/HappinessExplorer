@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   description: "See how happy the world is.",
 };
 
+
+/**
+ * @author Rui Zhang
+ * @param children - these are the React Children that will be inserted into the layout 
+ * @returns the layout for the website, which entails a header with the navigation menu
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,9 +36,6 @@ export default function RootLayout({
         )}>
           {children}
         </main>
-        <footer>
-
-        </footer>
       </body>
     </html>
   );
