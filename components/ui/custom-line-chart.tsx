@@ -60,18 +60,14 @@ export const YearLineChartDots = ({
   return (
     <Card className={clsx(
       "w-[435px] h-full p-3 flex flex-col shrink-0 gap-3",
-      {
-        "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]": adjust_on_large_device,
-      }
+      adjust_on_large_device ? "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]" : ""
     )}>
       <CardHeader className="p-0 grow-0 shrink-0">
         <CardTitle className="text-base font-normal">Score History</CardTitle>
       </CardHeader>
       <CardContent className={clsx(
         "p-0 w-full grow-0 shrink-0 h-[calc(100%-2.25rem)]",
-        {
-          "md:flex md:justify-center md:w-full": adjust_on_large_device
-        }
+        adjust_on_large_device ? "md:flex md:justify-center md:w-full" : ""
       )}>
         <div className="max-w-[435px] w-full p-0 h-full">
           {/* ChartContainer (required and provided by shadcn/ui) */}

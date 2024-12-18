@@ -68,11 +68,15 @@ export const Header = ({}: {}) => {
             "md:static md:w-fit md:p-0",
           )}>
             {/* open sidebar button (hidden on larger devices) */}
-            <button onClick={() => (setSidebar(!sidebar))} className={clsx(
-              "pl-2 z-50",
+            <button 
+              aria-label="open sidebar button used for smaller screen sizes (below 768px). For screens larger than that it's a hidden element"
+              onClick={() => (setSidebar(!sidebar))} 
+              className={clsx(
+                "pl-2 z-50",
 
-              "md:hidden",
-            )}>
+                "md:hidden",
+              )}
+            >
               <Menu/>
             </button>
             <Link href={"/"} className={clsx(
@@ -191,13 +195,13 @@ export const Header = ({}: {}) => {
           {/*
           Using shadcn/ui component
           */}
-          <Select defaultValue="en">
-            <SelectTrigger className="w-[11rem]">
+          <Select defaultValue="en" aria-label="localization (button for dropdown with multiple selectable languages)">
+            <SelectTrigger className="w-[11rem]" aria-label="localization (button for dropdown with multiple selectable languages)">
               <SelectValue placeholder="English"/>
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="en" aria-label="English">English</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

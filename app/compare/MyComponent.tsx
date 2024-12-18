@@ -141,7 +141,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
   return <>
     <div className="flex flex-wrap md:flex-nowrap md:flex-row px-5 py-2 gap-2 md:gap-8 md:items-center">
       <Select onValueChange={(value) => {handleYear(value)}}>
-        <SelectTrigger className="w-[180px]" defaultChecked>
+        <SelectTrigger className="w-[180px]" defaultChecked aria-label="Select a report (which year?)">
           <SelectValue placeholder={years[0].year.toString()} defaultValue={years[0].year.toString()} defaultChecked />
         </SelectTrigger>
         <SelectContent defaultChecked>
@@ -153,7 +153,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       </Select>
       <Separator orientation="vertical" className="hidden md:block w-64, h-16"/>
       <Select onValueChange={handleC1}>
-        <SelectTrigger className="w-[250px]">
+        <SelectTrigger className="w-[250px]" aria-label="Select a first country for the comparison">
           <SelectValue placeholder="Add a country" />
         </SelectTrigger>
         <SelectContent>
@@ -167,7 +167,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
       </Select>
       <Separator orientation="vertical" className="hidden md:block w-64, h-16"/>
       <Select onValueChange={handleC2}>
-        <SelectTrigger className="w-[250px]">
+        <SelectTrigger className="w-[250px]"  aria-label="Select a second country for the comparison">
           <SelectValue placeholder="Add another country" />
         </SelectTrigger>
         <SelectContent>

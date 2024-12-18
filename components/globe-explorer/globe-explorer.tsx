@@ -203,7 +203,7 @@ const GlobeExplorer = ({
             setSelectedCountry("");
             fetchCountries(value);
           }}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px]" aria-label="Select a report (which year?)">
               <SelectValue placeholder="Select a report"/>
             </SelectTrigger>
             <SelectContent>
@@ -219,7 +219,7 @@ const GlobeExplorer = ({
           <Separator orientation='vertical' className='bg-slate-300 h-10 hidden md:block'/>
           <section className='flex items-center gap-2'>
             <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild disabled={report == ""}>
+              <PopoverTrigger asChild disabled={report == ""} aria-label='Select a country'>
                 <Button
                   variant="outline"
                   role="combobox"
@@ -232,7 +232,7 @@ const GlobeExplorer = ({
               </PopoverTrigger>
               <PopoverContent className="w-[200px] p-0">
                 <Command>
-                  <CommandInput placeholder="Search a country..." className="h-9" />
+                  <CommandInput placeholder="Search a country..." className="h-9" aria-label='Search for a country'/>
                   <CommandList>
                     <CommandEmpty>No country found.</CommandEmpty>
                     <CommandGroup>
@@ -269,7 +269,7 @@ const GlobeExplorer = ({
             <span className='text-[14px] text-muted-foreground text-nowrap'>
               or press
             </span>
-            <kbd className="pointer-events-none inline-flex h-5 select-none text-[14px] font-medium text-muted-foreground items-center gap-1 rounded bg-muted px-1.5 font-mono opacity-100">
+            <kbd className="pointer-events-none inline-flex h-5 select-none text-[14px] font-medium dark:text-slate-200 text-slate-800 items-center gap-1 rounded bg-slate-200 dark:bg-slate-800 px-1.5 font-mono opacity-100">
               <span className="text-xs">⌘</span>K
             </kbd>
           </section>
