@@ -11,27 +11,26 @@ import { CountryIDs, GlobeSelection } from "./globe-explorer";
  */
 function getColor(score: number | undefined) {
   
-  // todo better color
   if (!score) {
-    return "#27272a";
+    return "#9E9E9E";
   }
 
   if (score < 1) {
-    return "#020617";
+    return "#EC7373";
   } else if (score < 2) {
-    return "#0f172a";
+    return "#EC7373";
   } else if (score < 3) {
-    return "#1e293b";
+    return "#EC8B73";
   } else if (score < 4) {
-    return "#334155";
+    return "#EC8B73";
   } else if (score < 5) {
-    return "#475569";
+    return "#EC9F73";
   } else if (score < 6) {
-    return "#64748b";
+    return "#EDD086";
   } else if (score < 7) {
-    return "#94a3b8";
+    return "#A3E378";
   } else {
-    return "#cbd5e1";
+    return "#78C154";
   }
 } 
 
@@ -64,6 +63,8 @@ export default function GeoCountry({
 
   return <Geography
     fill={getColor(score)}
+    stroke="#FFF"
+    strokeWidth={0.2}
     key={geo.rsmKey} 
     geography={geo} 
     onClick={(event) => {

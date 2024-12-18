@@ -48,13 +48,11 @@ const TitleCard = ({
 }) => {
   return (
     <div className={clsx(
-      "w-[158px] h-fit min-h-[7.75rem] shrink-0 flex flex-col justify-center",
-      {
-        "md:block": adjust_on_large_device,
-      }
+      "w-[158px] h-fit min-h-[8rem] shrink-0 flex flex-col justify-center",
+      adjust_on_large_device ? "md:block" : ""
     )}>
       <p className="text-5xl">{country_flag_emoji}</p>
-      <p className="text-2xl font-semibold">{country_name}</p>
+      <p className="text-2xl font-semibold text-wrap">{country_name}</p>
       {show_year_in_title && <p className="text-sm text-slate-500 leading-3">in {happinessScore.year}</p>}
     </div>
   )
@@ -77,7 +75,7 @@ const RankCard = ({
   <Card className={clsx(
     "w-[172px] h-full p-[1rem] flex flex-col gap-3 shrink-0",
     {
-      "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]]": adjust_on_large_device
+      "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]": adjust_on_large_device
     }
     )}>
     <CardHeader className="p-0 grow-0 shrink">

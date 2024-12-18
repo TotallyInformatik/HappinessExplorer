@@ -49,7 +49,7 @@ export default function CountryDetailsShort({
       <div className='w-[200px] aspect-square'>
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto min-w-1 aspect-square max-h-[250px]"
         >
           <RadialBarChart
             data={[{

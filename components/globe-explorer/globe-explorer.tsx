@@ -12,12 +12,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/popover"
+
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from '@/components/ui/separator';
 import { getAllCountries, getCountriesByContinent, getCountryData, MapCountries, Year } from '@/lib/db_interface';
 import { cn, getCorrectCountryName } from '@/lib/utils';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronsUpDown, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, ZoomableGroup } from 'react-simple-maps';
 import { Card, CardContent } from '../ui/card';
@@ -105,22 +106,6 @@ const GlobeExplorer = ({
     })
   }
 
-  useEffect(() => {
-
-    if (selectedCountry && report) {
-      getCountryData(parseInt(report), countryIDs[selectedCountry])
-        .then((result) => {
-          if (result) {
-            setRank(result.rank || 0);
-            setScore(result.ladderScore || 0);
-            setDataExists(true);
-          } else {
-            setDataExists(false);
-          }
-        })
-    }
-
-  }, [selectedCountry])
 
   useEffect(() => {
 
@@ -151,6 +136,41 @@ const GlobeExplorer = ({
       fetchCountries(yearValue);
     }
   }, [years])
+
+
+
+  useEffect(() => {
+
+    if (selectedCountry && report) {
+      getCountryData(parseInt(report), countryIDs[selectedCountry])
+        .then((result) => {
+          if (result) {
+            setRank(result.rank || 0);
+            setScore(result.ladderScore || 0);
+            setDataExists(true);
+          } else {
+            setDataExists(false);
+          }
+        })
+    }
+
+  }, [selectedCountry])
+
+
+  const filterZoomEvent = (event: unknown): boolean => {
+    if (event?.constructor?.name === "TouchEvent") {
+      return true;
+    } else if (event?.constructor?.name === "MouseEvent") {
+      return true;
+    } else if (event?.constructor?.name === "WheelEvent") {
+      const e = event as WheelEvent
+      if (e?.ctrlKey || e?.metaKey) {
+        return true
+      }
+    }
+    return false
+  };
+
 
   return <>
     <section id='world-map'>
@@ -251,7 +271,7 @@ const GlobeExplorer = ({
                 onClick={() => {
                   setSelectedCountry("");
                 }}>
-                <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom}>
+                <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom} filterZoomEvent={filterZoomEvent}>
                   <Geographies geography={geoUrl}>
                     {({ geographies }) =>
                       geographies.map((geo) => {
