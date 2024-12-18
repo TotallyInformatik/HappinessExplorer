@@ -23,14 +23,15 @@ import {
 
 import Link from "next/link";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 
 
 
-
+// Header component with responsiveness implemented for small devices (sidebar)
 export const Header = ({}: {}) => {
+  // whether sidebar is closed or open on small devices
   const [sidebar, setSidebar] = useState<boolean>(false)
   
 
@@ -41,21 +42,31 @@ export const Header = ({}: {}) => {
 
       "md:bg-background md:sticky md:top-0 md:left-0 md:z-40"
     )}>
+      {/* 
+      On Large devices:
+        Simple separation of navigation and language selection using flex and justify-content:between 
+      On Small devices:
+        Only 'open sidebar button' and website title (including icon), the rest is per default hidden
+      */}
       <div className={clsx(
         "md:p-2 flex justify-between"
       )}>
+        
+        {/* 
+        This section contains the 'open sidebar button', the website title (including icon) and the navigation menu
+        */}
         <section className={clsx(
           "flex items-center gap-x-5",
 
           "",
         )}>
-
           <div className={clsx(
             "fixed top-0 left-0 right-0 w-screen p-2 z-50 flex items-center gap-x-5",
             sidebar ? "bg-transparent" : "bg-background",
 
             "md:static md:w-fit md:p-0",
           )}>
+            {/* open sidebar button (hidden on larger devices) */}
             <button onClick={() => (setSidebar(!sidebar))} className={clsx(
               "pl-2 z-50",
 
@@ -66,6 +77,7 @@ export const Header = ({}: {}) => {
             <Link href={"/"} className={clsx(
               "flex gap-x-4 ",
             )}>
+              {/* Website icon (dark and light version) hidden resp. visible depending on current theme of page */}
               <Image
                 src="/icons/logo_onLight.svg"
                 alt="A globe with a smiling face and a sun."
@@ -90,16 +102,25 @@ export const Header = ({}: {}) => {
                   "md:translate-x-0",
                 )}
               />
+              {/* website title/name (moves outside view when sidebar is opened) */}
               <h1 className={clsx(
                 "text-2xl font-medium text-nowrap",
                 "transition-transform duration-150 ease-in-out",
                 sidebar ? "-translate-y-12" : "-translate-y-0",
+
+                "md:translate-y-0"
               )}>
                 Smiling Globe
               </h1>
             </Link>
           </div>
 
+          {/* 
+          This div contains the navigation menu
+          Using NavigationMenu component of shadcn/ui
+          On small devices:
+            Navigation menu is hidden outside view (then sliding in with transition when sidebar is opened)
+          */}
           <div className={clsx(
             "fixed top-0 left-0 pt-12 w-48 bg-background h-screen z-40 shadow-2xl",
             "transition-transform duration-150 ease-in-out",
@@ -147,6 +168,7 @@ export const Header = ({}: {}) => {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
+          {/* div to be able to click beside the sidebar to close it */}
           <div onClick={() => setSidebar(false)} className={clsx(
             "fixed top-0 left-48 w-[calc(100%-12rem)] h-screen z-50 max-w-full",
             sidebar ? "block" : "hidden",
@@ -155,12 +177,16 @@ export const Header = ({}: {}) => {
           )}/>
         </section>
         
+        {/* This section contains the language selection */}
         <section className={clsx(
           "fixed bottom-2 left-2 z-[51] translate-x-0 transition-transform duration-150 ease-in-out",
           sidebar ? "translate-x-0" : "-translate-x-48",
 
           "md:static md:translate-x-0"
         )}>
+          {/*
+          Using shadcn/ui component
+          */}
           <Select defaultValue="en">
             <SelectTrigger className="w-[11rem]">
               <SelectValue placeholder="English"/>
@@ -173,6 +199,7 @@ export const Header = ({}: {}) => {
           </Select>
         </section>
       </div>
+      {/* separator for visual clarity (separator below header) */}
       <Separator className={clsx(
         "w-screen h-px bg-slate-300 dark:bg-slate-800 fixed top-12 z-50 transition-transform duration-250 ease-in-out delay-100",
         sidebar ? "translate-x-full invisible" : "translate-x-0 visible",
