@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 import "./globals.css";
 import Head from "next/head";
@@ -29,13 +30,19 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <body>
-        <Header/>
-        <main className={clsx(
-          "relative top-12",
-          "md:top-0"
-        )}>
-          {children}
-        </main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
+          <Header />
+          <main className={clsx(
+            "relative top-12",
+            "md:top-0"
+          )}>
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );
