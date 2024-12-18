@@ -191,20 +191,10 @@ export const Header = ({}: {}) => {
           "md:static md:translate-x-0",
           "flex flex-col md:flex-row gap-5"
         )}>
-          <ThemeToggle></ThemeToggle>
           {/*
-          Using shadcn/ui component
+          Using custom ThemeToggle component
           */}
-          <Select defaultValue="en">
-            <SelectTrigger className="w-[11rem]" aria-label="Localization (button for dropdown with multiple selectable languages). Selecting a value will change the language of the Page.">
-              <SelectValue placeholder="English"/>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="en" aria-label="English">English</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <ThemeToggle></ThemeToggle>
         </section>
       </div>
       {/* separator for visual clarity (separator below header) */}
