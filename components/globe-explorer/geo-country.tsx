@@ -65,8 +65,8 @@ export default function GeoCountry({
   return <Geography
     className="stroke-slate-200 dark:stroke-slate-900 fill"
     fill={getColor(score)}
-    stroke="#FFF"
     strokeWidth={0.2}
+    tabIndex={-1} // Disable tab focus
     key={geo.rsmKey} 
     geography={geo} 
     onClick={(event) => {
