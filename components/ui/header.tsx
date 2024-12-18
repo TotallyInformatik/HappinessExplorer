@@ -69,7 +69,7 @@ export const Header = ({}: {}) => {
           )}>
             {/* open sidebar button (hidden on larger devices) */}
             <button 
-              aria-label="open sidebar button used for smaller screen sizes (below 768px). For screens larger than that it's a hidden element"
+              aria-label="Open sidebar button (will be opened on activation of button) used for smaller screen sizes (below 768px). For screens larger than that, it's a hidden element."
               onClick={() => (setSidebar(!sidebar))} 
               className={clsx(
                 "pl-2 z-50",
@@ -195,8 +195,8 @@ export const Header = ({}: {}) => {
           {/*
           Using shadcn/ui component
           */}
-          <Select defaultValue="en" aria-label="localization (button for dropdown with multiple selectable languages)">
-            <SelectTrigger className="w-[11rem]" aria-label="localization (button for dropdown with multiple selectable languages)">
+          <Select defaultValue="en">
+            <SelectTrigger className="w-[11rem]" aria-label="Localization (button for dropdown with multiple selectable languages). Selecting a value will change the language of the Page.">
               <SelectValue placeholder="English"/>
             </SelectTrigger>
             <SelectContent>
