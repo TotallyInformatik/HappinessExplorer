@@ -49,7 +49,7 @@ export default function Home() {
         <Button onClick={() => {
           // clicking this button will jump you to the world map
           router.push("#world-map");
-        }}><ArrowDown />Discover</Button>
+        }} aria-label='Activating this button will cause the view to jump to the world map and its associated interactions.'><ArrowDown />Discover</Button>
       </div>
     </section>
 

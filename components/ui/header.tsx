@@ -69,7 +69,7 @@ export const Header = ({}: {}) => {
           )}>
             {/* open sidebar button (hidden on larger devices) */}
             <button 
-              aria-label="open sidebar button used for smaller screen sizes (below 768px). For screens larger than that it's a hidden element"
+              aria-label="Open sidebar button (will be opened on activation of button) used for smaller screen sizes (below 768px). For screens larger than that, it's a hidden element."
               onClick={() => (setSidebar(!sidebar))} 
               className={clsx(
                 "pl-2 z-50",
@@ -191,20 +191,10 @@ export const Header = ({}: {}) => {
           "md:static md:translate-x-0",
           "flex flex-col md:flex-row gap-5"
         )}>
-          <ThemeToggle></ThemeToggle>
           {/*
-          Using shadcn/ui component
+          Using custom ThemeToggle component
           */}
-          <Select defaultValue="en" aria-label="localization (button for dropdown with multiple selectable languages)">
-            <SelectTrigger className="w-[11rem]" aria-label="localization (button for dropdown with multiple selectable languages)">
-              <SelectValue placeholder="English"/>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="en" aria-label="English">English</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <ThemeToggle></ThemeToggle>
         </section>
       </div>
       {/* separator for visual clarity (separator below header) */}

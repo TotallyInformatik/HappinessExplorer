@@ -16,6 +16,6 @@ export default function AnimatedGlobe(props: AnimatedGlobeProps) {
     });
 
     return (
-        <RiveComponent style={{ maxWidth: `${props.size}px` }} />
+        <RiveComponent style={{ maxWidth: `${props.size}px` }} aria-label="Animated website logo"/>
     );
 }

@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Separator } from '@/components/ui/separator';
 import { getAllCountries, getCountriesByContinent, getCountryData, MapCountries, Year } from '@/lib/db_interface';
 import { cn, getCorrectCountryName } from '@/lib/utils';
-import { Check, ChevronsUpDown, X } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { ComposableMap, Geographies, ZoomableGroup } from 'react-simple-maps';
 import { Card, CardContent } from '../ui/card';
@@ -211,7 +211,7 @@ const GlobeExplorer = ({
             setSelectedCountry("");
             fetchCountries(value);
           }}>
-            <SelectTrigger className="w-[180px]" aria-label="Select a report (which year?)">
+            <SelectTrigger className="w-[180px]" aria-label="Select a report (which year?). Selecting a report might load new data.">
               <SelectValue placeholder="Select a report"/>
             </SelectTrigger>
             <SelectContent>
@@ -227,7 +227,7 @@ const GlobeExplorer = ({
           <Separator orientation='vertical' className='bg-slate-300 h-10 hidden md:block'/>
           <section className='flex items-center gap-2'>
             <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild disabled={report == ""} aria-label='Select a country'>
+              <PopoverTrigger asChild disabled={report == ""} aria-label='Select a country. Selecting a country will load detailed information about said country.'>
                 <Button
                   variant="outline"
                   role="combobox"
@@ -240,7 +240,7 @@ const GlobeExplorer = ({
               </PopoverTrigger>
               <PopoverContent className="w-[200px] p-0">
                 <Command>
-                  <CommandInput placeholder="Search a country..." className="h-9" aria-label='Search for a country'/>
+                  <CommandInput placeholder="Search a country..." className="h-9" aria-label='Search for a country. Inputing text in this input field will cause the list of countries to be filtered.'/>
                   <CommandList>
                     <CommandEmpty>No country found.</CommandEmpty>
                     <CommandGroup>
@@ -284,7 +284,7 @@ const GlobeExplorer = ({
         </section>
       </header>
       <Separator className="w-screen h-px bg-slate-300"/>
-      <main className="w-full aspect-[4/3] overflow-hidden bg-slate-200 relative" ref={containerRef}>
+      <main className="w-full aspect-[4/3] overflow-hidden bg-slate-200 relative" ref={containerRef} aria-label='interactable map for country selection'>
         {
           report == "" ? 
             <div className='w-full h-full flex items-center justify-center'>
