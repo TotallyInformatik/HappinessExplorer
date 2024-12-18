@@ -22,15 +22,6 @@ type ChildProps= {
 }
 
 export function Chart2({year, country1, country2, chartData} :ChildProps) {
-
-  // const chartData = [
-  //   { month: "2019", desktop: 186, mobile: 80 },
-  //   { month: "2020", desktop: 305, mobile: 200 },
-  //   { month: "2021", desktop: 237, mobile: 120 },
-  //   { month: "2022", desktop: 73, mobile: 190 },
-  //   { month: "2023", desktop: 209, mobile: 130 },
-  //   { month: "2024", desktop: 214, mobile: 140 },
-  // ]
   const chartConfig = {
     c1: {
       label: country1,
@@ -45,7 +36,6 @@ export function Chart2({year, country1, country2, chartData} :ChildProps) {
     <Card>
       <CardHeader>
         <CardTitle>Rank (World) History</CardTitle>
-        {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-64 w-full">
@@ -65,7 +55,7 @@ export function Chart2({year, country1, country2, chartData} :ChildProps) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              // tickFormatter={(value) => value}
+              padding={{left: 12, right: 12}}
             />
             <ChartTooltip
               cursor={false}
@@ -102,14 +92,6 @@ export function Chart2({year, country1, country2, chartData} :ChildProps) {
           </LineChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter> */}
     </Card>
   )
 }
