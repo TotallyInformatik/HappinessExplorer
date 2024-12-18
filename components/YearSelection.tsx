@@ -30,7 +30,7 @@ export default function YearSelection(props: YearSelectionProps) {
                 props.setValue(newValue);
                 await props.onChange(newValue);
             }}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px]" aria-label="Select a report (a year)">
                     <SelectValue placeholder="Select a year" />
                 </SelectTrigger>
                 <SelectContent>

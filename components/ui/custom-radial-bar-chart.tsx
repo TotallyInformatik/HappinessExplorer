@@ -94,15 +94,12 @@ export const FactorsRadialBarChart = ({
   // using the Card Component of shadcn/ui as well as it's associated Components
   return (
     <Card className={clsx(
-      "h-full w-[490px] p-0 shrink-0",
-      {
-        "lg:min-w-[490px] lg:h-[221px] md:w-full md:min-w-[260px] md:h-[330px] ": adjust_on_large_device,
-      }
-    )}
-    >
+      "h-full w-[490px] p-[1rem] shrink-0",
+      adjust_on_large_device ? "lg:min-w-[490px] lg:h-[221px] md:w-full md:min-w-[260px] md:h-[330px]" : ""
+    )}>
       <div
         className={clsx(
-          "w-full h-full p-3 overflow-hidden",
+          "w-full h-full p-0 overflow-hidden",
         )}
       >
         <CardHeader className="p-0 grow-0 shrink">
@@ -110,9 +107,7 @@ export const FactorsRadialBarChart = ({
         </CardHeader>
         <CardContent className={clsx(
           "p-0 grow shrink h-full flex flex-row justify-center items-center gap-3",
-          {
-            "md:flex-col lg:flex-row": adjust_on_large_device,
-          }
+          adjust_on_large_device ? "md:flex-col lg:flex-row" : ""
         )}>
           <div>
             {/* use custom SVGContainer (see below) */}
@@ -197,7 +192,7 @@ export const SVGContainer = ({
         "",
         className
       )}
-      role="img" aria-label="[title + description]"
+      role="application" aria-label="[title + description]"
     >
       <title>[Contributing Factors to Happiness Score]</title>
       <desc>[This is a radial chart, that visually shows the composition of the happiness score of a country]</desc>
@@ -273,7 +268,6 @@ export const HalfRadialPath = ({
         filter: `saturate(${(currentHover === label || currentHover === false) ? 1 : 0.2}) contrast(${(currentHover === label || currentHover === false) ? 1 : 0.2})`, // greyed out if another part is hovered
         cursor: 'default',
       }}
-      aria-label={label} // accessibility support
       onMouseEnter={() => setOnHover(label)} // implement the on hover functionality
       onMouseLeave={() => setOnHover(false)} // implement the on hover functionality
     />

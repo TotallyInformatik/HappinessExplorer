@@ -8,10 +8,10 @@ export default async function Page() {
   const countries = await getTopTenCountries(currentYear.year, "en");
 
   return <>
-    <div className="w-full flex flex-col items-left my-8 gap-4 px-6">
+    <header className="w-full flex flex-col items-left my-8 gap-4 px-6">
       <h1 className="text-3xl font-extrabold">Leaderboard</h1>
       <p className="text-sm text-muted-foreground">See the world champions at a glance</p>
-    </div>
+    </header>
     <Leaderboard
       years={years}
       defaultYear={currentYear}
