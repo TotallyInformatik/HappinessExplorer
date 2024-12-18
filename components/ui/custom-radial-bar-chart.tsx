@@ -142,7 +142,7 @@ export const FactorsRadialBarChart = ({
                 y={radius-10}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="text-3xl font-bold cursor-default"
+                className="text-3xl font-bold cursor-default dark:fill-white"
               >
                 {detailedHappinessScore.score.toFixed(2)}
               </text>
@@ -151,8 +151,7 @@ export const FactorsRadialBarChart = ({
                 y={radius+10}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="text-sm font-normal cursor-default"
-                fill={'hsl(var(--slate-500))'}
+                className="text-sm font-normal cursor-default fill-slate-500"
               >
                 Total score
               </text>

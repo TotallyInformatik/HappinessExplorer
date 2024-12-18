@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { ThemeToggle } from "../ThemeToggle";
 
 import Link from "next/link";
 import clsx from "clsx";
@@ -177,13 +178,16 @@ export const Header = ({}: {}) => {
           )}/>
         </section>
         
-        {/* This section contains the language selection */}
+
+        {/* This section contains the language and theme selection */}
         <section className={clsx(
           "fixed bottom-2 left-2 z-[51] transition-transform duration-150 ease-in-out",
           sidebar ? "translate-x-0" : "-translate-x-48",
 
-          "md:static md:translate-x-0"
+          "md:static md:translate-x-0",
+          "flex flex-col md:flex-row gap-5"
         )}>
+          <ThemeToggle></ThemeToggle>
           {/*
           Using shadcn/ui component
           */}
