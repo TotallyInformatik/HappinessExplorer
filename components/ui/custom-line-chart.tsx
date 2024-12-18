@@ -89,7 +89,7 @@ export const YearLineChartDots = ({
                 type="category" 
                 padding={{left: 12, right: 12}}
                 tickMargin={16} // add tick margin on x axis, to make sure the labels can be printed
-                style={{fill: 'black', fontWeight: '500'}} // adjust style
+                className="font-medium fill-black dark:fill-white"
               />
               <YAxis
                 hide={true}
@@ -99,7 +99,7 @@ export const YearLineChartDots = ({
               />
               <ChartTooltip
                 cursor={false}
-                content={<ChartTooltipContent indicator="line"  />}
+                content={<ChartTooltipContent indicator="line"  labelClassName="dark:text-white"/>}
               />
               <Line // draw line
                 dataKey={'value'}

@@ -139,53 +139,53 @@ export default function MyComponent({years, countries} :{years : Year[], countri
 
 
   return <>
-    <div className="flex flex-row px-5 py-2 gap-8 items-center">
-    <Select onValueChange={(value) => {handleYear(value)}}>
-      <SelectTrigger className="w-[180px]" defaultChecked>
-        <SelectValue placeholder={years[0].year.toString()} defaultValue={years[0].year.toString()} defaultChecked />
-      </SelectTrigger>
-      <SelectContent defaultChecked>
-        <SelectGroup defaultChecked>
-          <SelectLabel defaultChecked>Year</SelectLabel>
-          {years.map(e => (<SelectItem value={e.year.toString()} key={e.year.toString()}>{e.year}</SelectItem>))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-    <Separator orientation="vertical" className="w-64, h-16"/>
-    <Select onValueChange={handleC1}>
-      <SelectTrigger className="w-[250px]">
-        <SelectValue placeholder="Add a country" />
-      </SelectTrigger>
-      <SelectContent>
-        {countries.map(a => {
-          return <SelectGroup key={a.continentName}>
-            <SelectLabel>{a.continentName}</SelectLabel>
-            {a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))}
+    <div className="flex flex-wrap md:flex-nowrap md:flex-row px-5 py-2 gap-2 md:gap-8 md:items-center">
+      <Select onValueChange={(value) => {handleYear(value)}}>
+        <SelectTrigger className="w-[180px]" defaultChecked>
+          <SelectValue placeholder={years[0].year.toString()} defaultValue={years[0].year.toString()} defaultChecked />
+        </SelectTrigger>
+        <SelectContent defaultChecked>
+          <SelectGroup defaultChecked>
+            <SelectLabel defaultChecked>Year</SelectLabel>
+            {years.map(e => (<SelectItem value={e.year.toString()} key={e.year.toString()}>{e.year}</SelectItem>))}
           </SelectGroup>
-        })}
-      </SelectContent>
-    </Select>
-    <Separator orientation="vertical" className="w-64, h-16"/>
-    <Select onValueChange={handleC2}>
-      <SelectTrigger className="w-[250px]">
-        <SelectValue placeholder="Add another country" />
-      </SelectTrigger>
-      <SelectContent>
-        {countries.map(a => {
-          return <SelectGroup key={a.continentName}>
-            <SelectLabel>{a.continentName}</SelectLabel>
-            {a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))}
-          </SelectGroup>
-        })}
-      </SelectContent>
-    </Select>
+        </SelectContent>
+      </Select>
+      <Separator orientation="vertical" className="hidden md:block w-64, h-16"/>
+      <Select onValueChange={handleC1}>
+        <SelectTrigger className="w-[250px]">
+          <SelectValue placeholder="Add a country" />
+        </SelectTrigger>
+        <SelectContent>
+          {countries.map(a => {
+            return <SelectGroup key={a.continentName}>
+              <SelectLabel>{a.continentName}</SelectLabel>
+              {a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))}
+            </SelectGroup>
+          })}
+        </SelectContent>
+      </Select>
+      <Separator orientation="vertical" className="hidden md:block w-64, h-16"/>
+      <Select onValueChange={handleC2}>
+        <SelectTrigger className="w-[250px]">
+          <SelectValue placeholder="Add another country" />
+        </SelectTrigger>
+        <SelectContent>
+          {countries.map(a => {
+            return <SelectGroup key={a.continentName}>
+              <SelectLabel>{a.continentName}</SelectLabel>
+              {a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))}
+            </SelectGroup>
+          })}
+        </SelectContent>
+      </Select>
     </div>
     <Separator/>
-    <div className="flex flex-row px-5 py-8 gap-4 w-full justify-center">
-      <div className="w-1/2">
+    <div className="flex flex-col px-5 py-8 gap-4 w-full justify-center md:flex-row">
+      <div className="md:w-1/2">
         <Chart2 year={year} country1={country1} country2={country2} chartData={chartData2 ? chartData2 : []} />
       </div>
-      <div className="w-1/2">
+      <div className="md:w-1/2">
         <Chart1 year={year} country1={country1} country2={country2} chartData={chartData ? chartData : []}/>
       </div>
     </div>
