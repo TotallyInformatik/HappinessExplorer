@@ -179,7 +179,7 @@ export const Header = ({}: {}) => {
         
         {/* This section contains the language selection */}
         <section className={clsx(
-          "fixed bottom-2 left-2 z-[51] translate-x-0 transition-transform duration-150 ease-in-out",
+          "fixed bottom-2 left-2 z-[51] transition-transform duration-150 ease-in-out",
           sidebar ? "translate-x-0" : "-translate-x-48",
 
           "md:static md:translate-x-0"
