@@ -17,15 +17,28 @@ body {
   font-family: "NotoColorEmojiLimited", "Inter", "Apple Color Emoji", Arial, Helvetica, sans-serif;
   width: 100%;
   overflow-x: hidden;
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+  display: none;
 }
 
 path {
   outline: none;
   cursor: pointer;
 }
+
 main {
   contain: paint; /* todo: remove this if we have any problems  */
 }
+
+
+
 
 @layer utilities {
   .text-balance {

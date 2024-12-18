@@ -79,7 +79,7 @@ const RankCard = ({
   <Card className={clsx(
     "w-[172px] h-full p-[1rem] flex flex-col gap-3 shrink-0",
     {
-      "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]]": adjust_on_large_device
+      "lg:min-w-[490px] md:h-[221px] md:w-full md:min-w-[260px]": adjust_on_large_device
     }
     )}>
     <CardHeader className="p-0 grow-0 shrink">

@@ -122,6 +122,22 @@ const GlobeExplorer = ({
 
   }, [selectedCountry])
 
+
+  const filterZoomEvent = (event: unknown): boolean => {
+    if (event?.constructor?.name === "TouchEvent") {
+      return true;
+    } else if (event?.constructor?.name === "MouseEvent") {
+      return true;
+    } else if (event?.constructor?.name === "WheelEvent") {
+      const e = event as WheelEvent
+      if (e?.ctrlKey || e?.metaKey) {
+        return true
+      }
+    }
+    return false
+  };
+
+
   useEffect(() => {
 
     const inputCountry = (event: KeyboardEvent) => {
@@ -251,7 +267,7 @@ const GlobeExplorer = ({
                 onClick={() => {
                   setSelectedCountry("");
                 }}>
-                <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom}>
+                <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom} filterZoomEvent={filterZoomEvent}>
                   <Geographies geography={geoUrl}>
                     {({ geographies }) =>
                       geographies.map((geo) => {

@@ -27,6 +27,9 @@ export const FactorsRadialBarChart = ({
   
   adjust_on_large_device?: boolean,
 }): React.ReactNode => {
+
+
+
   // which bar part (if any) is hovered?
   const [hoverBar, setHoverBar] = useState<string | boolean>(false)
   
@@ -40,6 +43,43 @@ export const FactorsRadialBarChart = ({
     { name: 'Perceptions of corruption', value: detailedHappinessScore.perceptionsOfCorruption, color: '-chart-6' },
     { name: 'Dystopia + residual', value: detailedHappinessScore.dystopiaResidual, color: '-chart-7' },
   ] as FactorsRadialBarChartData[]
+
+  
+  // make sure data is available
+  for (let i = 0; i < 7; i++) {
+    if (data[i].value === null) {
+      return (
+        <Card className={clsx(
+          "h-full w-[490px] p-0 shrink-0",
+          {
+            "lg:min-w-[490px] lg:h-[221px] md:w-full md:min-w-[260px] md:h-[330px] ": adjust_on_large_device,
+          }
+        )}
+        >
+          <div
+            className={clsx(
+              "w-full h-full p-3 overflow-hidden",
+            )}
+          >
+            <CardHeader className="p-0 grow-0 shrink">
+              <CardTitle className="text-base font-normal">Contributing Factors</CardTitle>
+            </CardHeader>
+            <CardContent className={clsx(
+              "p-0 grow shrink h-full flex flex-row justify-center items-center gap-3",
+              {
+                "md:flex-col lg:flex-row": adjust_on_large_device,
+              }
+            )}>
+              {/* No data found */}
+              <span className="max-w-full w-fit text-wrap text-slate-500 text-center">
+                We can't find any contributing factors data for this country.
+              </span>
+            </CardContent>
+          </div>
+        </Card>
+      )
+    }
+  }
 
   // reverse for drawing order
   const reversed_data = data.slice().reverse();
@@ -124,10 +164,8 @@ export const FactorsRadialBarChart = ({
             currentHover={hoverBar}
             setOnHover={setHoverBar}
           />
-          
         </CardContent>
       </div>
-      
     </Card>
   )
 }
@@ -193,7 +231,10 @@ export const HalfRadialPath = ({
   currentHover: string | boolean; // Use for on hover color changes
   setOnHover: React.Dispatch<SetStateAction<string | boolean>>; // Used for on hover interactions
 }) => {
-
+  // Prevent rendering when startAngle or endAngle is not yet calculated
+  if (String(startAngle) === "NaN" || String(endAngle) === "NaN") {
+    return <></>
+  }
 
   // Make sure angles are in allowed range (if not adjust them)
   startAngle = (startAngle > 180) ? 180 : (startAngle < 0 ? 0 : startAngle) 
@@ -211,7 +252,7 @@ export const HalfRadialPath = ({
   const y1 = center_y - radius * Math.sin(toRadians(endAngle)); // SVG Y-axis is flipped
   const x2 = center_x + radius * Math.cos(toRadians(startAngle));
   const y2 = center_y - radius * Math.sin(toRadians(startAngle));
-
+  
   // Large arc flag (1 if the angle > 180°, 0 otherwise)
   const largeArcFlag = startAngle - endAngle > 180 ? 1 : 0;
 
@@ -252,7 +293,6 @@ const CustomLegend = ({
   currentHover: string | boolean
   setOnHover: React.Dispatch<SetStateAction<string | boolean>>
 }): React.ReactNode => {
-
   return (
     <div
       className={clsx(
@@ -280,7 +320,7 @@ const CustomLegend = ({
             </div>
             {/* score */}
             <span className="font-semibold leading-[13px] cursor-default">
-              {factor.value.toFixed(2) /* fixed to two floating pointes */}
+              {factor.value === null ? 0 : factor.value.toFixed(2) /* fixed to two floating pointes */}
             </span>
           </li>
         ))}
