@@ -112,8 +112,16 @@ const GlobeExplorer = ({
   }, []);
 
 
-  const filterZoomEvent = (event: SVGElement): boolean => {
-    return allowZoom; // Allow zoom only if Ctrl/Command is pressed
+  const filterZoomEvent = (event: unknown): boolean => {
+    if (event?.constructor?.name === "MouseEvent") {
+      return true;
+    } else if (event?.constructor?.name === "WheelEvent") {
+      const e = event as WheelEvent
+      if (e?.ctrlKey || e?.metaKey) {
+        return true
+      }
+    }
+    return false
   };
 
   return <>
