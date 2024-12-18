@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Separator } from '@/components/ui/separator';
 import { getAllCountries, getCountriesByContinent, getCountryData, MapCountries, Year } from '@/lib/db_interface';
 import { cn, getCorrectCountryName } from '@/lib/utils';
-import { Check, ChevronsUpDown, X } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { ComposableMap, Geographies, ZoomableGroup } from 'react-simple-maps';
 import { Card, CardContent } from '../ui/card';

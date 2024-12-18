@@ -3,7 +3,6 @@
 import { getCorrectCountryName } from "@/lib/utils";
 import { Geography } from "react-simple-maps";
 import { CountryIDs, GlobeSelection } from "./globe-explorer";
-import { scaleLinear } from "d3-scale"
 
 /**
  * @author Rui Zhang
