@@ -70,7 +70,6 @@ const GlobeExplorer = ({
   const [rank, setRank] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [dataExists, setDataExists] = useState<boolean>(false);
-  const [allowZoom, setAllowZoom] = useState(false); // State to track Ctrl/Command key
   
 
 
@@ -92,28 +91,10 @@ const GlobeExplorer = ({
   }, [selectedCountry])
 
 
-  // Listen for keydown and keyup to track Ctrl/Command state
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey) setAllowZoom(true);
-    };
-
-    const handleKeyUp = () => {
-      setAllowZoom(false);
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
-
-
   const filterZoomEvent = (event: unknown): boolean => {
-    if (event?.constructor?.name === "MouseEvent") {
+    if (event?.constructor?.name === "TouchEvent") {
+      return true;
+    } else if (event?.constructor?.name === "MouseEvent") {
       return true;
     } else if (event?.constructor?.name === "WheelEvent") {
       const e = event as WheelEvent
@@ -123,6 +104,7 @@ const GlobeExplorer = ({
     }
     return false
   };
+
 
   return <>
     <section id='world-map'>
