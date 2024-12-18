@@ -84,7 +84,7 @@ export const Header = ({}: {}) => {
                 width={30}
                 height={30}
                 className={clsx(
-                  "dark:hidden transition-all duration-150 ease-in-out",
+                  "dark:hidden transition-all duration-150 ease-in-out h-auto",
                   sidebar ? "translate-x-[5.5rem]" : "translate-x-0",
 
                   "md:translate-x-0",
@@ -96,7 +96,7 @@ export const Header = ({}: {}) => {
                 width={30}
                 height={30}
                 className={clsx(
-                  "hidden dark:block transition-all duration-150 ease-in-out",
+                  "hidden dark:block transition-all duration-150 ease-in-out h-auto",
                   sidebar ? "translate-x-[5.5rem]" : "-translate-x-0",
 
                   "md:translate-x-0",
