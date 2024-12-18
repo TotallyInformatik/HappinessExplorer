@@ -556,10 +556,12 @@ export default function MyComponent({years, countries} :{years : Year[], countri
         <SelectValue placeholder="Add a country" />
       </SelectTrigger>
       <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Country1</SelectLabel>
-          {countries.map(a => (a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))))}
-        </SelectGroup>
+        {countries.map(a => {
+          return <SelectGroup>
+            <SelectLabel>{a.continentName}</SelectLabel>
+            {a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))}
+          </SelectGroup>
+        })}
       </SelectContent>
     </Select>
     <Separator orientation="vertical" className="w-64, h-16"/>
@@ -568,10 +570,12 @@ export default function MyComponent({years, countries} :{years : Year[], countri
         <SelectValue placeholder="Add another country" />
       </SelectTrigger>
       <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Country2</SelectLabel>
-          {countries.map(a => (a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))))}
-        </SelectGroup>
+        {countries.map(a => {
+          return <SelectGroup>
+            <SelectLabel>{a.continentName}</SelectLabel>
+            {a.countries.map(e => (<SelectItem key={a.continentName + "-" + e.countryId} value={e.countryId.toString()+','+e.countryName} className={a.continentName}>{e.countryName}</SelectItem>))}
+          </SelectGroup>
+        })}
       </SelectContent>
     </Select>
     </div>
