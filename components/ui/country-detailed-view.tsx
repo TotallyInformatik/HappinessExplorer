@@ -45,7 +45,7 @@ const defaultCardVisibility: Required<card_visibility> = {
 export const CountryDetailedViewContainer = ({
   country_name,
   country_flag_emoji,
-  rank,
+  rank, 
   happinessScore,
   happinessScoreHistory,
   detailedHappinessScore,

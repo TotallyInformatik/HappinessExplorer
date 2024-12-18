@@ -1,19 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
-import "./globals.css";
-import { Separator } from "@/components/ui/separator";
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
+import { Separator } from "@/components/ui/separator";
+import "./globals.css";
 
 import {
   Select,
@@ -22,11 +18,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
-import Link from "next/link";
-import Head from "next/head";
 import { cn } from "@/lib/utils";
+import Head from "next/head";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Smiling Globe",

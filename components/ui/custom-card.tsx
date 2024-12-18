@@ -65,8 +65,6 @@ const TitleCard = ({
 // RankCard Component
 const RankCard = ({
   rank,
-
-  
   adjust_on_large_device = true,
 }: {
   rank: number | string, // number and strings accepted for simplicity in usage
