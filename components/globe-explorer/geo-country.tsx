@@ -63,6 +63,8 @@ export default function GeoCountry({
 
   return <Geography
     fill={getColor(score)}
+    stroke="#FFF"
+    strokeWidth={0.2}
     key={geo.rsmKey} 
     geography={geo} 
     onClick={(event) => {

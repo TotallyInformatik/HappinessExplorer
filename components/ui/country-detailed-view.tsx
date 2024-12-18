@@ -81,9 +81,8 @@ export const CountryDetailedViewContainer = ({
   return (
     <div className={clsx(
     "flex flex-row items-center h-[281px] gap-3 w-fit justify-end p-[1.875rem]",
-    {
-      "md:flex-col md:items-center md:h-auto md:w-full": adjust_on_large_device // used for responsiveness (if requested by user (adjust_on_large_device))
-    })}>
+    adjust_on_large_device ? "md:flex-col md:items-center md:h-auto md:w-full md:px-0" : "" // used for responsiveness (if requested by user (adjust_on_large_device))
+    )}>
       {/* Title Card */}
       {show_title && <TitleCard 
         country_flag_emoji={country_flag_emoji} 

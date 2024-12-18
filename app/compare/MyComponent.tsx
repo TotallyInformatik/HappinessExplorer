@@ -192,8 +192,8 @@ export default function MyComponent({years, countries} :{years : Year[], countri
     <Separator/>
     <div className="flex flex-col w-full justify-evenly md:flex-row">
       {country1 == "" ? '' : 
-        <ScrollArea className="whitespace-nowrap p-4">
-          <div className="md:w-1/3">
+        <ScrollArea className="whitespace-nowrap p-4 md:p-0 md:m-auto">
+          <div className="">
             <CountryDetailedViewContainer 
               country_name={country1}
               country_flag_emoji={emoji1}
@@ -216,15 +216,15 @@ export default function MyComponent({years, countries} :{years : Year[], countri
               }}
             />
           </div>
-          <ScrollBar orientation="horizontal"/>
+          <ScrollBar orientation="horizontal" className="md:hidden"/>
         </ScrollArea>
       }
       {country1 && country2 ? 
         <Separator orientation="vertical" className="w-64, h-auto"/> : ''
       }
       {country2 == "" ? '' : 
-        <ScrollArea className="whitespace-nowrap p-4">
-          <div className="md:w-1/3">
+        <ScrollArea className="whitespace-nowrap p-4 md:p-0 md:m-auto">
+          <div className="">
             <CountryDetailedViewContainer 
               country_name={country2}
               country_flag_emoji={emoji2}
@@ -246,7 +246,7 @@ export default function MyComponent({years, countries} :{years : Year[], countri
               }}
             />
           </div>
-          <ScrollBar orientation="horizontal"/>
+          <ScrollBar orientation="horizontal" className="md:hidden"/>
         </ScrollArea>
       }
     </div>
