@@ -192,7 +192,7 @@ export const SVGContainer = ({
         "",
         className
       )}
-      role="img" aria-label="[title + description]"
+      role="application" aria-label="[title + description]"
     >
       <title>[Contributing Factors to Happiness Score]</title>
       <desc>[This is a radial chart, that visually shows the composition of the happiness score of a country]</desc>
@@ -268,7 +268,6 @@ export const HalfRadialPath = ({
         filter: `saturate(${(currentHover === label || currentHover === false) ? 1 : 0.2}) contrast(${(currentHover === label || currentHover === false) ? 1 : 0.2})`, // greyed out if another part is hovered
         cursor: 'default',
       }}
-      aria-label={label} // accessibility support
       onMouseEnter={() => setOnHover(label)} // implement the on hover functionality
       onMouseLeave={() => setOnHover(false)} // implement the on hover functionality
     />

@@ -120,7 +120,7 @@ const HappinessScoreProgressCard = ({
           <div className="flex justify-center items-center gap-3 w-[100%]">
             <span className="font-semibold text-lg grow-0">0</span>
             {/* Progress-bar component provided by shadcn/ui */}
-            <Progress value={score.score * 10} className="grow [&_div]:bg-chart-1"></Progress>
+            <Progress value={score.score * 10} className="grow [&_div]:bg-chart-1" aria-label="Progress bar describing the happiness score of a country (from 0 to 10)"/>
             <span className="font-semibold text-lg grow-0">10</span>
           </div>
           <div className="flex justify-center">
