@@ -52,8 +52,9 @@ export type CountryIDs = {
 
 /**
  * @author Rui Zhang
- * @param 
- * @returns 
+ * @param onCountryChange - callback called everytime a country is selected
+ * @param years - all years in which happiness data is available
+ * @returns the globe explorer react component
  */
 const GlobeExplorer = ({ 
   onCountryChange,
@@ -77,6 +78,7 @@ const GlobeExplorer = ({
   const [heatMapData, setHeatMapData] = useState<MapCountries | undefined>(undefined);
   const containerRef = useRef<HTMLElement | null>(null);
   
+  // this function fetches all the data required for a single year of report
   function fetchCountries(yearValue: string) {
     getCountriesByContinent(parseInt(yearValue), "en").then((result) => {
       let allCountries: Countries = [];
@@ -106,8 +108,9 @@ const GlobeExplorer = ({
   }
 
 
+  // called on load of the component to add the cmd + k 
+  // event listener functionality
   useEffect(() => {
-
     const inputCountry = (event: KeyboardEvent) => {
 
       if (event.key == "k" && (event.ctrlKey || event.metaKey)) {
@@ -128,6 +131,8 @@ const GlobeExplorer = ({
     }
   }, [])
 
+  // called on load of the component to set the default year to 
+  // the latest report
   useEffect(() => {
     if (years[0]) {
       const yearValue = years[0].year.toString();
@@ -136,6 +141,9 @@ const GlobeExplorer = ({
     }
   }, [years])
 
+  
+  // called every time the selected country is changed to 
+  // update the information on the overlay
   useEffect(() => {
 
     if (selectedCountry && report) {
@@ -153,8 +161,9 @@ const GlobeExplorer = ({
 
   }, [selectedCountry])
 
-
-  useEffect(() => {
+  // called on load to create the ctrl+scroll 
+  // functionality for zooming in on the map
+  useEffect(() => { 
     const preventZoom = (e: WheelEvent) => {
       if (e.ctrlKey) {
         e.preventDefault(); // Prevent zooming
@@ -187,7 +196,7 @@ const GlobeExplorer = ({
     return false
   };
 
-
+  // actual component tsx
   return <>
     <section id='world-map'>
       <header className="w-screen h-auto overflow-x-auto no-scrollbar 

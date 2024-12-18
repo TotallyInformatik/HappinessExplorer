@@ -14,8 +14,12 @@ const chartConfig = {
 
 /**
  * @author Rui Zhang
- * @param 
- * @returns 
+ * @param selectedCountry - the current selected country passed from the index page
+ * @param report - the current selected year passed from the index page
+ * @param score - the score of the selected country
+ * @param rank - the rank of that country
+ * @param selected - if any country is selected at all
+ * @returns the react component for the map overlay, showing happiness score of the selected country
  */
 export default function CountryDetailsShort({
   selectedCountry,
