@@ -17,15 +17,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button';
-import { ArrowDown, Check, ChevronsUpDown, X } from 'lucide-react';
+import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getCountriesByContinent, getCountryData, Year } from '@/lib/db_interface';
-import { continentTranslations } from '@/lib/database/schema';
-import { setConfig } from 'next/config';
 import GeoCountry from './geo-country';
-import { useRouter } from 'next/navigation';
-import { ChartConfig, ChartContainer } from '../ui/chart';
-import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
 import CountryDetailsShort from './country-details-short';
 import { Card, CardContent } from '../ui/card';
 
@@ -75,6 +70,7 @@ const GlobeExplorer = ({
   const [rank, setRank] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [dataExists, setDataExists] = useState<boolean>(false);
+  const [allowZoom, setAllowZoom] = useState(false); // State to track Ctrl/Command key
   
 
 
@@ -94,6 +90,31 @@ const GlobeExplorer = ({
     }
 
   }, [selectedCountry])
+
+
+  // Listen for keydown and keyup to track Ctrl/Command state
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey) setAllowZoom(true);
+    };
+
+    const handleKeyUp = () => {
+      setAllowZoom(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
+
+  const filterZoomEvent = (event: SVGElement): boolean => {
+    return allowZoom; // Allow zoom only if Ctrl/Command is pressed
+  };
 
   return <>
     <section id='world-map'>
@@ -214,7 +235,7 @@ const GlobeExplorer = ({
                 onClick={(event) => {
                   setSelectedCountry("");
                 }}>
-                <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom}>
+                <ZoomableGroup translateExtent={[[-200, 65], [900, 540]]} minZoom={1.3} center={position.coordinates} zoom={position.zoom} filterZoomEvent={filterZoomEvent}>
                   <Geographies geography={geoUrl}>
                     {({ geographies }) =>
                       geographies.map((geo) => {
