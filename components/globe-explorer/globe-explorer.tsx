@@ -61,11 +61,9 @@ const GlobeExplorer = ({
 } : GlobeExplorerProps) => {
   const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
-
   // select a report has no external events, just changes the heatmap
   // select a country has an external event, the same as the country click event.
   // this event also tells which report is currently selected.
-  // todo: heatmap
   
   const [report, setReport] = useState("");
   const [position] = useState<MapPosition>({ coordinates: [0, 0], zoom: 1.3 });
