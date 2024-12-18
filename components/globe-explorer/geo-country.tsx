@@ -3,6 +3,7 @@
 import { getCorrectCountryName } from "@/lib/utils";
 import { Geography } from "react-simple-maps";
 import { CountryIDs, GlobeSelection } from "./globe-explorer";
+import { scaleLinear } from "d3-scale"
 
 /**
  * @author Rui Zhang
@@ -62,6 +63,7 @@ export default function GeoCountry({
 }) {
 
   return <Geography
+    className="stroke-slate-200 dark:stroke-slate-900 fill"
     fill={getColor(score)}
     stroke="#FFF"
     strokeWidth={0.2}

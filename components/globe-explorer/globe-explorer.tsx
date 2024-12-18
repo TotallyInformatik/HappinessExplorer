@@ -19,7 +19,7 @@ import { Separator } from '@/components/ui/separator';
 import { getAllCountries, getCountriesByContinent, getCountryData, MapCountries, Year } from '@/lib/db_interface';
 import { cn, getCorrectCountryName } from '@/lib/utils';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ComposableMap, Geographies, ZoomableGroup } from 'react-simple-maps';
 import { Card, CardContent } from '../ui/card';
 import CountryDetailsShort from './country-details-short';
@@ -65,7 +65,6 @@ const GlobeExplorer = ({
   // select a report has no external events, just changes the heatmap
   // select a country has an external event, the same as the country click event.
   // this event also tells which report is currently selected.
-  // todo: heatmap
   
   const [report, setReport] = useState("");
   const [position] = useState<MapPosition>({ coordinates: [0, 0], zoom: 1.3 });
@@ -77,6 +76,7 @@ const GlobeExplorer = ({
   const [score, setScore] = useState<number>(0);
   const [dataExists, setDataExists] = useState<boolean>(false);
   const [heatMapData, setHeatMapData] = useState<MapCountries | undefined>(undefined);
+  const containerRef = useRef<HTMLElement | null>(null);
   
   function fetchCountries(yearValue: string) {
     getCountriesByContinent(parseInt(yearValue), "en").then((result) => {
@@ -137,8 +137,6 @@ const GlobeExplorer = ({
     }
   }, [years])
 
-
-
   useEffect(() => {
 
     if (selectedCountry && report) {
@@ -156,6 +154,25 @@ const GlobeExplorer = ({
 
   }, [selectedCountry])
 
+
+  useEffect(() => {
+    const preventZoom = (e: WheelEvent) => {
+      if (e.ctrlKey) {
+        e.preventDefault(); // Prevent zooming
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("wheel", preventZoom, { passive: false });
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener("wheel", preventZoom);
+      }
+    };
+  }, []);
 
   const filterZoomEvent = (event: unknown): boolean => {
     if (event?.constructor?.name === "TouchEvent") {
@@ -259,7 +276,7 @@ const GlobeExplorer = ({
         </section>
       </header>
       <Separator className="w-screen h-px bg-slate-300"/>
-      <main className="w-full aspect-[4/3] overflow-hidden bg-slate-200 relative">
+      <main className="w-full aspect-[4/3] overflow-hidden bg-slate-200 relative" ref={containerRef}>
         {
           report == "" ? 
             <div className='w-full h-full flex items-center justify-center'>
@@ -268,6 +285,7 @@ const GlobeExplorer = ({
             : 
             <>
               <ComposableMap 
+                className="fill-background [&>g>rect]:dark:fill-slate-900 [&>g>rect]:fill-slate-200"
                 onClick={() => {
                   setSelectedCountry("");
                 }}>
